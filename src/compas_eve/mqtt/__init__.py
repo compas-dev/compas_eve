@@ -21,7 +21,6 @@ class MqttTransport(Transport, EventEmitterMixin):
         self.client.loop_start()
 
     def close(self):
-        print("Closing")
         self.client.loop_stop()
 
     def _on_connect(self, client, userdata, flags, rc):
