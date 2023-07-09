@@ -4,7 +4,7 @@ compas_eve
 
 .. rst-class:: lead
 
-COMPAS EVent Extensions: adds event-based communication infrastructure to the COMPAS framework.
+COMPAS Event Extensions: adds event-based communication infrastructure to the COMPAS framework.
 
 .. .. figure:: /_images/
      :figclass: figure

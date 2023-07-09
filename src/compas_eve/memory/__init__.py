@@ -1,5 +1,5 @@
-from ..event_emitter import EventEmitterMixin
-from ..core import Transport
+from compas_eve.event_emitter import EventEmitterMixin
+from compas_eve.core import Transport
 
 
 class InMemoryTransport(Transport, EventEmitterMixin):

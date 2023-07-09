@@ -16,10 +16,7 @@ here = path.abspath(path.dirname(__file__))
 
 
 def read(*names, **kwargs):
-    return io.open(
-        path.join(here, *names),
-        encoding=kwargs.get("encoding", "utf8")
-    ).read()
+    return io.open(path.join(here, *names), encoding=kwargs.get("encoding", "utf8")).read()
 
 
 long_description = read("README.md")
@@ -29,7 +26,7 @@ optional_requirements = {}
 setup(
     name="compas_eve",
     version="0.1.0",
-    description="COMPAS EVent Extensions: adds event-based communication infrastructure to the COMPAS framework.",
+    description="COMPAS Event Extensions: adds event-based communication infrastructure to the COMPAS framework.",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/compas-dev/compas_eve",

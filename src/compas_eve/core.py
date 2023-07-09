@@ -64,8 +64,7 @@ class Message(UserDict):
 
     @classmethod
     def parse(cls, value):
-        instance = super(Message, cls).__new__(cls)
-        instance.data = {}
+        instance = cls()
         instance.update(value)
         return instance
 
