@@ -25,11 +25,21 @@ __version__ = "0.1.0"
 
 
 HERE = os.path.dirname(__file__)
-
 HOME = os.path.abspath(os.path.join(HERE, "../../"))
-DATA = os.path.abspath(os.path.join(HOME, "data"))
-DOCS = os.path.abspath(os.path.join(HOME, "docs"))
-TEMP = os.path.abspath(os.path.join(HOME, "temp"))
 
+from .core import Message, Publisher, Subscriber, Transport, Topic, get_default_transport, set_default_transport
+from .memory import InMemoryTransport
 
-__all__ = ["HOME", "DATA", "DOCS", "TEMP"]
+set_default_transport(InMemoryTransport())
+
+__all__ = [
+    "HOME",
+    "Message",
+    "Publisher",
+    "Subscriber",
+    "Topic",
+    "Transport",
+    "get_default_transport",
+    "set_default_transport",
+    "InMemoryTransport",
+]
