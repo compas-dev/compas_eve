@@ -1,6 +1,6 @@
 # compas_eve
 
-COMPAS EVent Extensions: adds event-based communication infrastructure to the COMPAS framework.
+COMPAS Event Extensions: adds event-based communication infrastructure to the COMPAS framework.
 
 
 ## Getting started with this project
