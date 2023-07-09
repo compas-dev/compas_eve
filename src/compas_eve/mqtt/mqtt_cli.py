@@ -1,3 +1,4 @@
+# fmt: off
 from __future__ import print_function
 
 from ..core import MessageEncoder
@@ -51,7 +52,7 @@ class MqttTransport(Transport, EventEmitterMixin):
 
     def close(self):
         options = MqttClientDisconnectOptionsBuilder().WithReasonString("Normal").Build()
-        self.client.DisconnectAsync(options, CancellationToken.None)
+        self.client.DisconnectAsync(options, CancellationToken.None) # noqa: E999 (disable flake8 error, which incorrectly parses None as the python keyword)
 
     def on_ready(self, callback):
         if self._is_connected:
