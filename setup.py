@@ -25,7 +25,7 @@ optional_requirements = {}
 
 setup(
     name="compas_eve",
-    version="0.1.0",
+    version="0.1.1",
     description="COMPAS Event Extensions: adds event-based communication infrastructure to the COMPAS framework.",
     long_description=long_description,
     long_description_content_type="text/markdown",
