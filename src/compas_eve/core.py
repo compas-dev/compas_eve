@@ -118,15 +118,19 @@ class Publisher(object):
 class Subscriber(object):
     """Subscriber interface."""
 
-    def __init__(self, topic, transport=None):
+    def __init__(self, topic, transport=None, callback=None):
         self.transport = transport or get_default_transport()
         self.topic = topic
         self._subscribe_id = None
+        self._callback = callback
 
-    # This is basically an abstract method that needs to be implemented in subclasses
-    # It's not really marked as such because IronPython causes a huge memory leak in these cases
     def message_received(self, message):
-        pass
+        """Handler called whenever a new message is received.
+
+        By default, this implementation will simply invoke the callback
+        used on init (if any), but sub-classes can override this behavior."""
+        if self._callback:
+            self._callback(message)
 
     @property
     def is_subscribed(self):
