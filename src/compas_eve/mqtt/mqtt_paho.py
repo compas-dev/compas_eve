@@ -1,5 +1,3 @@
-import json
-
 from compas.data import json_dumps
 from compas.data import json_loads
 
