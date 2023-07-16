@@ -118,7 +118,7 @@ class Publisher(object):
 class Subscriber(object):
     """Subscriber interface."""
 
-    def __init__(self, topic, transport=None, callback=None):
+    def __init__(self, topic, callback=None, transport=None):
         self.transport = transport or get_default_transport()
         self.topic = topic
         self._subscribe_id = None
