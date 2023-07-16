@@ -1,10 +1,12 @@
 import json
 
-import paho.mqtt.client as mqtt
+from compas.data import json_dumps
+from compas.data import json_loads
 
-from ..core import MessageEncoder
 from ..core import Transport
 from ..event_emitter import EventEmitterMixin
+
+import paho.mqtt.client as mqtt
 
 
 class MqttTransport(Transport, EventEmitterMixin):
@@ -36,7 +38,7 @@ class MqttTransport(Transport, EventEmitterMixin):
 
         def _callback(**kwargs):
             # TODO: can we avoid the additional cast to dict?
-            json_message = json.dumps(dict(message), cls=MessageEncoder)
+            json_message = json_dumps(dict(message))
             self.client.publish(topic.name, json_message)
             # self.emit(event_key, message)
 
@@ -49,7 +51,7 @@ class MqttTransport(Transport, EventEmitterMixin):
             self.client.subscribe(topic.name)
 
             def on_message(client, userdata, msg):
-                msg = topic.message_type.parse(json.loads(msg.payload.decode()))
+                msg = topic.message_type.parse(json_loads(msg.payload.decode()))
                 callback(msg)
 
             self.client.on_message = on_message

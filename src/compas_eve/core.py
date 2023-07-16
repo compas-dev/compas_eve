@@ -18,13 +18,6 @@ def set_default_transport(transport):
     DEFAULT_TRANSPORT = transport
 
 
-class MessageEncoder(json.JSONEncoder):
-    """Internal class to serialize some of the core data types into json."""
-
-    def default(self, o):
-        return super(MessageEncoder, self).default(o)
-
-
 class Transport(object):
     """Defines the base interface for different transport implementations."""
 

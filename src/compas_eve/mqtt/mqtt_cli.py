@@ -1,9 +1,11 @@
 # fmt: off
 from __future__ import print_function
 
-from ..core import MessageEncoder
 from ..core import Transport
 from ..event_emitter import EventEmitterMixin
+
+from compas.data import json_dumps
+from compas.data import json_loads
 
 import clr
 import json
@@ -18,7 +20,7 @@ clr.AddReference("MQTTnet")
 
 from System import Action
 from System.Text import Encoding
-from System.Threading import CancellationToken, CancellationTokenSource, ManualResetEventSlim
+from System.Threading import CancellationToken, CancellationTokenSource
 from System.Threading.Tasks import Task
 
 from MQTTnet import MqttFactory
@@ -67,7 +69,7 @@ class MqttTransport(Transport, EventEmitterMixin):
         application_message = (
             MqttApplicationMessageBuilder()
             .WithTopic(topic.name)
-            .WithPayload(json.dumps(dict(message), cls=MessageEncoder))
+            .WithPayload(json_dumps(dict(message)))
             .Build()
         )
 
@@ -82,7 +84,7 @@ class MqttTransport(Transport, EventEmitterMixin):
 
         def on_message(event_args):
             payload = Encoding.UTF8.GetString(event_args.ApplicationMessage.Payload)
-            msg = topic.message_type.parse(json.loads(payload))
+            msg = topic.message_type.parse(json_loads(payload))
             callback(msg)
 
         def _subscribe_callback(**kwargs):
