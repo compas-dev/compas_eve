@@ -1,5 +1,3 @@
-import json
-
 # Python 2/3 compatibility import list
 try:
     from collections import UserDict
