@@ -148,5 +148,5 @@ class Subscriber(object):
         if not self._subscribe_id:
             return
 
-        self.transport.unsubscribe(self.topic)
+        self.transport.unsubscribe_by_id(self._subscribe_id)
         self._subscribe_id = None

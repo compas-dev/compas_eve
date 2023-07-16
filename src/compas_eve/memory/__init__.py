@@ -9,6 +9,7 @@ class InMemoryTransport(Transport, EventEmitterMixin):
 
     def __init__(self, *args, **kwargs):
         super(InMemoryTransport, self).__init__(*args, **kwargs)
+        self._local_callbacks = {}
 
     def on_ready(self, callback):
         """In-memory transport is always ready, it will immediately trigger the callback."""
@@ -16,7 +17,7 @@ class InMemoryTransport(Transport, EventEmitterMixin):
 
     def publish(self, topic, message):
         """Publish a message to a topic."""
-        event_key = "event_{}".format(topic.name)
+        event_key = "event:{}".format(topic.name)
 
         def _callback(**kwargs):
             self.emit(event_key, message)
@@ -25,16 +26,30 @@ class InMemoryTransport(Transport, EventEmitterMixin):
 
     def subscribe(self, topic, callback):
         """Subscribe to be notified of messages on a given topic."""
-        event_key = "event_{}".format(topic.name)
+        event_key = "event:{}".format(topic.name)
+        subscribe_id = "{}:{}".format(event_key, id(callback))
 
         def _callback(**kwargs):
             self.on(event_key, callback)
 
+        self._local_callbacks[subscribe_id] = callback
+
         self.on_ready(_callback)
+
+        return subscribe_id
+
+    def unsubscribe_by_id(self, subscribe_id):
+        """Unsubscribe from the specified topic based on the subscription id."""
+        ev_type, topic_name, _callback_id = subscribe_id.split(":")
+        event_key = "{}:{}".format(ev_type, topic_name)
+
+        callback = self._local_callbacks[subscribe_id]
+        self.off(event_key, callback)
+        del self._local_callbacks[subscribe_id]
 
     def unsubscribe(self, topic):
         """Unsubscribe from the specified topic."""
-        event_key = "event_{}".format(topic.name)
+        event_key = "event:{}".format(topic.name)
         self.remove_all_listeners(event_key)
 
     def advertise(self, topic):
