@@ -7,7 +7,7 @@ from compas_eve import Topic
 from compas_eve import set_default_transport
 from compas_eve.mqtt import MqttTransport
 
-HOST = "broker.hivemq.com"
+HOST = "localhost"
 
 
 def test_default_transport_publishing():

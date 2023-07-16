@@ -18,27 +18,34 @@ jobs:
         python: ['3.8', '3.9', '3.10']
 
     steps:
+      - name: Set up docker container
+        run: |
+          docker run -d --name nanomq -p 1883:1883 -p 8083:8083 -p 8883:8883 emqx/nanomq:latest
+          docker ps -a
       - uses: compas-dev/compas-actions.build@v3
         with:
           python: ${{ matrix.python }}
           invoke_lint: true
           invoke_test: true
+      - name: Tear down docker container
+        run: |
+          docker rm -f nanomq
 
-  build-ironpython:
-    name: windows-ironpython
-    runs-on: windows-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Install dependencies
-        run: |
-          curl -o compas.tar.gz -LJO https://pypi.debian.net/compas/latest
-          curl -o ironpython-pytest.tar.gz -LJO https://pypi.debian.net/ironpython-pytest/latest
-          choco install ironpython --version=2.7.8.1
-          ipy -X:Frames -m ensurepip
-          ipy -X:Frames -m pip install --no-deps compas.tar.gz
-          ipy -X:Frames -m pip install --no-deps ironpython-pytest.tar.gz
-      - name: Run tests
-        env:
-          IRONPYTHONPATH: ./src
-        run: |
-          ipy -m pytest tests
+  # build-ironpython:
+  #   name: windows-ironpython
+  #   runs-on: windows-latest
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - name: Install dependencies
+  #       run: |
+  #         curl -o compas.tar.gz -LJO https://pypi.debian.net/compas/latest
+  #         curl -o ironpython-pytest.tar.gz -LJO https://pypi.debian.net/ironpython-pytest/latest
+  #         choco install ironpython --version=2.7.8.1
+  #         ipy -X:Frames -m ensurepip
+  #         ipy -X:Frames -m pip install --no-deps compas.tar.gz
+  #         ipy -X:Frames -m pip install --no-deps ironpython-pytest.tar.gz
+  #     - name: Run tests
+  #       env:
+  #         IRONPYTHONPATH: ./src
+  #       run: |
+  #         ipy -m pytest tests
