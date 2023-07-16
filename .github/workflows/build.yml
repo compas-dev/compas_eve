@@ -25,7 +25,7 @@ jobs:
           invoke_test: false
       - name: Run unit tests
         run: |
-          pytest tests\unit
+          pytest tests/unit
 
   build-ironpython:
     name: windows-ironpython
@@ -44,7 +44,7 @@ jobs:
         env:
           IRONPYTHONPATH: ./src
         run: |
-          ipy -m pytest tests\unit
+          ipy -m pytest tests/unit
 
   integration_tests:
     if: "!contains(github.event.pull_request.labels.*.name, 'docs-only')"
@@ -61,7 +61,7 @@ jobs:
           invoke_test: false
       - name: Run integration tests
         run: |
-          pytest tests\integration
+          pytest tests/integration
       - name: Tear down docker container
         run: |
           docker rm -f nanomq
