@@ -50,8 +50,11 @@ class Message(UserDict):
 
     A message is fundamentally a dictionary and behaves as one."""
 
+    def __str__(self):
+        return str(self.data)
+
     def __getattr__(self, name):
-        return self.data[name]
+        return self.__dict__["data"][name]
 
     @classmethod
     def parse(cls, value):
