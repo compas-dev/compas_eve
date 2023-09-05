@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 * Fixed bug failing to get a `str` representation of `Message` on `ipy`
+* Pinned Sphinx version for docs generation
 
 ### Removed
 
