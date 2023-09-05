@@ -99,3 +99,8 @@ def test_message_type_parsing():
     assert received, "Message not received"
     assert result["value"].name == "Jazz"
     assert result["value"].hello_name == "Hello Jazz"
+
+
+def test_message_str():
+    msg = Message(a=3)
+    assert str(msg) == "{'a': 3}"
