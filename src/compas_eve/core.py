@@ -94,6 +94,7 @@ class Topic(object):
     options : dict
         A dictionary of options.
     """
+
     def __init__(self, name, message_type, **options):
         self.name = name
         self.message_type = message_type

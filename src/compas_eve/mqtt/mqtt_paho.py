@@ -18,6 +18,7 @@ class MqttTransport(Transport, EventEmitterMixin):
     port : int
         MQTT broker port, defaults to ``1883``.
     """
+
     def __init__(self, host, port=1883, *args, **kwargs):
         super(MqttTransport, self).__init__(*args, **kwargs)
         self.host = host
@@ -60,6 +61,7 @@ class MqttTransport(Transport, EventEmitterMixin):
         message : :class:`Message`
             Instance of the message to publish.
         """
+
         def _callback(**kwargs):
             # TODO: can we avoid the additional cast to dict?
             json_message = json_dumps(dict(message))
