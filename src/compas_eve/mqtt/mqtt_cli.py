@@ -32,6 +32,16 @@ from MQTTnet.Client import MqttClientDisconnectOptionsBuilder
 
 
 class MqttTransport(Transport, EventEmitterMixin):
+    """MQTT transport allows sending and receiving messages using an MQTT broker.
+
+    Parameters
+    ----------
+    host : str
+        Host name for the MQTT broker, e.g. ``broker.hivemq.com`` or ``localhost`` if
+        you are running a local broker on your machine.
+    port : int
+        MQTT broker port, defaults to ``1883``.
+    """
     def __init__(self, host, port=1883, *args, **kwargs):
         super(MqttTransport, self).__init__(*args, **kwargs)
         self.host = host

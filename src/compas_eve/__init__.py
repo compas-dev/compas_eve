@@ -6,9 +6,21 @@ compas_eve
 .. currentmodule:: compas_eve
 
 
-.. toctree::
-    :maxdepth: 1
+Classes
+=======
 
+.. autosummary::
+    :toctree: generated/
+    :nosignatures:
+
+    Message
+    Topic
+    Publisher
+    Subscriber
+    Transport
+    InMemoryTransport
+    get_default_transport
+    set_default_transport
 
 """
 

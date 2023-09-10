@@ -1,10 +1,10 @@
 ********************************************************************************
-compas_eve
+Event Extensions for COMPAS
 ********************************************************************************
 
 .. rst-class:: lead
 
-COMPAS Event Extensions: adds event-based communication infrastructure to the COMPAS framework.
+``compas_eve`` adds event-based communication infrastructure to the COMPAS framework.
 
 .. .. figure:: /_images/
      :figclass: figure
@@ -15,12 +15,11 @@ Table of Contents
 =================
 
 .. toctree::
-   :maxdepth: 3
+   :maxdepth: 2
    :titlesonly:
 
    Introduction <self>
    installation
-   tutorial
    examples
    api
    license

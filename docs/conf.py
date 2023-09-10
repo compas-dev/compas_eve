@@ -89,6 +89,18 @@ def setup(app):
 # autosummary options
 
 autosummary_generate = True
+autosummary_mock_imports = [
+    "System",
+    "clr",
+    "Eto",
+    "Rhino",
+    "Grasshopper",
+    "scriptcontext",
+    "rhinoscriptsyntax",
+    "bpy",
+    "bmesh",
+    "mathutils",
+]
 
 # napoleon options
 
@@ -161,14 +173,17 @@ def linkcode_resolve(domain, info):
         obj = getattr(module, obj_name)
         attr = getattr(obj, attr_name)
         if inspect.isfunction(attr):
-            filename = inspect.getmodule(obj).__name__.replace(".", "/")
-            lineno = inspect.getsourcelines(attr)[1]
+            try:
+                filename = inspect.getmodule(obj).__name__.replace(".", "/")
+                lineno = inspect.getsourcelines(attr)[1]
+            except IOError:
+                return None
         else:
             return None
     else:
         return None
 
-    return f"https://github.com/compas-dev/compas_eve/blob/master/src/{filename}.py#L{lineno}"
+    return f"https://github.com/gramaziokohler/compas_eve/blob/main/src/{filename}.py#L{lineno}"
 
 
 # extlinks

@@ -6,3 +6,5 @@ API Reference
     :maxdepth: 1
 
     api/compas_eve
+    api/compas_eve.mqtt
+    api/compas_eve.memory

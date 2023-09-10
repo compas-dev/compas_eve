@@ -8,10 +8,25 @@ DEFAULT_TRANSPORT = None
 
 
 def get_default_transport():
+    """Retrieve the default, system-wide transport.
+
+    Returns
+    -------
+    :class:`~compas_eve.Transport`
+        _description_
+    """
     return DEFAULT_TRANSPORT
 
 
 def set_default_transport(transport):
+    """Assign a default transport implementation to be used system-wide.
+
+    Parameters
+    ----------
+    transport : :class:`~compas_eve.Transport`
+        Instance of a transport class. By default, ``compas_eve`` uses
+        :class:`~compas_eve.memory.InMemoryTransport`.
+    """
     global DEFAULT_TRANSPORT
     DEFAULT_TRANSPORT = transport
 
@@ -64,8 +79,21 @@ class Message(UserDict):
 
 
 class Topic(object):
-    """Describes a topic"""
+    """A topic is like a mailbox where messages can be sent and received.
 
+    Topics are described by a name, a type of message they accept, and a
+    set of options.
+
+    Attributes
+    ----------
+    name : str
+        Name of the topic.
+    message_type : type
+        Class defining the message structure. Use :class:`Message` for
+        a generic, non-typed checked message implementation.
+    options : dict
+        A dictionary of options.
+    """
     def __init__(self, name, message_type, **options):
         self.name = name
         self.message_type = message_type
