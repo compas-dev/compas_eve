@@ -104,7 +104,7 @@ class BackgroundWorker(object):
         """Start the background processing thread where work will be performed."""
         if self.custom_work_callable:
             target = self.custom_work_callable
-            args = (self, )
+            args = (self,)
         else:
             target = self.do_work
             args = ()

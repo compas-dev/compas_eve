@@ -16,7 +16,6 @@ def do_work(worker):
     # Replace the content of this function with your own, the only thing important
     # to keep in mind is to leave the calls set_internal_state_to_* in all the right places
 
-
     # 1. Call this function at the start of your long-running task to notify you have started
     worker.set_internal_state_to_working()
     worker.display_message("Starting task...")
@@ -36,7 +35,7 @@ def do_work(worker):
 
         worker.current_value = i
         result += i
-        worker.display_progress(i / (50-1))
+        worker.display_progress(i / (50 - 1))
         time.sleep(0.01)
 
     # 5. Set to done, including the result contents
@@ -45,7 +44,7 @@ def do_work(worker):
 
 class BackgroundTaskComponent(component):
     def RunScript(self, start):
-        self.worker = BackgroundWorker.instance_by_component(ghenv, do_work, force_new=start)
+        self.worker = BackgroundWorker.instance_by_component(ghenv, do_work, force_new=start)  # noqa: F821
 
         if not self.worker.is_working() and not self.worker.is_done() and start:
             self.worker.start_work()
@@ -57,6 +56,6 @@ class BackgroundTaskComponent(component):
             print("Completed")
 
         if hasattr(self.worker, "result"):
-            return (self.worker.result, )
+            return (self.worker.result,)
         else:
-            return (None, )
+            return (None,)

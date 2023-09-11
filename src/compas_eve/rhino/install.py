@@ -22,7 +22,8 @@ def after_rhino_install(installed_packages):
     if project not in installed_packages:
         return []
 
-    installed_objects = install_userobjects(os.path.join(os.path.dirname(__file__), "..", "ghpython", "components", "ghuser"))
+    srcdir = os.path.join(os.path.dirname(__file__), "..", "ghpython", "components", "ghuser")
+    installed_objects = install_userobjects(srcdir)
     msg = "Installed {} GH User Objects".format(len(installed_objects))
 
     return [
