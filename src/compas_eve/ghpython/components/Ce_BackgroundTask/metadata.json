@@ -1,0 +1,26 @@
+{
+    "name": "Background Task",
+    "nickname": "BG Task",
+    "category": "COMPAS EVE",
+    "subcategory": "Tasks",
+    "description": "Launch long-running background tasks.",
+    "exposure": 4,
+
+    "ghpython": {
+        "isAdvancedMode": true,
+        "iconDisplay": 2,
+        "inputParameters": [
+            {
+                "name": "start",
+                "description": "Start the background worker."
+            }
+
+        ],
+        "outputParameters": [
+            {
+                "name": "result",
+                "description": "The result of the long-running task."
+            }
+        ]
+    }
+}

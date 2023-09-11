@@ -6,9 +6,9 @@ Event Extensions for COMPAS
 
 ``compas_eve`` adds event-based communication infrastructure to the COMPAS framework.
 
-.. .. figure:: /_images/
-     :figclass: figure
-     :class: figure-img img-fluid
+.. figure:: /_images/pubsub.png
+  :figclass: figure
+  :class: figure-img img-fluid
 
 
 Table of Contents
