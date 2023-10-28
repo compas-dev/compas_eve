@@ -18,26 +18,18 @@ class BackgroundWorker(object):
     A long-running task is any piece of code that will run for an extended period of time,
     for example, a very complex calculation, or loading a very large data file, etc.
 
-    To use it, start off from a simple Grasshopper GHPython component and retrieve an instance
-    of the background worker with. The worker will stay working without blocking the UI.
+    To use it, write your long-running function in a Grasshopper GHPython component,
+    and pass it as the input to the background worker component.
+    The worker will continue working without blocking the UI.
 
-    The following is an example of a GHPython component (in SDK mode) that launches a
-    background task when it opens. The task is defined as the ``do_work`` function.
+    The following is an example of a long-running function that updates the
+    progress while it runs.
 
     .. code-block:: python
 
         import time
-        from compas_eve.ghpython import BackgroundWorker
 
-        from ghpythonlib.componentbase import executingcomponent as component
-
-
-        def do_work(worker):
-            # Call this function at the start of your long-running task to notify you have started
-            worker.set_internal_state_to_working()
-            worker.display_message("Starting task...")
-            time.sleep(0.5)
-
+        def do_something_long_and_complicated(worker):
             # Result can be of any data type
             result = 0
 
@@ -47,43 +39,27 @@ class BackgroundWorker(object):
                 worker.display_progress(i / (50-1))
                 time.sleep(0.01)
 
-            # Set the worker to do, and assigns the final results
-            worker.set_internal_state_to_done(result)
+            worker.display_message("Done!")
 
-        class ExampleComponent(component):
-            def RunScript(self, start):
-                self.worker = BackgroundWorker.instance_by_component(ghenv, do_work, force_new=start)
+            return result
 
-                if not self.worker.is_working() and not self.worker.is_done():
-                    self.worker.start_work()
-
-                print("Is worker working? {}".format(self.worker.is_working()))
-                print("Is worker done? {}".format(self.worker.is_done()))
-
-                if self.worker.is_done():
-                    print("Completed")
-
-                if hasattr(self.worker, "result"):
-                    return (self.worker.result, )
-                else:
-                    return (None, )
 
     Parameters
     ----------
     ghenv : ``GhPython.Component.PythonEnvironment``
         Grasshopper environment object
-    custom_work_callable : function, optional
-        If defined, this function will be the main entry point for the long-running task.
+    long_running_function : function, optional
+        This function will be the main entry point for the long-running task.
     """
 
-    def __init__(self, ghenv, custom_work_callable=None):
+    def __init__(self, ghenv, long_running_function=None):
         super(BackgroundWorker, self).__init__()
         self.ghenv = ghenv
         self._is_working = False
         self._is_done = False
         self._is_cancelled = False
         self._has_requested_cancellation = False
-        self.custom_work_callable = custom_work_callable
+        self.long_running_function = long_running_function
 
     def is_working(self):
         """Indicate whether the worker is currently working or not."""
@@ -102,12 +78,16 @@ class BackgroundWorker(object):
 
     def start_work(self):
         """Start the background processing thread where work will be performed."""
-        if self.custom_work_callable:
-            target = self.custom_work_callable
-            args = (self,)
-        else:
-            target = self.do_work
-            args = ()
+        def _long_running_task_wrapper(worker):
+            try:
+                worker.set_internal_state_to_working()
+                result = self.long_running_function(self)
+                worker.set_internal_state_to_done(result)
+            except Exception as e:
+                worker.display_message(str(e))
+                worker.set_internal_state_to_cancelled()
+        target = _long_running_task_wrapper
+        args = (self,)
         self.thread = threading.Thread(target=target, args=args)
         self.thread.start()
 
@@ -122,42 +102,29 @@ class BackgroundWorker(object):
         self._is_working = False
         self._is_done = True
         self._is_cancelled = False
+        self.update_result(result, delay=1)
+
+    def update_result(self, result, delay=1):
+        """Update the result of the worker.
+
+        This will update the result of the worker, and trigger a solution expiration
+        of the Grasshopper component.
+
+        Parameters
+        ----------
+        result : object
+            Result of the worker.
+        delay : int, optional
+            Delay (in milliseconds) before updating the component, by default 1.
+        """
         self.result = result
-        update_component(self.ghenv, 1)
+        update_component(self.ghenv, delay)
 
     def set_internal_state_to_cancelled(self):
         """Set the internal state to ``cancelled``."""
         self._is_working = False
         self._is_done = False
         self._is_cancelled = True
-
-    def do_work(self):
-        """Main entry point to define the work of a long-running task.
-
-        This function should be overwritten in sub-classes of this one.
-
-        The code of this function only an example of how to write a ``do_work`` method in a background worker.
-        Within this function, the code can do whatever it needs: it can be blocking if needed, long/running, anything.
-
-        The important bit is that it calls the methods ``set_internal_state_to_*`` at the right times
-        to flag the status of the worker correctly.
-        """
-        self.set_internal_state_to_working()
-
-        t = 200
-        result = dict()
-        for i in range(t):
-            if self.has_requested_cancellation():
-                self.display_message("Cancelled")
-                self.set_internal_state_to_cancelled()
-                break
-
-            self.display_progress(i / (t - 1))
-            time.sleep(1)
-
-            result["a"] = "Counted up to {}".format(t)
-
-        self.set_internal_state_to_done(result)
 
     def display_progress(self, progress):
         """Display a progress indicator in the component.
@@ -186,7 +153,7 @@ class BackgroundWorker(object):
         Rhino.RhinoApp.InvokeOnUiThread(System.Action(ui_callback))
 
     @classmethod
-    def instance_by_component(cls, ghenv, custom_work_callable=None, force_new=False):
+    def instance_by_component(cls, ghenv, long_running_function=None, force_new=False):
         """Get the worker instance assigned to the component.
 
         This will get a persistant instance of a background worker
@@ -197,8 +164,8 @@ class BackgroundWorker(object):
         ----------
         ghenv : ``GhPython.Component.PythonEnvironment``
             Grasshopper environment object
-        custom_work_callable : function, optional
-            If defined, this function will be the main entry point for the long-running task.
+        long_running_function : function, optional
+            This function will be the main entry point for the long-running task.
         force_new : bool, optional
             Force the creation of a new background worker, by default False.
 
@@ -217,10 +184,27 @@ class BackgroundWorker(object):
             del scriptcontext.sticky[key]
 
         if not worker:
-            if custom_work_callable:
-                worker = cls(ghenv, custom_work_callable=custom_work_callable)
-            else:
-                worker = cls(ghenv)
+            worker = cls(ghenv, long_running_function=long_running_function)
             scriptcontext.sticky[key] = worker
 
         return worker
+
+    @classmethod
+    def stop_instance_by_component(cls, ghenv):
+        """Stops the worker instance assigned to the component.
+
+        If there is no worker running, it will do nothing.
+
+        Parameters
+        ----------
+        ghenv : ``GhPython.Component.PythonEnvironment``
+            Grasshopper environment object
+        """
+
+        key = create_id(ghenv.Component, "background_worker")
+        worker = scriptcontext.sticky.get(key)
+
+        if worker:
+            worker.request_cancellation()
+            worker = None
+            del scriptcontext.sticky[key]

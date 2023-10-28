@@ -11,8 +11,17 @@
         "iconDisplay": 2,
         "inputParameters": [
             {
-                "name": "start",
-                "description": "Start the background worker."
+                "name": "reset",
+                "description": "Resets the background worker."
+            },
+            {
+                "name": "task",
+                "description": "A Python function that will be executed by the background worker. The function does not need to return quickly, it can even have an infinite loop and keep running, it will not block the UI."
+            },
+            {
+                "name": "on",
+                "description": "Turn ON or OFF the background worker.",
+                "typeHintID": "bool"
             }
 
         ],
