@@ -8,12 +8,13 @@ DEFAULT_TRANSPORT = None
 
 
 def get_default_transport():
-    """Retrieve the default, system-wide transport.
+    """Retrieve the default transport implementation to be used system-wide.
 
     Returns
     -------
     :class:`~compas_eve.Transport`
-        _description_
+        Instance of a transport class. By default, ``compas_eve`` uses
+        :class:`~compas_eve.memory.InMemoryTransport`.
     """
     return DEFAULT_TRANSPORT
 
