@@ -116,7 +116,19 @@ class MqttTransport(Transport, EventEmitterMixin):
     def advertise(self, topic):
         """Announce this code will publish messages to the specified topic.
 
-        This call has no effect on this transport implementation."""
+        This call has no effect on this transport implementation.
+
+        Parameters
+        ----------
+        topic : :class:`Topic`
+            Instance of the topic to advertise.
+
+        Returns
+        -------
+        str
+            Advertising identifier.
+        """
+
         advertise_id = "advertise:{}:{}".format(topic.name, self.id_counter)
         # mqtt does not need anything here
         return advertise_id
@@ -124,11 +136,23 @@ class MqttTransport(Transport, EventEmitterMixin):
     def unadvertise(self, topic):
         """Announce that this code will stop publishing messages to the specified topic.
 
-        This call has no effect on this transport implementation."""
+        This call has no effect on this transport implementation.
+
+        Parameters
+        ----------
+        topic : :class:`Topic`
+            Instance of the topic to stop publishing messages to.
+        """
         pass
 
     def unsubscribe_by_id(self, subscribe_id):
-        """Unsubscribe from the specified topic based on the subscription id."""
+        """Unsubscribe from the specified topic based on the subscription id.
+
+        Parameters
+        ----------
+        subscribe_id : str
+            Identifier of the subscription.
+        """
         ev_type, topic_name, _callback_id = subscribe_id.split(":")
         event_key = "{}:{}".format(ev_type, topic_name)
 
@@ -139,5 +163,11 @@ class MqttTransport(Transport, EventEmitterMixin):
         del self._local_callbacks[subscribe_id]
 
     def unsubscribe(self, topic):
-        """Unsubscribe from the specified topic."""
+        """Unsubscribe from the specified topic.
+
+        Parameters
+        ----------
+        topic : :class:`Topic`
+            Instance of the topic to unsubscribe from.
+        """
         self.client.unsubscribe(topic.name)
