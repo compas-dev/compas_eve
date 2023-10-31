@@ -3,7 +3,7 @@
 
 <head>
   
-  <title>compas_eve - compas_eve</title>
+  <title>compas_eve - Event Extensions for COMPAS</title>
   
 
   <meta charset="utf-8" />
@@ -33,19 +33,19 @@
   <header id="header" class="compas-header d-flex align-items-center">
     <nav class="navbar navbar-expand navbar-dark col flex-column flex-md-row text-center">
       <!-- brand -->
-      <a class="navbar-brand" href="https://compas-dev.github.io/compas_eve/">
+      <a class="navbar-brand" href="https://gramaziokohler.github.io/compas_eve/">
         <img src="_static/images/compas_icon_white.png" alt="compas_eve" width="48px" height="48px" />
       </a>
       <!-- brand -->
       <!-- primary -->
       <ul class="navbar-nav">
-        <li class="nav-item active"><a class="nav-link" href="https://compas-dev.github.io/compas_eve/">compas_eve</a></li>
+        <li class="nav-item active"><a class="nav-link" href="https://gramaziokohler.github.io/compas_eve/">compas_eve</a></li>
       </ul>
       <!-- primary -->
       <ul class="navbar-nav d-none d-md-flex ml-md-auto">
         <!-- version -->
         
-        <meta id="doc_versions" data-url="https://compas-dev.github.io/compas_eve/doc_versions.txt" data-docs="https://compas-dev.github.io/compas_eve/">
+        <meta id="doc_versions" data-url="https://gramaziokohler.github.io/compas_eve/doc_versions.txt" data-docs="https://gramaziokohler.github.io/compas_eve/">
         <li class="nav-item nav-versions dropdown">
           <a class="nav-item nav-link dropdown-toggle mr-md-2" href="#" id="bd-versions" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             0.2.1
@@ -56,7 +56,7 @@
         <!-- version -->
         <!-- social -->
         <li class="nav-item">
-          <a class="nav-link" href="https://github.com/compas-dev/compas_eve" target="_blank">
+          <a class="nav-link" href="https://github.com/gramaziokohler/compas_eve" target="_blank">
             <span class="fab fa-github fa-1x"></span>
           </a>
         </li>
@@ -80,30 +80,27 @@
           <ol class="breadcrumb mb-3 bg-white px-0">
             <li class="breadcrumb-item"><a href="#">compas_eve</a></li>
             
-            <!-- <li class="breadcrumb-item active" aria-current="page">compas_eve</li> -->
+            <!-- <li class="breadcrumb-item active" aria-current="page">Event Extensions for COMPAS</li> -->
           </ol>
         </nav>
         
 
         
         
-        <section id="compas-eve">
-<h1>compas_eve</h1>
-<p class="lead">COMPAS Event Extensions: adds event-based communication infrastructure to the COMPAS framework.</p>
+        <section id="event-extensions-for-compas">
+<h1>Event Extensions for COMPAS</h1>
+<p class="lead"><code class="docutils literal notranslate"><span class="pre">compas_eve</span></code> adds event-based communication infrastructure to the COMPAS framework.</p>
 <section id="table-of-contents">
 <h2>Table of Contents</h2>
 <div class="toctree-wrapper compound">
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorial</a></li>
-<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="api.html">API Reference</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="api/compas_eve.html">compas_eve</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="api/compas_eve.html">compas_eve</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/compas_eve.mqtt.html">compas_eve.mqtt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/compas_eve.memory.html">compas_eve.memory</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="license.html">License</a></li>
@@ -138,14 +135,11 @@
           <ul class="nav flex-column collapse show active">
 <li class="toctree-l1 nav-item active"><a class="nav-link active reference internal" href="#">Introduction</a></li>
 <li class="toctree-l1 nav-item"><a class="nav-link reference internal" href="installation.html">Installation</a></li>
-<li class="toctree-l1 nav-item"><a class="nav-link reference internal" href="tutorial.html">Tutorial</a></li>
-<li class="toctree-l1 nav-item"><a class="nav-link reference internal" href="examples.html">Examples</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l1 nav-item"><a class="nav-link reference internal" href="examples.html">Examples</a></li>
 <li class="toctree-l1 nav-item"><a class="nav-link reference internal" href="api.html">API Reference</a><ul class="nav flex-column collapse">
-<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="api/compas_eve.html">compas_eve</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="api/compas_eve.html">compas_eve</a></li>
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="api/compas_eve.mqtt.html">compas_eve.mqtt</a></li>
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="api/compas_eve.memory.html">compas_eve.memory</a></li>
 </ul>
 </li>
 <li class="toctree-l1 nav-item"><a class="nav-link reference internal" href="license.html">License</a></li>
@@ -159,7 +153,7 @@
       <div class="d-none d-xl-block col-xl-2 compas-toc" role="toc">
         
         <ul class="nav flex-column" id="compas-toc">
-<li class="nav-item"><a class="nav-link reference internal" href="#">compas_eve</a><ul class="nav flex-column">
+<li class="nav-item"><a class="nav-link reference internal" href="#">Event Extensions for COMPAS</a><ul class="nav flex-column">
 <li class="nav-item"><a class="nav-link reference internal" href="#table-of-contents">Table of Contents</a></li>
 <li class="nav-item"><a class="nav-link reference internal" href="#indices-and-tables">Indices and tables</a></li>
 </ul>

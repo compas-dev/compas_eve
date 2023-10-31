@@ -20,11 +20,11 @@
   <link rel="stylesheet" type="text/css" href="_static/css/compas-reference.css" />
 
   
-  <link rel="next" title="Tutorial" href="tutorial.html" />
+  <link rel="next" title="Examples" href="examples.html" />
   
 
   
-  <link rel="prev" title="compas_eve" href="index.html" />
+  <link rel="prev" title="Event Extensions for COMPAS" href="index.html" />
   
 
   <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
@@ -35,19 +35,19 @@
   <header id="header" class="compas-header d-flex align-items-center">
     <nav class="navbar navbar-expand navbar-dark col flex-column flex-md-row text-center">
       <!-- brand -->
-      <a class="navbar-brand" href="https://compas-dev.github.io/compas_eve/">
+      <a class="navbar-brand" href="https://gramaziokohler.github.io/compas_eve/">
         <img src="_static/images/compas_icon_white.png" alt="compas_eve" width="48px" height="48px" />
       </a>
       <!-- brand -->
       <!-- primary -->
       <ul class="navbar-nav">
-        <li class="nav-item active"><a class="nav-link" href="https://compas-dev.github.io/compas_eve/">compas_eve</a></li>
+        <li class="nav-item active"><a class="nav-link" href="https://gramaziokohler.github.io/compas_eve/">compas_eve</a></li>
       </ul>
       <!-- primary -->
       <ul class="navbar-nav d-none d-md-flex ml-md-auto">
         <!-- version -->
         
-        <meta id="doc_versions" data-url="https://compas-dev.github.io/compas_eve/doc_versions.txt" data-docs="https://compas-dev.github.io/compas_eve/">
+        <meta id="doc_versions" data-url="https://gramaziokohler.github.io/compas_eve/doc_versions.txt" data-docs="https://gramaziokohler.github.io/compas_eve/">
         <li class="nav-item nav-versions dropdown">
           <a class="nav-item nav-link dropdown-toggle mr-md-2" href="#" id="bd-versions" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             0.2.1
@@ -58,7 +58,7 @@
         <!-- version -->
         <!-- social -->
         <li class="nav-item">
-          <a class="nav-link" href="https://github.com/compas-dev/compas_eve" target="_blank">
+          <a class="nav-link" href="https://github.com/gramaziokohler/compas_eve" target="_blank">
             <span class="fab fa-github fa-1x"></span>
           </a>
         </li>
@@ -91,6 +91,86 @@
         
         <section id="installation">
 <h1>Installation</h1>
+<p><strong>COMPAS EVE</strong> can be easily installed on multiple platforms,
+using popular package managers such as conda or pip.</p>
+<section id="install-with-conda">
+<h2>Install with conda</h2>
+<p>The recommended way to install <strong>COMPAS EVE</strong> is with <a class="reference external" href="https://conda.io/docs/">conda</a>.
+For example, create an environment named <code class="docutils literal notranslate"><span class="pre">project_name</span></code> and install <code class="docutils literal notranslate"><span class="pre">compas_eve</span></code>.</p>
+<div class="language-bash notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span>conda<span class="w"> </span>create<span class="w"> </span>-n<span class="w"> </span>project_name<span class="w"> </span>-c<span class="w"> </span>conda-forge<span class="w"> </span>compas_eve
+</code></pre></div>
+</div>
+<p>Afterwards, simply activate the environment and run the following
+command to check if the installation process was successful.</p>
+<div class="language-bash notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span>conda<span class="w"> </span>activate<span class="w"> </span>project_name
+python<span class="w"> </span>-m<span class="w"> </span>compas_eve
+</code></pre></div>
+</div>
+<div class="language-none notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span>COMPAS EVE v0.2.1 is installed!
+</code></pre></div>
+</div>
+<p>You are ready to use <strong>COMPAS EVE</strong>!</p>
+<section id="installation-options">
+<h3>Installation options</h3>
+<p>Install COMPAS EVE in an environment with a specific version of Python.</p>
+<div class="language-bash notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span>conda<span class="w"> </span>create<span class="w"> </span>-n<span class="w"> </span>project_name<span class="w"> </span><span class="nv">python</span><span class="o">=</span><span class="m">3</span>.8<span class="w"> </span>compas_eve
+</code></pre></div>
+</div>
+<p>Install COMPAS EVE in an existing environment.</p>
+<div class="language-bash notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span>conda<span class="w"> </span>install<span class="w"> </span>-n<span class="w"> </span>project_name<span class="w"> </span>compas_eve
+</code></pre></div>
+</div>
+</section>
+</section>
+<section id="install-with-pip">
+<h2>Install with pip</h2>
+<p>Install COMPAS EVE using <code class="docutils literal notranslate"><span class="pre">pip</span></code> from the Python Package Index.</p>
+<div class="language-bash notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span>pip<span class="w"> </span>install<span class="w"> </span>compas_eve
+</code></pre></div>
+</div>
+<p>Install an editable version from local source.</p>
+<div class="language-bash notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span><span class="nb">cd</span><span class="w"> </span>path/to/compas_eve
+pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.
+</code></pre></div>
+</div>
+<p>Note that installation with <code class="docutils literal notranslate"><span class="pre">pip</span></code> is also possible within a <code class="docutils literal notranslate"><span class="pre">conda</span></code> environment.</p>
+<div class="language-bash notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span>conda<span class="w"> </span>activate<span class="w"> </span>project_name
+pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.
+</code></pre></div>
+</div>
+</section>
+<section id="update-with-conda">
+<h2>Update with conda</h2>
+<p>To update COMPAS EVE to the latest version with <code class="docutils literal notranslate"><span class="pre">conda</span></code></p>
+<div class="language-bash notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span>conda<span class="w"> </span>update<span class="w"> </span>compas_eve
+</code></pre></div>
+</div>
+<p>To switch to a specific version</p>
+<div class="language-bash notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span>conda<span class="w"> </span>install<span class="w"> </span><span class="nv">compas_eve</span><span class="o">=</span><span class="m">0</span>.2.1
+</code></pre></div>
+</div>
+</section>
+<section id="update-with-pip">
+<h2>Update with pip</h2>
+<p>If you installed COMPAS EVE with <code class="docutils literal notranslate"><span class="pre">pip</span></code> the update command is the following</p>
+<div class="language-bash notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span>pip<span class="w"> </span>install<span class="w"> </span>--upgrade<span class="w"> </span>compas_eve
+</code></pre></div>
+</div>
+<p>Or to switch to a specific version</p>
+<div class="language-bash notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span>pip<span class="w"> </span>install<span class="w"> </span><span class="nv">compas_eve</span><span class="o">==</span><span class="m">0</span>.2.1
+</code></pre></div>
+</div>
+</section>
+<section id="working-in-rhino">
+<h2>Working in Rhino</h2>
+<p>To make <strong>COMPAS EVE</strong> available inside Rhino, open the <em>command prompt</em>,
+activate the appropriate environment, and type the following:</p>
+<div class="language-bash notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span>python<span class="w"> </span>-m<span class="w"> </span>compas_rhino.install
+</code></pre></div>
+</div>
+<p>Open Rhino, start the Python script editor, type <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">compas_eve</span></code> and
+run it to verify that your installation is working.</p>
+</section>
 </section>
 
         
@@ -112,14 +192,11 @@
           <ul class="nav flex-column collapse show active">
 <li class="toctree-l1 nav-item"><a class="nav-link reference internal" href="index.html">Introduction</a></li>
 <li class="toctree-l1 nav-item active"><a class="nav-link active reference internal" href="#">Installation</a></li>
-<li class="toctree-l1 nav-item"><a class="nav-link reference internal" href="tutorial.html">Tutorial</a></li>
-<li class="toctree-l1 nav-item"><a class="nav-link reference internal" href="examples.html">Examples</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l1 nav-item"><a class="nav-link reference internal" href="examples.html">Examples</a></li>
 <li class="toctree-l1 nav-item"><a class="nav-link reference internal" href="api.html">API Reference</a><ul class="nav flex-column collapse">
-<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="api/compas_eve.html">compas_eve</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="api/compas_eve.html">compas_eve</a></li>
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="api/compas_eve.mqtt.html">compas_eve.mqtt</a></li>
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="api/compas_eve.memory.html">compas_eve.memory</a></li>
 </ul>
 </li>
 <li class="toctree-l1 nav-item"><a class="nav-link reference internal" href="license.html">License</a></li>
@@ -133,7 +210,17 @@
       <div class="d-none d-xl-block col-xl-2 compas-toc" role="toc">
         
         <ul class="nav flex-column" id="compas-toc">
-<li class="nav-item"><a class="nav-link reference internal" href="#">Installation</a></li>
+<li class="nav-item"><a class="nav-link reference internal" href="#">Installation</a><ul class="nav flex-column">
+<li class="nav-item"><a class="nav-link reference internal" href="#install-with-conda">Install with conda</a><ul class="nav flex-column">
+<li class="nav-item"><a class="nav-link reference internal" href="#installation-options">Installation options</a></li>
+</ul>
+</li>
+<li class="nav-item"><a class="nav-link reference internal" href="#install-with-pip">Install with pip</a></li>
+<li class="nav-item"><a class="nav-link reference internal" href="#update-with-conda">Update with conda</a></li>
+<li class="nav-item"><a class="nav-link reference internal" href="#update-with-pip">Update with pip</a></li>
+<li class="nav-item"><a class="nav-link reference internal" href="#working-in-rhino">Working in Rhino</a></li>
+</ul>
+</li>
 </ul>
 
       </div>
@@ -145,20 +232,20 @@
   <footer class="compas-footer">
     <nav class="nav p-2">
       
-      <a href="index.html" title="compas_eve" class="nav-link footer-link float-start text-left d-flex w-50" rel="prev">
+      <a href="index.html" title="Event Extensions for COMPAS" class="nav-link footer-link float-start text-left d-flex w-50" rel="prev">
         <div class="nav-button p-2 m-2"><i class="fas fa-arrow-left"></i></div>
         <div class="nav-title flex-grow-1 align-self-center">
           <div class="nav-direction small font-weight-light">Previous</div>
-          compas_eve
+          Event Extensions for COMPAS
         </div>
       </a>
       
 
       
-      <a href="tutorial.html" title="Tutorial" class="nav-link footer-link float-end text-right d-flex w-50" rel="next">
+      <a href="examples.html" title="Examples" class="nav-link footer-link float-end text-right d-flex w-50" rel="next">
         <div class="nav-title footer-link flex-grow-1 align-self-center">
           <div class="nav-direction small font-weight-light">Next</div>
-          Tutorial
+          Examples
         </div>
         <div class="nav-button p-2 m-2"><i class="fas fa-arrow-right"></i></div>
       </a>
