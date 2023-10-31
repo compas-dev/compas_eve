@@ -26,6 +26,7 @@ ns.configure(
     {
         "base_folder": os.path.dirname(__file__),
         "ghuser": {
+            "prefix": "EVE",
             "source_dir": "src/compas_eve/ghpython/components",
             "target_dir": "src/compas_eve/ghpython/components/ghuser",
         },

@@ -1,5 +1,25 @@
+"""
+********************************************************************************
+compas_eve.memory
+********************************************************************************
+
+.. currentmodule:: compas_eve.memory
+
+
+Classes
+=======
+
+.. autosummary::
+    :toctree: generated/
+    :nosignatures:
+
+    InMemoryTransport
+
+"""
 from compas_eve.event_emitter import EventEmitterMixin
 from compas_eve.core import Transport
+
+__all__ = ["InMemoryTransport"]
 
 
 class InMemoryTransport(Transport, EventEmitterMixin):
@@ -16,7 +36,15 @@ class InMemoryTransport(Transport, EventEmitterMixin):
         callback()
 
     def publish(self, topic, message):
-        """Publish a message to a topic."""
+        """Publish a message to a topic.
+
+        Parameters
+        ----------
+        topic : :class:`Topic`
+            Instance of the topic to publish to.
+        message : :class:`Message`
+            Instance of the message to publish.
+        """
         event_key = "event:{}".format(topic.name)
 
         def _callback(**kwargs):
@@ -25,7 +53,23 @@ class InMemoryTransport(Transport, EventEmitterMixin):
         self.on_ready(_callback)
 
     def subscribe(self, topic, callback):
-        """Subscribe to be notified of messages on a given topic."""
+        """Subscribe to a topic.
+
+        Every time a new message is received on the topic, the callback will be invoked.
+
+        Parameters
+        ----------
+        topic : :class:`Topic`
+            Instance of the topic to subscribe to.
+        callback : function
+            Callback to invoke whenever a new message arrives. The callback should
+            receive only one `msg` argument, e.g. ``lambda msg: print(msg)``.
+
+        Returns
+        -------
+        str
+            Returns an identifier of the subscription.
+        """
         event_key = "event:{}".format(topic.name)
         subscribe_id = "{}:{}".format(event_key, id(callback))
 
@@ -61,7 +105,7 @@ class InMemoryTransport(Transport, EventEmitterMixin):
         return advertise_id
 
     def unadvertise(self, topic):
-        """Announce this code will stop publishing messages to the specified topic.
+        """Announce that this code will stop publishing messages to the specified topic.
 
         This call has no effect on the in-memory transport."""
         pass
