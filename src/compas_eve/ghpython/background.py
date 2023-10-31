@@ -3,7 +3,6 @@ from __future__ import division
 from __future__ import print_function
 
 import threading
-import time
 
 import Rhino
 import scriptcontext

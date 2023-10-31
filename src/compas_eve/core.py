@@ -97,7 +97,6 @@ class Topic(object):
     """
     # TODO: Add documentation/examples of possible options
 
-
     def __init__(self, name, message_type, **options):
         self.name = name
         self.message_type = message_type

@@ -14,13 +14,14 @@ from ghpythonlib.componentbase import executingcomponent as component
 
 DEBUG = False
 
+
 class BackgroundTaskComponent(component):
     def RunScript(self, reset, task, on):
         if not on:
-            BackgroundWorker.stop_instance_by_component(ghenv)
+            BackgroundWorker.stop_instance_by_component(ghenv)  # noqa: F821
             return None
 
-        self.worker = BackgroundWorker.instance_by_component(ghenv, task, force_new=reset)
+        self.worker = BackgroundWorker.instance_by_component(ghenv, task, force_new=reset)  # noqa: F821
 
         if not self.worker.is_working() and not self.worker.is_done() and reset:
             self.worker.start_work()
