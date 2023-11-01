@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 * Added examples and more detailed documentation for installation and usage.
+* Added `BackgroundWorker` class and `BackgroundTask` Grasshopper component to execute long-running tasks without blocking GH.
 
 ### Changed
 

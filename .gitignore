@@ -118,3 +118,6 @@ temp/**
 docs/api/generated/
 
 conda.recipe/
+
+# Grasshopper generated objects
+src/compas_eve/ghpython/components/ghuser/*.ghuser

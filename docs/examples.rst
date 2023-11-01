@@ -4,6 +4,11 @@ Examples
 
 .. currentmodule:: compas_eve
 
+.. note::
+
+    This tutorial assumes that you have already installed ``compas_eve``.
+    If you haven't, please follow the instructions in the :ref:`installation` section.
+
 The main feature of ``compas_eve`` is to allow communication between different
 parts of a program using messages. These messages are sent around using a
 publisher/subscriber model, or pub/sub for short. In pub/sub communication,
