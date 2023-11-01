@@ -21,6 +21,7 @@ Table of Contents
    Introduction <self>
    installation
    examples
+   grasshopper
    api
    license
 
