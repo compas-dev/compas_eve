@@ -35,7 +35,7 @@ class BackgroundTaskComponent(component):
         if DEBUG:
             other_workers = []
             for key in sc.sticky.keys():
-                if key.startswith('background_worker_'):
+                if key.startswith("background_worker_"):
                     worker = sc.sticky[key]
                     if worker != self.worker:
                         other_workers.append(worker)

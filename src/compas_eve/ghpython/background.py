@@ -77,6 +77,7 @@ class BackgroundWorker(object):
 
     def start_work(self):
         """Start the background processing thread where work will be performed."""
+
         def _long_running_task_wrapper(worker):
             try:
                 worker.set_internal_state_to_working()
@@ -85,6 +86,7 @@ class BackgroundWorker(object):
             except Exception as e:
                 worker.display_message(str(e))
                 worker.set_internal_state_to_cancelled()
+
         target = _long_running_task_wrapper
         args = (self,)
         self.thread = threading.Thread(target=target, args=args)

@@ -95,6 +95,7 @@ class Topic(object):
     options : dict
         A dictionary of options.
     """
+
     # TODO: Add documentation/examples of possible options
 
     def __init__(self, name, message_type, **options):
