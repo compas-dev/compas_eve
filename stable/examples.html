@@ -20,11 +20,11 @@
   <link rel="stylesheet" type="text/css" href="_static/css/compas-reference.css" />
 
   
-  <link rel="next" title="API Reference" href="api.html" />
+  <link rel="next" title="Examples in Rhino/Grasshopper" href="grasshopper.html" />
   
 
   
-  <link rel="prev" title="Tutorial" href="tutorial.html" />
+  <link rel="prev" title="Installation" href="installation.html" />
   
 
   <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
@@ -50,7 +50,7 @@
         <meta id="doc_versions" data-url="https://compas-dev.github.io/compas_eve/doc_versions.txt" data-docs="https://compas-dev.github.io/compas_eve/">
         <li class="nav-item nav-versions dropdown">
           <a class="nav-item nav-link dropdown-toggle mr-md-2" href="#" id="bd-versions" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            0.1.2
+            0.3.0
           </a>
           <div id="doc_version_list" class="dropdown-menu dropdown-menu-md-right" aria-labelledby="bd-versions"></div>
         </li>
@@ -91,8 +91,159 @@
         
         <section id="examples">
 <h1>Examples</h1>
-<div class="toctree-wrapper compound">
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This tutorial assumes that you have already installed <code class="docutils literal notranslate"><span class="pre">compas_eve</span></code>.
+If you haven’t, please follow the instructions in the <span class="xref std std-ref">installation</span> section.</p>
 </div>
+<p>The main feature of <code class="docutils literal notranslate"><span class="pre">compas_eve</span></code> is to allow communication between different
+parts of a program using messages. These messages are sent around using a
+publisher/subscriber model, or pub/sub for short. In pub/sub communication,
+messages are not sent directly from a sender to a receiver, instead, they are
+sent to a <a class="reference internal" href="api/generated/compas_eve.Topic.html#compas_eve.Topic" title="compas_eve.Topic"><code class="xref py py-class docutils literal notranslate"><span class="pre">Topic</span></code></a>. A topic is like a mailbox, the <a class="reference internal" href="api/generated/compas_eve.Publisher.html#compas_eve.Publisher" title="compas_eve.Publisher"><code class="xref py py-class docutils literal notranslate"><span class="pre">Publisher</span></code></a>
+sends messages to the topic without the need for a subcriber to be
+actively listening for messages, and also the <a class="reference internal" href="api/generated/compas_eve.Subscriber.html#compas_eve.Subscriber" title="compas_eve.Subscriber"><code class="xref py py-class docutils literal notranslate"><span class="pre">Subscriber</span></code></a> can start
+listening for messages on a topic without the need for any publisher to be
+currently sending anything.</p>
+<p>This creates a highly decoupled communication model that facilitates the creation
+of complex software with simple code.</p>
+<p>An additional benefit of pub/sub is that it is not limited to 1-to-1 communication:
+on a single topic, there can be multiple publishers and multiple subscribers all
+communicating at the same time without additional coordination.</p>
+<section id="hello-world">
+<h2>Hello World</h2>
+<p>Let’s see a <strong>Hello World</strong> example of this type of communication using <code class="docutils literal notranslate"><span class="pre">compas_eve</span></code>.
+This example is very contrived because both the publisher and the subscriber are defined
+in the same script and the same thread.</p>
+<div class="language-python notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span><span class="kn">import</span> <span class="nn">time</span>
+
+<span class="kn">from</span> <span class="nn">compas_eve</span> <span class="kn">import</span> <span class="n">Message</span>
+<span class="kn">from</span> <span class="nn">compas_eve</span> <span class="kn">import</span> <span class="n">Publisher</span>
+<span class="kn">from</span> <span class="nn">compas_eve</span> <span class="kn">import</span> <span class="n">Subscriber</span>
+<span class="kn">from</span> <span class="nn">compas_eve</span> <span class="kn">import</span> <span class="n">Topic</span>
+
+
+<span class="n">topic</span> <span class="o">=</span> <span class="n">Topic</span><span class="p">(</span><span class="s2">&quot;/compas_eve/hello_world/&quot;</span><span class="p">,</span> <span class="n">Message</span><span class="p">)</span>
+
+<span class="n">publisher</span> <span class="o">=</span> <span class="n">Publisher</span><span class="p">(</span><span class="n">topic</span><span class="p">)</span>
+<span class="n">subcriber</span> <span class="o">=</span> <span class="n">Subscriber</span><span class="p">(</span><span class="n">topic</span><span class="p">,</span> <span class="n">callback</span><span class="o">=</span><span class="k">lambda</span> <span class="n">msg</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Received message: </span><span class="si">{</span><span class="n">msg</span><span class="o">.</span><span class="n">text</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">))</span>
+<span class="n">subcriber</span><span class="o">.</span><span class="n">subscribe</span><span class="p">()</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">20</span><span class="p">):</span>
+    <span class="n">msg</span> <span class="o">=</span> <span class="n">Message</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Hello world #</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Publishing message: </span><span class="si">{</span><span class="n">msg</span><span class="o">.</span><span class="n">text</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">publisher</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</code></pre></div>
+</div>
+<p>This example is the simplest possible, and it only shows the main concepts needed
+to communicate. In particular, <code class="docutils literal notranslate"><span class="pre">compas_eve</span></code> uses by default an <strong>in-memory transport</strong>
+for the messages, this means that messages are can only be received within the same program.</p>
+</section>
+<section id="hello-threaded-world">
+<h2>Hello Threaded World</h2>
+<p>Let’s try to extend this first example and add multiple threads to illustrate
+multi-threaded communication:</p>
+<div class="language-python notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span><span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">threading</span> <span class="kn">import</span> <span class="n">Thread</span>
+
+<span class="kn">from</span> <span class="nn">compas_eve</span> <span class="kn">import</span> <span class="n">Message</span>
+<span class="kn">from</span> <span class="nn">compas_eve</span> <span class="kn">import</span> <span class="n">Publisher</span>
+<span class="kn">from</span> <span class="nn">compas_eve</span> <span class="kn">import</span> <span class="n">Subscriber</span>
+<span class="kn">from</span> <span class="nn">compas_eve</span> <span class="kn">import</span> <span class="n">Topic</span>
+
+<span class="n">topic</span> <span class="o">=</span> <span class="n">Topic</span><span class="p">(</span><span class="s2">&quot;/compas_eve/hello_world/&quot;</span><span class="p">,</span> <span class="n">Message</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">start_publisher</span><span class="p">():</span>
+    <span class="n">publisher</span> <span class="o">=</span> <span class="n">Publisher</span><span class="p">(</span><span class="n">topic</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">20</span><span class="p">):</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="n">Message</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Hello world #</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Publishing message: </span><span class="si">{</span><span class="n">msg</span><span class="o">.</span><span class="n">text</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">publisher</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">start_subscriber</span><span class="p">():</span>
+    <span class="n">subcriber</span> <span class="o">=</span> <span class="n">Subscriber</span><span class="p">(</span><span class="n">topic</span><span class="p">,</span> <span class="n">callback</span><span class="o">=</span><span class="k">lambda</span> <span class="n">msg</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Received message: </span><span class="si">{</span><span class="n">msg</span><span class="o">.</span><span class="n">text</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">))</span>
+    <span class="n">subcriber</span><span class="o">.</span><span class="n">subscribe</span><span class="p">()</span>
+
+
+<span class="c1"># Define one thread for each</span>
+<span class="n">t1</span> <span class="o">=</span> <span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">start_subscriber</span><span class="p">)</span>
+<span class="n">t2</span> <span class="o">=</span> <span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">start_publisher</span><span class="p">)</span>
+
+<span class="c1"># Start both threads</span>
+<span class="n">t1</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+<span class="n">t2</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+<span class="c1"># Wait until both threads complete</span>
+<span class="n">t1</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+<span class="n">t2</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+</code></pre></div>
+</div>
+<p>This get more interesting! Now the publisher and subscriber are in separate threads. However,
+the in-memory transport is limited to <em>same-process</em>. This means that if we launch this
+script twice, the messages will not jump from one process to the other.
+In other words, if we want to communicate with a subscriber on a different process on the machine,
+or even on a completely separate machine, we need to take an extra step.</p>
+</section>
+<section id="hello-distributed-world">
+<h2>Hello Distributed World</h2>
+<p>Fortunately, it is very easy to extend our example and enable communication across processes, machines,
+networks, continents, anything that is connected to the Internet!</p>
+<p>The only difference is that we are going to configure a different <a class="reference internal" href="api/generated/compas_eve.Transport.html#compas_eve.Transport" title="compas_eve.Transport"><code class="xref py py-class docutils literal notranslate"><span class="pre">Transport</span></code></a> implementation for
+our messages. In this case, we will use the MQTT transport method. <a class="reference external" href="https://en.wikipedia.org/wiki/MQTT">MQTT</a>
+is a network protocol very popular for IoT applications because of its lightweight.</p>
+<p>We are going to split the code and create one script for sending messages with a publisher and a different
+one for receiving. This will enable us to start the two examples at the same time from different windows, or
+potentially from different machines!</p>
+<p>First the publisher example:</p>
+<div class="language-python notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span><span class="kn">import</span> <span class="nn">time</span>
+
+<span class="kn">from</span> <span class="nn">compas_eve</span> <span class="kn">import</span> <span class="n">Message</span>
+<span class="kn">from</span> <span class="nn">compas_eve</span> <span class="kn">import</span> <span class="n">Publisher</span>
+<span class="kn">from</span> <span class="nn">compas_eve</span> <span class="kn">import</span> <span class="n">Topic</span>
+<span class="kn">from</span> <span class="nn">compas_eve.mqtt</span> <span class="kn">import</span> <span class="n">MqttTransport</span>
+
+<span class="n">topic</span> <span class="o">=</span> <span class="n">Topic</span><span class="p">(</span><span class="s2">&quot;/compas_eve/hello_world/&quot;</span><span class="p">,</span> <span class="n">Message</span><span class="p">)</span>
+<span class="n">tx</span> <span class="o">=</span> <span class="n">MqttTransport</span><span class="p">(</span><span class="s2">&quot;broker.hivemq.com&quot;</span><span class="p">)</span>
+
+<span class="n">publisher</span> <span class="o">=</span> <span class="n">Publisher</span><span class="p">(</span><span class="n">topic</span><span class="p">,</span> <span class="n">transport</span><span class="o">=</span><span class="n">tx</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">20</span><span class="p">):</span>
+    <span class="n">msg</span> <span class="o">=</span> <span class="n">Message</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Hello world #</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Publishing message: </span><span class="si">{</span><span class="n">msg</span><span class="o">.</span><span class="n">text</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">publisher</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</code></pre></div>
+</div>
+<p>And now the subscriber example:</p>
+<div class="language-python notranslate"><div class="highlight"><pre><button class="btn copy"><i class="far fa-copy"></i></button><code><span></span><span class="kn">import</span> <span class="nn">time</span>
+
+<span class="kn">from</span> <span class="nn">compas_eve</span> <span class="kn">import</span> <span class="n">Message</span>
+<span class="kn">from</span> <span class="nn">compas_eve</span> <span class="kn">import</span> <span class="n">Subscriber</span>
+<span class="kn">from</span> <span class="nn">compas_eve</span> <span class="kn">import</span> <span class="n">Topic</span>
+<span class="kn">from</span> <span class="nn">compas_eve.mqtt</span> <span class="kn">import</span> <span class="n">MqttTransport</span>
+
+<span class="n">topic</span> <span class="o">=</span> <span class="n">Topic</span><span class="p">(</span><span class="s2">&quot;/compas_eve/hello_world/&quot;</span><span class="p">,</span> <span class="n">Message</span><span class="p">)</span>
+<span class="n">tx</span> <span class="o">=</span> <span class="n">MqttTransport</span><span class="p">(</span><span class="s2">&quot;broker.hivemq.com&quot;</span><span class="p">)</span>
+
+<span class="n">subcriber</span> <span class="o">=</span> <span class="n">Subscriber</span><span class="p">(</span><span class="n">topic</span><span class="p">,</span> <span class="n">callback</span><span class="o">=</span><span class="k">lambda</span> <span class="n">msg</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Received message: </span><span class="si">{</span><span class="n">msg</span><span class="o">.</span><span class="n">text</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">),</span> <span class="n">transport</span><span class="o">=</span><span class="n">tx</span><span class="p">)</span>
+<span class="n">subcriber</span><span class="o">.</span><span class="n">subscribe</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Waiting for messages, press CTRL+C to cancel&quot;</span><span class="p">)</span>
+<span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</code></pre></div>
+</div>
+<p>You can start both programs in two completely different terminal windows,
+or even completely different computers and they will be able to communicate!</p>
+<p>And since pub/sub allows any number of publishers and any number of
+subscriber per topic, you can start the same scripts more than once and the
+messages will be received and send multiple times!</p>
+</section>
 </section>
 
         
@@ -114,14 +265,13 @@
           <ul class="nav flex-column collapse show active">
 <li class="toctree-l1 nav-item"><a class="nav-link reference internal" href="index.html">Introduction</a></li>
 <li class="toctree-l1 nav-item"><a class="nav-link reference internal" href="installation.html">Installation</a></li>
-<li class="toctree-l1 nav-item"><a class="nav-link reference internal" href="tutorial.html">Tutorial</a></li>
-<li class="toctree-l1 nav-item active"><a class="nav-link active reference internal" href="#">Examples</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l1 nav-item active"><a class="nav-link active reference internal" href="#">Examples</a></li>
+<li class="toctree-l1 nav-item"><a class="nav-link reference internal" href="grasshopper.html">Examples in Rhino/Grasshopper</a></li>
 <li class="toctree-l1 nav-item"><a class="nav-link reference internal" href="api.html">API Reference</a><ul class="nav flex-column collapse">
-<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="api/compas_eve.html">compas_eve</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="api/compas_eve.html">compas_eve</a></li>
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="api/compas_eve.mqtt.html">compas_eve.mqtt</a></li>
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="api/compas_eve.memory.html">compas_eve.memory</a></li>
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="api/compas_eve.ghpython.html">compas_eve.ghpython</a></li>
 </ul>
 </li>
 <li class="toctree-l1 nav-item"><a class="nav-link reference internal" href="license.html">License</a></li>
@@ -135,7 +285,12 @@
       <div class="d-none d-xl-block col-xl-2 compas-toc" role="toc">
         
         <ul class="nav flex-column" id="compas-toc">
-<li class="nav-item"><a class="nav-link reference internal" href="#">Examples</a></li>
+<li class="nav-item"><a class="nav-link reference internal" href="#">Examples</a><ul class="nav flex-column">
+<li class="nav-item"><a class="nav-link reference internal" href="#hello-world">Hello World</a></li>
+<li class="nav-item"><a class="nav-link reference internal" href="#hello-threaded-world">Hello Threaded World</a></li>
+<li class="nav-item"><a class="nav-link reference internal" href="#hello-distributed-world">Hello Distributed World</a></li>
+</ul>
+</li>
 </ul>
 
       </div>
@@ -147,20 +302,20 @@
   <footer class="compas-footer">
     <nav class="nav p-2">
       
-      <a href="tutorial.html" title="Tutorial" class="nav-link footer-link float-start text-left d-flex w-50" rel="prev">
+      <a href="installation.html" title="Installation" class="nav-link footer-link float-start text-left d-flex w-50" rel="prev">
         <div class="nav-button p-2 m-2"><i class="fas fa-arrow-left"></i></div>
         <div class="nav-title flex-grow-1 align-self-center">
           <div class="nav-direction small font-weight-light">Previous</div>
-          Tutorial
+          Installation
         </div>
       </a>
       
 
       
-      <a href="api.html" title="API Reference" class="nav-link footer-link float-end text-right d-flex w-50" rel="next">
+      <a href="grasshopper.html" title="Examples in Rhino/Grasshopper" class="nav-link footer-link float-end text-right d-flex w-50" rel="next">
         <div class="nav-title footer-link flex-grow-1 align-self-center">
           <div class="nav-direction small font-weight-light">Next</div>
-          API Reference
+          Examples in Rhino/Grasshopper
         </div>
         <div class="nav-button p-2 m-2"><i class="fas fa-arrow-right"></i></div>
       </a>

@@ -20,7 +20,7 @@
   <link rel="stylesheet" type="text/css" href="../_static/css/compas-reference.css" />
 
   
-  <link rel="next" title="License" href="../license.html" />
+  <link rel="next" title="Message" href="generated/compas_eve.Message.html" />
   
 
   
@@ -50,7 +50,7 @@
         <meta id="doc_versions" data-url="https://compas-dev.github.io/compas_eve/doc_versions.txt" data-docs="https://compas-dev.github.io/compas_eve/">
         <li class="nav-item nav-versions dropdown">
           <a class="nav-item nav-link dropdown-toggle mr-md-2" href="#" id="bd-versions" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            0.1.2
+            0.3.0
           </a>
           <div id="doc_version_list" class="dropdown-menu dropdown-menu-md-right" aria-labelledby="bd-versions"></div>
         </li>
@@ -91,10 +91,42 @@
 
         
         
-        <span class="target" id="module-compas_eve"></span><section id="compas-eve">
-<h1>compas_eve</h1>
-<div class="toctree-wrapper compound">
-</div>
+        <section id="module-compas_eve">
+<span id="compas-eve"></span><h1>compas_eve</h1>
+<section id="id1">
+<h2>compas_eve</h2>
+<section id="classes">
+<h3>Classes</h3>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/compas_eve.Message.html#compas_eve.Message" title="compas_eve.Message"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Message</span></code></a></p></td>
+<td><p>Message objects used for publishing and subscribing to/from topics.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/compas_eve.Topic.html#compas_eve.Topic" title="compas_eve.Topic"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Topic</span></code></a></p></td>
+<td><p>A topic is like a mailbox where messages can be sent and received.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/compas_eve.Publisher.html#compas_eve.Publisher" title="compas_eve.Publisher"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Publisher</span></code></a></p></td>
+<td><p>Publisher interface.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/compas_eve.Subscriber.html#compas_eve.Subscriber" title="compas_eve.Subscriber"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Subscriber</span></code></a></p></td>
+<td><p>Subscriber interface.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/compas_eve.Transport.html#compas_eve.Transport" title="compas_eve.Transport"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Transport</span></code></a></p></td>
+<td><p>Defines the base interface for different transport implementations.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/compas_eve.InMemoryTransport.html#compas_eve.InMemoryTransport" title="compas_eve.InMemoryTransport"><code class="xref py py-obj docutils literal notranslate"><span class="pre">InMemoryTransport</span></code></a></p></td>
+<td><p>In-Memory transport is ideal for simple single-process apps and testing.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/compas_eve.get_default_transport.html#compas_eve.get_default_transport" title="compas_eve.get_default_transport"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_default_transport</span></code></a></p></td>
+<td><p>Retrieve the default transport implementation to be used system-wide.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/compas_eve.set_default_transport.html#compas_eve.set_default_transport" title="compas_eve.set_default_transport"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_default_transport</span></code></a></p></td>
+<td><p>Assign a default transport implementation to be used system-wide.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
 </section>
 
         
@@ -116,14 +148,13 @@
           <ul class="nav flex-column collapse show active">
 <li class="toctree-l1 nav-item"><a class="nav-link reference internal" href="../index.html">Introduction</a></li>
 <li class="toctree-l1 nav-item"><a class="nav-link reference internal" href="../installation.html">Installation</a></li>
-<li class="toctree-l1 nav-item"><a class="nav-link reference internal" href="../tutorial.html">Tutorial</a></li>
-<li class="toctree-l1 nav-item"><a class="nav-link reference internal" href="../examples.html">Examples</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l1 nav-item"><a class="nav-link reference internal" href="../examples.html">Examples</a></li>
+<li class="toctree-l1 nav-item"><a class="nav-link reference internal" href="../grasshopper.html">Examples in Rhino/Grasshopper</a></li>
 <li class="toctree-l1 nav-item active"><a class="nav-link reference internal" href="../api.html">API Reference</a><ul class="nav flex-column collapse show active">
-<li class="toctree-l2 nav-item active"><a class="nav-link active reference internal" href="#">compas_eve</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l2 nav-item active"><a class="nav-link active reference internal" href="#">compas_eve</a></li>
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="compas_eve.mqtt.html">compas_eve.mqtt</a></li>
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="compas_eve.memory.html">compas_eve.memory</a></li>
+<li class="toctree-l2 nav-item"><a class="nav-link reference internal" href="compas_eve.ghpython.html">compas_eve.ghpython</a></li>
 </ul>
 </li>
 <li class="toctree-l1 nav-item"><a class="nav-link reference internal" href="../license.html">License</a></li>
@@ -137,7 +168,13 @@
       <div class="d-none d-xl-block col-xl-2 compas-toc" role="toc">
         
         <ul class="nav flex-column" id="compas-toc">
-<li class="nav-item"><a class="nav-link reference internal" href="#">compas_eve</a></li>
+<li class="nav-item"><a class="nav-link reference internal" href="#">compas_eve</a><ul class="nav flex-column">
+<li class="nav-item"><a class="nav-link reference internal" href="#id1">compas_eve</a><ul class="nav flex-column">
+<li class="nav-item"><a class="nav-link reference internal" href="#classes">Classes</a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 
       </div>
@@ -159,10 +196,10 @@
       
 
       
-      <a href="../license.html" title="License" class="nav-link footer-link float-end text-right d-flex w-50" rel="next">
+      <a href="generated/compas_eve.Message.html" title="Message" class="nav-link footer-link float-end text-right d-flex w-50" rel="next">
         <div class="nav-title footer-link flex-grow-1 align-self-center">
           <div class="nav-direction small font-weight-light">Next</div>
-          License
+          Message
         </div>
         <div class="nav-button p-2 m-2"><i class="fas fa-arrow-right"></i></div>
       </a>
