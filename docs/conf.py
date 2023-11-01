@@ -183,7 +183,7 @@ def linkcode_resolve(domain, info):
     else:
         return None
 
-    return f"https://github.com/gramaziokohler/compas_eve/blob/main/src/{filename}.py#L{lineno}"
+    return f"https://github.com/compas-dev/compas_eve/blob/main/src/{filename}.py#L{lineno}"
 
 
 # extlinks
@@ -200,9 +200,9 @@ html_theme_options = {
     "package_title": project,
     "package_version": release,
     "package_author": "Gonzalo Casas",
-    "package_docs": "https://gramaziokohler.github.io/compas_eve/",
-    "package_repo": "https://github.com/gramaziokohler/compas_eve",
-    "package_old_versions_txt": "https://gramaziokohler.github.io/compas_eve/doc_versions.txt",
+    "package_docs": "https://compas-dev.github.io/compas_eve/",
+    "package_repo": "https://github.com/compas-dev/compas_eve",
+    "package_old_versions_txt": "https://compas-dev.github.io/compas_eve/doc_versions.txt",
 }
 
 html_context = {}
