@@ -45,9 +45,13 @@ jobs:
 
   Publish:
     needs: build
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     steps:
       - uses: compas-dev/compas-actions.publish@v2
         with:
           pypi_token: ${{ secrets.PYPI }}
           github_token: ${{ secrets.TOKEN }}
+          build_ghpython_components: true
+          gh_source: src/compas_ghpython/components
+          gh_target: src/compas_ghpython/components/ghuser
+          release_name_prefix: EVE
