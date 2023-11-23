@@ -52,6 +52,6 @@ jobs:
           pypi_token: ${{ secrets.PYPI }}
           github_token: ${{ secrets.TOKEN }}
           build_ghpython_components: true
-          gh_source: src/compas_ghpython/components
-          gh_target: src/compas_ghpython/components/ghuser
-          release_name_prefix: EVE
+          gh_source: src/compas_eve/ghpython/components
+          gh_target: src/compas_eve/ghpython/components/ghuser
+          release_name_prefix: COMPAS EVE v
