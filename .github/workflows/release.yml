@@ -47,11 +47,83 @@ jobs:
     needs: build
     runs-on: windows-latest
     steps:
-      - uses: compas-dev/compas-actions.publish@v2
+      # The steps should rely on compas-actions.publish
+      # but this bug is blocking it: https://github.com/compas-dev/compas-actions.publish/issues/1
+      # so atm, it's a copy of the steps
+
+      # - uses: compas-dev/compas-actions.publish@v2
+      #   with:
+      #     pypi_token: ${{ secrets.PYPI }}
+      #     github_token: ${{ secrets.TOKEN }}
+      #     build_ghpython_components: true
+      #     gh_source: src/compas_eve/ghpython/components
+      #     gh_target: src/compas_eve/ghpython/components/ghuser
+      #     release_name_prefix: COMPAS EVE v
+
+      - uses: actions/checkout@v3
+
+      - name: Get Version From Tag
+        id: tag_name
+        run: |
+          echo "current_version=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+        shell: bash
+
+      - name: Get Changelog Entry
+        id: changelog_reader
+        uses: mindsers/changelog-reader-action@v2
         with:
-          pypi_token: ${{ secrets.PYPI }}
-          github_token: ${{ secrets.TOKEN }}
-          build_ghpython_components: true
-          gh_source: src/compas_eve/ghpython/components
-          gh_target: src/compas_eve/ghpython/components/ghuser
-          release_name_prefix: COMPAS EVE v
+          version: ${{ steps.tag_name.outputs.current_version }}
+          path: ./CHANGELOG.md
+
+      - name: Assemble Release Name
+        id: assemble_release_name
+        shell: bash
+        run: |
+          release_name="COMPAS EVE v${{ steps.tag_name.outputs.current_version }}"
+          echo Using release name: $release_name
+          echo "release_name=$release_name" >> $GITHUB_OUTPUT
+
+      - name: Create Release
+        id: create_release
+        uses: ncipollo/release-action@v1
+        with:
+          body: ${{ steps.changelog_reader.outputs.changes }}
+          token: ${{ secrets.TOKEN }}
+          name: ${{ steps.assemble_release_name.outputs.release_name }}
+
+      - name: Setup Python 3.10
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+
+      - name: Install CPython dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install wheel
+          python -m pip install --no-cache-dir -r requirements-dev.txt
+
+      - uses: NuGet/setup-nuget@v1.0.5
+      - name: Install dependencies
+        run: |
+          choco install ironpython --version=2.7.8.1
+
+      - uses: compas-dev/compas-actions.ghpython_components@v4
+        with:
+          source: src/compas_eve/ghpython/components
+          target: src/compas_eve/ghpython/components/ghuser
+          prefix: ""
+
+      - name: Copy manual components
+        run: |
+          cp src/compas_timber/ghpython/ghuser_manual/* src/compas_timber/ghpython/components/ghuser/
+
+      - shell: bash
+        run: |
+          python -m pip install --upgrade pip
+          pip install setuptools wheel twine
+          python setup.py clean --all sdist bdist_wheel
+          twine check dist/*
+          twine upload dist/* --skip-existing
+        env:
+            TWINE_USERNAME: __token__
+            TWINE_PASSWORD: ${{ secrets.PYPI }}
