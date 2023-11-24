@@ -27,7 +27,7 @@ command to check if the installation process was successful.
 
 .. code-block:: none
 
-    COMPAS EVE v0.3.2 is installed!
+    COMPAS EVE v0.3.3 is installed!
 
 You are ready to use **COMPAS EVE**!
 
@@ -83,7 +83,7 @@ To switch to a specific version
 
 .. code-block:: bash
 
-    conda install compas_eve=0.3.2
+    conda install compas_eve=0.3.3
 
 
 Update with pip
@@ -99,7 +99,7 @@ Or to switch to a specific version
 
 .. code-block:: bash
 
-    pip install compas_eve==0.3.2
+    pip install compas_eve==0.3.3
 
 
 Working in Rhino
