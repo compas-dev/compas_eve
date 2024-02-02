@@ -6,18 +6,11 @@ check-manifest >=0.36
 compas_invocations
 doc8
 flake8
-graphviz
 invoke >=0.14
-ipykernel
-ipython >=5.8
 isort
-m2r2
-matplotlib
-nbsphinx
 pydocstyle
 pytest >=3.2
-sphinx ==7.1.2
-sphinx_compas_theme >=0.15.18
+sphinx_compas2_theme
 twine
 wheel
 -e .
