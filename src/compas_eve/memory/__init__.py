@@ -16,6 +16,7 @@ Classes
     InMemoryTransport
 
 """
+
 from compas_eve.event_emitter import EventEmitterMixin
 from compas_eve.core import Transport
 
