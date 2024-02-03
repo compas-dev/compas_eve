@@ -142,7 +142,7 @@
     <div class="me-auto navbar-header-items__center">
       
         <div class="navbar-item"><nav class="navbar-nav">
-  <p class="sidebar-header-items__title"
+  <!-- <p class="sidebar-header-items__title"
      role="heading"
      aria-level="1"
      aria-label="Site Navigation">
@@ -206,7 +206,7 @@
                 </div>
             </div>
             
-  </ul>
+  </ul> -->
 </nav></div>
       
     </div>
@@ -330,7 +330,7 @@ document.write(`
       <div class="sidebar-header-items__center">
         
           <div class="navbar-item"><nav class="navbar-nav">
-  <p class="sidebar-header-items__title"
+  <!-- <p class="sidebar-header-items__title"
      role="heading"
      aria-level="1"
      aria-label="Site Navigation">
@@ -394,7 +394,7 @@ document.write(`
                 </div>
             </div>
             
-  </ul>
+  </ul> -->
 </nav></div>
         
       </div>
@@ -474,32 +474,29 @@ document.write(`
   </div>
   
     <div class="sidebar-primary-items__start sidebar-primary__section">
-        <div class="sidebar-primary-item"><nav class="bd-docs-nav bd-links"
-     aria-label="Section Navigation">
-  <!-- <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p> -->
-  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active has-children"><a class="reference internal" href="../compas_eve.html">compas_eve</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
-<li class="toctree-l2 current active"><a class="reference internal" href="compas_eve.Message.html">Message</a></li>
-<li class="toctree-l2"><a class="reference internal" href="compas_eve.Topic.html">Topic</a></li>
-<li class="toctree-l2"><a class="reference internal" href="compas_eve.Publisher.html">Publisher</a></li>
-<li class="toctree-l2"><a class="reference internal" href="compas_eve.Subscriber.html">Subscriber</a></li>
-<li class="toctree-l2"><a class="reference internal" href="compas_eve.Transport.html">Transport</a></li>
-<li class="toctree-l2"><a class="reference internal" href="compas_eve.InMemoryTransport.html">InMemoryTransport</a></li>
-<li class="toctree-l2"><a class="reference internal" href="compas_eve.get_default_transport.html">get_default_transport</a></li>
-<li class="toctree-l2"><a class="reference internal" href="compas_eve.set_default_transport.html">set_default_transport</a></li>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../grasshopper.html">Examples in Rhino/Grasshopper</a></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../../api.html">API Reference</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l2 current active"><a class="reference internal" href="../compas_eve.html">compas_eve</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../compas_eve.mqtt.html">compas_eve.mqtt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../compas_eve.memory.html">compas_eve.memory</a></li>
 </ul>
 </li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../compas_eve.mqtt.html">compas_eve.mqtt</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="compas_eve.mqtt.MqttTransport.html">MqttTransport</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../license.html">License</a></li>
 </ul>
-</li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../compas_eve.memory.html">compas_eve.memory</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="compas_eve.memory.InMemoryTransport.html">InMemoryTransport</a></li>
-</ul>
-</li>
-</ul>
-</div>
+
+    </div>
 </nav></div>
+        <div class="sidebar-primary-item"><div class="sidebar-primary-item">
+    <a href="https://compas.dev" target="_blank">
+        COMPAS.dev <i class="fa fa-external-link" aria-hidden="true"></i>
+    </a>
+</div></div>
     </div>
   
   
@@ -566,7 +563,7 @@ document.write(`
 <h1>Message.copy</h1>
 <dl class="py method">
 <dt class="sig sig-object py" id="compas_eve.Message.copy">
-<span class="sig-prename descclassname"><span class="pre">Message.</span></span><span class="sig-name descname"><span class="pre">copy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/compas-dev/compas_eve/blob/abd7cf4/src/compas_eve/../../../../../../../opt/hostedtoolcache/Python/3.10.13/x64/lib/python3.10/collections/__init__.py#L1153"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<span class="sig-prename descclassname"><span class="pre">Message.</span></span><span class="sig-name descname"><span class="pre">copy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/compas-dev/compas_eve/blob/c826151/src/compas_eve/../../../../../../../opt/hostedtoolcache/Python/3.10.13/x64/lib/python3.10/collections/__init__.py#L1153"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd></dd></dl>
 
 </section>
