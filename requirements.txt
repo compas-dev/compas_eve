@@ -1,2 +1,2 @@
 compas>=1.17.6
-paho-mqtt
+paho-mqtt >=1, <2

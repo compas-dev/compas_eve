@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 * Updated to COMPAS 2.0 theme
+* Limit dependency on `mqtt-paho` to be `>=1, <2` since version `2.0` introduces breaking changes.
 
 ### Removed
 
