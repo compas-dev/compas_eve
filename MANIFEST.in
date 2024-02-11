@@ -13,6 +13,7 @@ include AUTHORS.md
 include CHANGELOG.md
 include requirements.txt
 
+exclude compas_eve.jpg
 exclude requirements-dev.txt
 exclude pytest.ini .bumpversion.cfg .editorconfig
 exclude tasks.py
