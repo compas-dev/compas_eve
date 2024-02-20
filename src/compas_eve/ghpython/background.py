@@ -8,7 +8,12 @@ import Rhino
 import scriptcontext
 import System
 from compas_ghpython import create_id
-from compas_ghpython import update_component
+
+# COMPAS 1.x compatibility
+try:
+    from compas_ghpython.timer import update_component
+except ImportError:
+    from compas_ghpython import update_component
 
 
 class BackgroundWorker(object):
