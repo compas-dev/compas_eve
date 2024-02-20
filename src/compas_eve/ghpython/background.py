@@ -12,7 +12,7 @@ from compas_ghpython import create_id
 # COMPAS 1.x compatibility
 try:
     from compas_ghpython.timer import update_component
-except:
+except ImportError:
     from compas_ghpython import update_component
 
 
