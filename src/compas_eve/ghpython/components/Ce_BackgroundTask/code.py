@@ -3,7 +3,7 @@ Background Task component.
 
 Executes a long-running task in the background, while keeping Grasshopper reactive.
 
-COMPAS EVE v0.3.6
+COMPAS EVE v0.3.7
 """
 
 import threading
