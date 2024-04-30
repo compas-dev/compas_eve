@@ -77,6 +77,12 @@ class Message(object):
     def __getattr__(self, name):
         return self.data[name]
 
+    def __getitem__(self, key):
+        return self.data[key]
+
+    def __setitem__(self, key, value):
+        self.data[key] = value
+
     @classmethod
     def parse(cls, value):
         instance = cls(**value)

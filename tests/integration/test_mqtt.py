@@ -102,6 +102,7 @@ def test_message_type_parsing():
     received = result["event"].wait(timeout=3)
     assert received, "Message not received"
     assert result["value"].name == "Jazz"
+    assert result["value"]["name"] == "Jazz", "Messages should be accessible as dict"
     assert result["value"].hello_name == "Hello Jazz"
 
 
@@ -153,3 +154,4 @@ def test_dict_as_message():
     received = result["event"].wait(timeout=3)
     assert received, "Message not received"
     assert result["value"].name == "Jazz"
+    assert result["value"]["name"] == "Jazz", "Messages should be accessible as dict"
