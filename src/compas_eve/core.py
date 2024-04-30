@@ -126,7 +126,7 @@ class Topic(object):
             try:
                 data = dict(message)
             except Exception:
-                data = message.__to_data__()
+                data = message.__data__
         return json_dumps(data)
 
     def _message_from_json(self, json_message):
