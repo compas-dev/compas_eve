@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+* Added the option to pass arguments into the long running task of a background worker.
+* Added the option to manually control when the background worker task is set to **Done**.
+
 ### Changed
 
 ### Removed

@@ -17,7 +17,7 @@ DEBUG = False
 
 
 class BackgroundTaskComponent(component):
-    def RunScript(self, reset, task, on):
+    def RunScript(self, task, reset, on):
         if not on:
             BackgroundWorker.stop_instance_by_component(ghenv)  # noqa: F821
             return None
