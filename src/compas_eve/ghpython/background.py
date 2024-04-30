@@ -120,7 +120,7 @@ class BackgroundWorker(object):
 
     def dispose(self):
         """Invoked when the worker is being disposed."""
-        if self.dispose_function:
+        if callable(self.dispose_function):
             self.dispose_function(self)
 
     def set_internal_state_to_working(self):
