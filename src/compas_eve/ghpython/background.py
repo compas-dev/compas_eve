@@ -55,9 +55,11 @@ class BackgroundWorker(object):
     long_running_function : function, optional
         This function will be the main entry point for the long-running task.
     dispose_function : function, optional
-        If defined, this function will be called when the worker is disposed. It can be used for clean-up tasks and resource deallocation.
+        If defined, this function will be called when the worker is disposed. It can be used for clean-up tasks
+        and resource deallocation.
     auto_set_done : bool, optional
-        If true, the worker state will be automatically set to ``Done`` after the function returns. Defaults to ``True``.
+        If true, the worker state will be automatically set to ``Done`` after the function returns.
+        Defaults to ``True``.
     args : tuple, optional
         List or tuple of arguments for the invocation of the ``long_running_function``. Defaults to ``()``.
     """
@@ -97,9 +99,12 @@ class BackgroundWorker(object):
                 worker.set_internal_state_to_working()
                 result = self.long_running_function(self, *self.args)
 
-                # If a long running function is not so long-running, it don't want to set done automatically
-                # e.g. a subscriber function will terminate immediately after setting up event handlers, but it's not DONE
-                # It would be possible to busy-wait in those cases, but that's kind of silly, instead, we have this flag to control
+                # If a long running function is not so long-running,
+                # it don't want to set done automatically
+                # e.g. a subscriber function will terminate immediately after
+                # setting up event handlers, but it's not DONE.
+                # It would be possible to busy-wait in those cases,
+                # but that's kind of silly, instead, we have this flag to control
                 # the state setting to be manual
                 if self.auto_set_done:
                     worker.set_internal_state_to_done(result)
@@ -196,9 +201,11 @@ class BackgroundWorker(object):
         long_running_function : function, optional
             This function will be the main entry point for the long-running task.
         dispose_function : function, optional
-            If defined, this function will be called when the worker is disposed. It can be used for clean-up tasks and resource deallocation.
+            If defined, this function will be called when the worker is disposed.
+            It can be used for clean-up tasks and resource deallocation.
         auto_set_done : bool, optional
-            If true, the worker state will be automatically set to ``Done`` after the function returns. Defaults to ``True``.
+            If true, the worker state will be automatically set to ``Done`` after the function returns.
+            Defaults to ``True``.
         force_new : bool, optional
             Force the creation of a new background worker, by default False.
         args : tuple, optional
