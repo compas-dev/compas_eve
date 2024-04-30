@@ -1,8 +1,5 @@
-# Python 2/3 compatibility import list
-try:
-    from collections import UserDict
-except ImportError:
-    from UserDict import UserDict
+from compas.data import json_dumps
+from compas.data import json_loads
 
 DEFAULT_TRANSPORT = None
 
@@ -61,21 +58,28 @@ class Transport(object):
         pass
 
 
-class Message(UserDict):
+class Message(object):
     """Message objects used for publishing and subscribing to/from topics.
 
     A message is fundamentally a dictionary and behaves as one."""
+
+    def __init__(self, *args, **kwargs):
+        super(Message, self).__init__()
+        self.data = {}
+        self.data.update(*args, **kwargs)
+
+    def ToString(self):
+        return str(self)
 
     def __str__(self):
         return str(self.data)
 
     def __getattr__(self, name):
-        return self.__dict__["data"][name]
+        return self.data[name]
 
     @classmethod
     def parse(cls, value):
-        instance = cls()
-        instance.update(value)
+        instance = cls(**value)
         return instance
 
 
@@ -102,6 +106,26 @@ class Topic(object):
         self.name = name
         self.message_type = message_type
         self.options = options
+
+    def _message_to_json(self, message):
+        """Convert a message to a JSON string.
+
+        Normally, this method expects sub-classes of ``Message`` as input.
+        However, it can deal with regular dictionaries as well as classes
+        implementing the COMPAS data framework.
+        """
+        try:
+            data = message.data
+        except (KeyError, AttributeError):
+            try:
+                data = dict(message)
+            except Exception:
+                data = message.__to_data__()
+        return json_dumps(data)
+
+    def _message_from_json(self, json_message):
+        """Converts a jJSOn string back into a message instance."""
+        return self.message_type.parse(json_loads(json_message))
 
 
 class Publisher(object):

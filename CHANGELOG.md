@@ -11,10 +11,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 * Added the option to pass arguments into the long running task of a background worker.
 * Added the option to manually control when the background worker task is set to **Done**.
+* Added dispose function to control resource deallocation in a background worker.
 
 ### Changed
 
 * Set background threads in the background worker as daemon threads to prevent blocking the main thread.
+* Changed base class of `Message` from `UserDict` to `object` because in IronPython 2.7 `UserDict` is an old-style class. The behavior of dictionary-like is still preserved.
 
 ### Removed
 

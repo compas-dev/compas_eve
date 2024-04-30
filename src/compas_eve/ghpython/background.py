@@ -54,13 +54,15 @@ class BackgroundWorker(object):
         Grasshopper environment object
     long_running_function : function, optional
         This function will be the main entry point for the long-running task.
+    dispose_function : function, optional
+        If defined, this function will be called when the worker is disposed. It can be used for clean-up tasks and resource deallocation.
     auto_set_done : bool, optional
         If true, the worker state will be automatically set to ``Done`` after the function returns. Defaults to ``True``.
     args : tuple, optional
         List or tuple of arguments for the invocation of the ``long_running_function``. Defaults to ``()``.
     """
 
-    def __init__(self, ghenv, long_running_function=None, auto_set_done=True, args=()):
+    def __init__(self, ghenv, long_running_function=None, dispose_function=None, auto_set_done=True, args=()):
         super(BackgroundWorker, self).__init__()
         self.ghenv = ghenv
         self._is_working = False
@@ -68,6 +70,7 @@ class BackgroundWorker(object):
         self._is_cancelled = False
         self._has_requested_cancellation = False
         self.long_running_function = long_running_function
+        self.dispose_function = dispose_function
         self.auto_set_done = auto_set_done
         self.args = args
 
@@ -109,6 +112,11 @@ class BackgroundWorker(object):
         self.thread = threading.Thread(target=target, args=args)
         self.thread.daemon = True
         self.thread.start()
+
+    def dispose(self):
+        """Invoked when the worker is being disposed."""
+        if self.dispose_function:
+            self.dispose_function(self)
 
     def set_internal_state_to_working(self):
         """Set the internal state to ``working``."""
@@ -172,7 +180,9 @@ class BackgroundWorker(object):
         Rhino.RhinoApp.InvokeOnUiThread(System.Action(ui_callback))
 
     @classmethod
-    def instance_by_component(cls, ghenv, long_running_function=None, auto_set_done=True, force_new=False, args=()):
+    def instance_by_component(
+        cls, ghenv, long_running_function=None, dispose_function=None, auto_set_done=True, force_new=False, args=()
+    ):
         """Get the worker instance assigned to the component.
 
         This will get a persistant instance of a background worker
@@ -185,6 +195,8 @@ class BackgroundWorker(object):
             Grasshopper environment object
         long_running_function : function, optional
             This function will be the main entry point for the long-running task.
+        dispose_function : function, optional
+            If defined, this function will be called when the worker is disposed. It can be used for clean-up tasks and resource deallocation.
         auto_set_done : bool, optional
             If true, the worker state will be automatically set to ``Done`` after the function returns. Defaults to ``True``.
         force_new : bool, optional
@@ -203,11 +215,18 @@ class BackgroundWorker(object):
 
         if worker and force_new:
             worker.request_cancellation()
+            worker.dispose()
             worker = None
             del scriptcontext.sticky[key]
 
         if not worker:
-            worker = cls(ghenv, long_running_function=long_running_function, auto_set_done=auto_set_done, args=args)
+            worker = cls(
+                ghenv,
+                long_running_function=long_running_function,
+                dispose_function=dispose_function,
+                auto_set_done=auto_set_done,
+                args=args,
+            )
             scriptcontext.sticky[key] = worker
 
         return worker
@@ -229,5 +248,6 @@ class BackgroundWorker(object):
 
         if worker:
             worker.request_cancellation()
+            worker.dispose()
             worker = None
             del scriptcontext.sticky[key]

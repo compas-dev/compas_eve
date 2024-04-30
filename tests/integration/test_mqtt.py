@@ -1,5 +1,7 @@
 from threading import Event
 
+from compas.data import Data
+
 from compas_eve import Message
 from compas_eve import Publisher
 from compas_eve import Subscriber
@@ -101,3 +103,53 @@ def test_message_type_parsing():
     assert received, "Message not received"
     assert result["value"].name == "Jazz"
     assert result["value"].hello_name == "Hello Jazz"
+
+
+def test_compas_data_as_message():
+
+    class DataTestMessage(Data):
+        def __init__(self, name=None, eclipse=None):
+            self.name = name
+            self.eclipse = eclipse
+
+        def __to_data__(self):
+            return {"name": self.name, "eclipse": self.eclipse}
+
+        @classmethod
+        def parse(cls, value):
+            return cls.__from_data__(value)
+
+    result = dict(value=None, event=Event())
+
+    def callback(msg):
+        result["value"] = msg
+        result["event"].set()
+
+    tx = MqttTransport(HOST)
+    topic = Topic("/messages_compas_eve_test/", DataTestMessage)
+
+    Subscriber(topic, callback, transport=tx).subscribe()
+    Publisher(topic, transport=tx).publish(DataTestMessage(name="Jazz", eclipse=1.334))
+
+    received = result["event"].wait(timeout=3)
+    assert received, "Message not received"
+    assert result["value"].name == "Jazz"
+    assert result["value"].eclipse == 1.334
+
+
+def test_dict_as_message():
+    result = dict(value=None, event=Event())
+
+    def callback(msg):
+        result["value"] = msg
+        result["event"].set()
+
+    tx = MqttTransport(HOST)
+    topic = Topic("/messages_compas_eve_test/", Message)
+
+    Subscriber(topic, callback, transport=tx).subscribe()
+    Publisher(topic, transport=tx).publish(dict(name="Jazz"))
+
+    received = result["event"].wait(timeout=3)
+    assert received, "Message not received"
+    assert result["value"].name == "Jazz"
