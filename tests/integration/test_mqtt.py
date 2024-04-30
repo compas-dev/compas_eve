@@ -15,7 +15,7 @@ HOST = "broker.hivemq.com"
 def test_default_transport_publishing():
     set_default_transport(MqttTransport(HOST))
     event = Event()
-    topic = Topic("/messages_compas_eve_test/", Message)
+    topic = Topic("/messages_compas_eve_test/test_default_transport_publishing/", Message)
 
     Subscriber(topic, lambda m: event.set()).subscribe()
     Publisher(topic).publish(Message(done=True))
@@ -27,7 +27,7 @@ def test_default_transport_publishing():
 def test_pubsub():
     tx = MqttTransport(HOST)
     event = Event()
-    topic = Topic("/messages_compas_eve_test/", Message)
+    topic = Topic("/messages_compas_eve_test/test_pubsub/", Message)
 
     Subscriber(topic, lambda m: event.set(), transport=tx).subscribe()
     Publisher(topic, transport=tx).publish(Message(done=True))
@@ -40,7 +40,7 @@ def test_two_subs():
     tx = MqttTransport(HOST)
     event1 = Event()
     event2 = Event()
-    topic = Topic("/messages_compas_eve_test/", Message)
+    topic = Topic("/messages_compas_eve_test/test_two_subs/", Message)
 
     Subscriber(topic, lambda m: event1.set(), transport=tx).subscribe()
     Subscriber(topic, lambda m: event2.set(), transport=tx).subscribe()
@@ -54,7 +54,7 @@ def test_two_subs():
 
 def test_unsub():
     tx = MqttTransport(HOST)
-    topic = Topic("/messages_compas_eve_test/", Message)
+    topic = Topic("/messages_compas_eve_test/test_unsub/", Message)
 
     result = dict(count=0, event=Event())
 
@@ -94,7 +94,7 @@ def test_message_type_parsing():
         result["event"].set()
 
     tx = MqttTransport(HOST)
-    topic = Topic("/messages_compas_eve_test/", TestMessage)
+    topic = Topic("/messages_compas_eve_test/test_message_type_parsing/", TestMessage)
 
     Subscriber(topic, callback, transport=tx).subscribe()
     Publisher(topic, transport=tx).publish(TestMessage(name="Jazz"))
@@ -126,7 +126,7 @@ def test_compas_data_as_message():
         result["event"].set()
 
     tx = MqttTransport(HOST)
-    topic = Topic("/messages_compas_eve_test/", DataTestMessage)
+    topic = Topic("/messages_compas_eve_test/test_compas_data_as_message/", DataTestMessage)
 
     Subscriber(topic, callback, transport=tx).subscribe()
     Publisher(topic, transport=tx).publish(DataTestMessage(name="Jazz", eclipse=1.334))
@@ -145,7 +145,7 @@ def test_dict_as_message():
         result["event"].set()
 
     tx = MqttTransport(HOST)
-    topic = Topic("/messages_compas_eve_test/", Message)
+    topic = Topic("/messages_compas_eve_test/test_dict_as_message/", Message)
 
     Subscriber(topic, callback, transport=tx).subscribe()
     Publisher(topic, transport=tx).publish(dict(name="Jazz"))
