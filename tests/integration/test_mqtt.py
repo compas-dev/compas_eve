@@ -108,13 +108,31 @@ def test_message_type_parsing():
 
 def test_compas_data_as_message():
 
-    class DataTestMessage(Data):
-        def __init__(self, name=None, eclipse=None):
-            self.name = name
-            self.eclipse = eclipse
+    class Header(Data):
+        def __init__(self, sequence_id=None):
+            self.sequence_id = sequence_id
 
-        def __to_data__(self):
-            return {"name": self.name, "eclipse": self.eclipse}
+        @property
+        def __data__(self):
+            return {"sequence_id": self.sequence_id}
+
+    class DataTestMessage(Data):
+        def __init__(self, name=None, location=None, header=None):
+            self.name = name
+            self.location = location
+            self.header = header or Header(1)
+
+        @property
+        def __data__(self):
+            return {"name": self.name, "location": self.location, "header": self.header.__data__}
+
+        @classmethod
+        def __from_data__(cls, data):
+            return cls(
+                name=data["name"],
+                location=data["location"],
+                header=Header.__from_data__(data["header"]),
+            )
 
         @classmethod
         def parse(cls, value):
@@ -130,12 +148,13 @@ def test_compas_data_as_message():
     topic = Topic("/messages_compas_eve_test/test_compas_data_as_message/", DataTestMessage)
 
     Subscriber(topic, callback, transport=tx).subscribe()
-    Publisher(topic, transport=tx).publish(DataTestMessage(name="Jazz", eclipse=1.334))
+    Publisher(topic, transport=tx).publish(DataTestMessage(name="Jazz", location=1.334))
 
     received = result["event"].wait(timeout=3)
     assert received, "Message not received"
     assert result["value"].name == "Jazz"
-    assert result["value"].eclipse == 1.334
+    assert result["value"].location == 1.334
+    assert result["value"].header.sequence_id == 1
 
 
 def test_dict_as_message():
