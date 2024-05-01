@@ -11,6 +11,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+* Fix/add json serialization support to `Message` class.
+* Fix get/set attr/item recursion bug. 
+
 ### Removed
 
 
