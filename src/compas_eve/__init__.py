@@ -34,7 +34,7 @@ __author__ = ["Gonzalo Casas"]
 __copyright__ = "Gramazio Kohler Research"
 __license__ = "MIT License"
 __email__ = "casas@arch.ethz.ch"
-__version__ = "0.4.0"
+__version__ = "0.5.0"
 
 from .event_emitter import EventEmitterMixin  # noqa: F401 needed here to avoid circular import on py2.7
 from .core import (
