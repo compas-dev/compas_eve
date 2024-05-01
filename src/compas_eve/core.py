@@ -124,13 +124,13 @@ class Topic(object):
             data = message.data
         except (KeyError, AttributeError):
             try:
-                data = dict(message)
-            except Exception:
                 data = message.__data__
+            except (KeyError, AttributeError):
+                data = dict(message)
         return json_dumps(data)
 
     def _message_from_json(self, json_message):
-        """Converts a jJSOn string back into a message instance."""
+        """Converts a JSON string back into a message instance."""
         return self.message_type.parse(json_loads(json_message))
 
 
