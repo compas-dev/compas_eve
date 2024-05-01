@@ -577,21 +577,20 @@ This example is very contrived because both the publisher and the subscriber are
 in the same script and the same thread.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">time</span>
 
-<span class="kn">from</span> <span class="nn">compas_eve</span> <span class="kn">import</span> <span class="n">Message</span>
 <span class="kn">from</span> <span class="nn">compas_eve</span> <span class="kn">import</span> <span class="n">Publisher</span>
 <span class="kn">from</span> <span class="nn">compas_eve</span> <span class="kn">import</span> <span class="n">Subscriber</span>
 <span class="kn">from</span> <span class="nn">compas_eve</span> <span class="kn">import</span> <span class="n">Topic</span>
 
 
-<span class="n">topic</span> <span class="o">=</span> <span class="n">Topic</span><span class="p">(</span><span class="s2">&quot;/compas_eve/hello_world/&quot;</span><span class="p">,</span> <span class="n">Message</span><span class="p">)</span>
+<span class="n">topic</span> <span class="o">=</span> <span class="n">Topic</span><span class="p">(</span><span class="s2">&quot;/compas_eve/hello_world/&quot;</span><span class="p">)</span>
 
 <span class="n">publisher</span> <span class="o">=</span> <span class="n">Publisher</span><span class="p">(</span><span class="n">topic</span><span class="p">)</span>
-<span class="n">subcriber</span> <span class="o">=</span> <span class="n">Subscriber</span><span class="p">(</span><span class="n">topic</span><span class="p">,</span> <span class="n">callback</span><span class="o">=</span><span class="k">lambda</span> <span class="n">msg</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Received message: </span><span class="si">{</span><span class="n">msg</span><span class="o">.</span><span class="n">text</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">))</span>
+<span class="n">subcriber</span> <span class="o">=</span> <span class="n">Subscriber</span><span class="p">(</span><span class="n">topic</span><span class="p">,</span> <span class="n">callback</span><span class="o">=</span><span class="k">lambda</span> <span class="n">msg</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Received message: </span><span class="si">{</span><span class="n">msg</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">))</span>
 <span class="n">subcriber</span><span class="o">.</span><span class="n">subscribe</span><span class="p">()</span>
 
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">20</span><span class="p">):</span>
-    <span class="n">msg</span> <span class="o">=</span> <span class="n">Message</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Hello world #</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Publishing message: </span><span class="si">{</span><span class="n">msg</span><span class="o">.</span><span class="n">text</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">msg</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Hello world #</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Publishing message: </span><span class="si">{</span><span class="n">msg</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
     <span class="n">publisher</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
     <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
@@ -607,26 +606,25 @@ multi-threaded communication:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">time</span>
 <span class="kn">from</span> <span class="nn">threading</span> <span class="kn">import</span> <span class="n">Thread</span>
 
-<span class="kn">from</span> <span class="nn">compas_eve</span> <span class="kn">import</span> <span class="n">Message</span>
 <span class="kn">from</span> <span class="nn">compas_eve</span> <span class="kn">import</span> <span class="n">Publisher</span>
 <span class="kn">from</span> <span class="nn">compas_eve</span> <span class="kn">import</span> <span class="n">Subscriber</span>
 <span class="kn">from</span> <span class="nn">compas_eve</span> <span class="kn">import</span> <span class="n">Topic</span>
 
-<span class="n">topic</span> <span class="o">=</span> <span class="n">Topic</span><span class="p">(</span><span class="s2">&quot;/compas_eve/hello_world/&quot;</span><span class="p">,</span> <span class="n">Message</span><span class="p">)</span>
+<span class="n">topic</span> <span class="o">=</span> <span class="n">Topic</span><span class="p">(</span><span class="s2">&quot;/compas_eve/hello_world/&quot;</span><span class="p">)</span>
 
 
 <span class="k">def</span> <span class="nf">start_publisher</span><span class="p">():</span>
     <span class="n">publisher</span> <span class="o">=</span> <span class="n">Publisher</span><span class="p">(</span><span class="n">topic</span><span class="p">)</span>
 
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">20</span><span class="p">):</span>
-        <span class="n">msg</span> <span class="o">=</span> <span class="n">Message</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Hello world #</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Publishing message: </span><span class="si">{</span><span class="n">msg</span><span class="o">.</span><span class="n">text</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Hello world #</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Publishing message: </span><span class="si">{</span><span class="n">msg</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="n">publisher</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
         <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 
 
 <span class="k">def</span> <span class="nf">start_subscriber</span><span class="p">():</span>
-    <span class="n">subcriber</span> <span class="o">=</span> <span class="n">Subscriber</span><span class="p">(</span><span class="n">topic</span><span class="p">,</span> <span class="n">callback</span><span class="o">=</span><span class="k">lambda</span> <span class="n">msg</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Received message: </span><span class="si">{</span><span class="n">msg</span><span class="o">.</span><span class="n">text</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">))</span>
+    <span class="n">subcriber</span> <span class="o">=</span> <span class="n">Subscriber</span><span class="p">(</span><span class="n">topic</span><span class="p">,</span> <span class="n">callback</span><span class="o">=</span><span class="k">lambda</span> <span class="n">msg</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Received message: </span><span class="si">{</span><span class="n">msg</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">))</span>
     <span class="n">subcriber</span><span class="o">.</span><span class="n">subscribe</span><span class="p">()</span>
 
 
@@ -652,7 +650,7 @@ or even on a completely separate machine, we need to take an extra step.</p>
 <section id="hello-distributed-world">
 <h2>Hello Distributed World</h2>
 <p>Fortunately, it is very easy to extend our example and enable communication across processes, machines,
-networks, continents, anything that is connected to the Internet!</p>
+networks, continents, and anything that is connected to the Internet!</p>
 <p>The only difference is that we are going to configure a different <a class="reference internal" href="api/generated/compas_eve.Transport.html" title="compas_eve.Transport"><code class="xref py py-class docutils literal notranslate"><span class="pre">Transport</span></code></a> implementation for
 our messages. In this case, we will use the MQTT transport method. <a class="reference external" href="https://en.wikipedia.org/wiki/MQTT">MQTT</a>
 is a network protocol very popular for IoT applications because of its lightweight.</p>
@@ -662,19 +660,18 @@ potentially from different machines!</p>
 <p>First the publisher example:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">time</span>
 
-<span class="kn">from</span> <span class="nn">compas_eve</span> <span class="kn">import</span> <span class="n">Message</span>
 <span class="kn">from</span> <span class="nn">compas_eve</span> <span class="kn">import</span> <span class="n">Publisher</span>
 <span class="kn">from</span> <span class="nn">compas_eve</span> <span class="kn">import</span> <span class="n">Topic</span>
 <span class="kn">from</span> <span class="nn">compas_eve.mqtt</span> <span class="kn">import</span> <span class="n">MqttTransport</span>
 
-<span class="n">topic</span> <span class="o">=</span> <span class="n">Topic</span><span class="p">(</span><span class="s2">&quot;/compas_eve/hello_world/&quot;</span><span class="p">,</span> <span class="n">Message</span><span class="p">)</span>
+<span class="n">topic</span> <span class="o">=</span> <span class="n">Topic</span><span class="p">(</span><span class="s2">&quot;/compas_eve/hello_world/&quot;</span><span class="p">)</span>
 <span class="n">tx</span> <span class="o">=</span> <span class="n">MqttTransport</span><span class="p">(</span><span class="s2">&quot;broker.hivemq.com&quot;</span><span class="p">)</span>
 
 <span class="n">publisher</span> <span class="o">=</span> <span class="n">Publisher</span><span class="p">(</span><span class="n">topic</span><span class="p">,</span> <span class="n">transport</span><span class="o">=</span><span class="n">tx</span><span class="p">)</span>
 
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">20</span><span class="p">):</span>
-    <span class="n">msg</span> <span class="o">=</span> <span class="n">Message</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Hello world #</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Publishing message: </span><span class="si">{</span><span class="n">msg</span><span class="o">.</span><span class="n">text</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">msg</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Hello world #</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Publishing message: </span><span class="si">{</span><span class="n">msg</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
     <span class="n">publisher</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
     <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
@@ -682,15 +679,14 @@ potentially from different machines!</p>
 <p>And now the subscriber example:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">time</span>
 
-<span class="kn">from</span> <span class="nn">compas_eve</span> <span class="kn">import</span> <span class="n">Message</span>
 <span class="kn">from</span> <span class="nn">compas_eve</span> <span class="kn">import</span> <span class="n">Subscriber</span>
 <span class="kn">from</span> <span class="nn">compas_eve</span> <span class="kn">import</span> <span class="n">Topic</span>
 <span class="kn">from</span> <span class="nn">compas_eve.mqtt</span> <span class="kn">import</span> <span class="n">MqttTransport</span>
 
-<span class="n">topic</span> <span class="o">=</span> <span class="n">Topic</span><span class="p">(</span><span class="s2">&quot;/compas_eve/hello_world/&quot;</span><span class="p">,</span> <span class="n">Message</span><span class="p">)</span>
+<span class="n">topic</span> <span class="o">=</span> <span class="n">Topic</span><span class="p">(</span><span class="s2">&quot;/compas_eve/hello_world/&quot;</span><span class="p">)</span>
 <span class="n">tx</span> <span class="o">=</span> <span class="n">MqttTransport</span><span class="p">(</span><span class="s2">&quot;broker.hivemq.com&quot;</span><span class="p">)</span>
 
-<span class="n">subcriber</span> <span class="o">=</span> <span class="n">Subscriber</span><span class="p">(</span><span class="n">topic</span><span class="p">,</span> <span class="n">callback</span><span class="o">=</span><span class="k">lambda</span> <span class="n">msg</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Received message: </span><span class="si">{</span><span class="n">msg</span><span class="o">.</span><span class="n">text</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">),</span> <span class="n">transport</span><span class="o">=</span><span class="n">tx</span><span class="p">)</span>
+<span class="n">subcriber</span> <span class="o">=</span> <span class="n">Subscriber</span><span class="p">(</span><span class="n">topic</span><span class="p">,</span> <span class="n">callback</span><span class="o">=</span><span class="k">lambda</span> <span class="n">msg</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Received message: </span><span class="si">{</span><span class="n">msg</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">),</span> <span class="n">transport</span><span class="o">=</span><span class="n">tx</span><span class="p">)</span>
 <span class="n">subcriber</span><span class="o">.</span><span class="n">subscribe</span><span class="p">()</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Waiting for messages, press CTRL+C to cancel&quot;</span><span class="p">)</span>
@@ -703,6 +699,44 @@ or even completely different computers and they will be able to communicate!</p>
 <p>And since pub/sub allows any number of publishers and any number of
 subscriber per topic, you can start the same scripts more than once and the
 messages will be received and send multiple times!</p>
+</section>
+<section id="add-typing-information-to-messages">
+<h2>Add typing information to messages</h2>
+<p>So far, we have defined our messages as simple dictionaries.
+It is also possible to define a class that messages need to comform to,
+in order to get typing information on the messages.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">compas_eve</span> <span class="k">as</span> <span class="nn">eve</span>
+
+
+<span class="c1"># Create a custom message type</span>
+<span class="k">class</span> <span class="nc">CustomMessage</span><span class="p">(</span><span class="n">eve</span><span class="o">.</span><span class="n">Message</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">CustomMessage</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+
+
+<span class="c1"># Define a default transport using MQTT</span>
+<span class="kn">from</span> <span class="nn">compas_eve.mqtt</span> <span class="kn">import</span> <span class="n">MqttTransport</span>
+
+<span class="n">tx</span> <span class="o">=</span> <span class="n">MqttTransport</span><span class="p">(</span><span class="s2">&quot;broker.hivemq.com&quot;</span><span class="p">)</span>
+<span class="n">eve</span><span class="o">.</span><span class="n">set_default_transport</span><span class="p">(</span><span class="n">tx</span><span class="p">)</span>
+
+<span class="c1"># Create publisher and subscriber (using the EchoSubscriber for simplicity)</span>
+<span class="n">topic</span> <span class="o">=</span> <span class="n">eve</span><span class="o">.</span><span class="n">Topic</span><span class="p">(</span><span class="s2">&quot;/hello_world/&quot;</span><span class="p">,</span> <span class="n">message_type</span><span class="o">=</span><span class="n">CustomMessage</span><span class="p">)</span>
+<span class="n">pub</span> <span class="o">=</span> <span class="n">eve</span><span class="o">.</span><span class="n">Publisher</span><span class="p">(</span><span class="n">topic</span><span class="p">)</span>
+<span class="n">sub</span> <span class="o">=</span> <span class="n">eve</span><span class="o">.</span><span class="n">EchoSubscriber</span><span class="p">(</span><span class="n">topic</span><span class="p">)</span>
+<span class="n">sub</span><span class="o">.</span><span class="n">subscribe</span><span class="p">()</span>
+
+<span class="c1"># Starting publishing messages</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+    <span class="n">pub</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">CustomMessage</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This example also shows how to set a default transport so that it does
+not need to be specified on every publisher and subscriber instance.</p>
 </section>
 </section>
 
@@ -730,6 +764,7 @@ messages will be received and send multiple times!</p>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hello-world">Hello World</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hello-threaded-world">Hello Threaded World</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hello-distributed-world">Hello Distributed World</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#add-typing-information-to-messages">Add typing information to messages</a></li>
 </ul>
   </nav></div>
 

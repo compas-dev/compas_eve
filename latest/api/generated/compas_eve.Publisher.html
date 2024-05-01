@@ -559,23 +559,34 @@ document.write(`
 <h1>Publisher</h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="compas_eve.Publisher">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">compas_eve.</span></span><span class="sig-name descname"><span class="pre">Publisher</span></span><a class="reference external" href="https://github.com/compas-dev/compas_eve/blob/8ceb89c/src/compas_eve/core.py#L146"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">compas_eve.</span></span><span class="sig-name descname"><span class="pre">Publisher</span></span><a class="reference external" href="https://github.com/compas-dev/compas_eve/blob/6b3f73e/src/compas_eve/core.py#L147"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
-<p>Publisher interface.</p>
+<p>Publisher for a specific topic.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl>
+<dt><strong>topic</strong><span class="classifier"><a class="reference internal" href="compas_eve.Topic.html#compas_eve.Topic" title="compas_eve.Topic"><code class="xref py py-class docutils literal notranslate"><span class="pre">Topic</span></code></a> or str</span></dt><dd><p>The topic to publish messages to. If a string is provided, a new topic instance
+will be created using the string as topic name.</p>
+</dd>
+<dt><strong>transport</strong><span class="classifier"><a class="reference internal" href="compas_eve.Transport.html#compas_eve.Transport" title="compas_eve.Transport"><code class="xref py py-class docutils literal notranslate"><span class="pre">Transport</span></code></a>, optional</span></dt><dd><p>The transport to use for publishing. If not provided, the default transport will be used.</p>
+</dd>
+</dl>
+</dd>
+</dl>
 <p class="rubric">Methods</p>
 <table class="autosummary longtable table autosummary">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="compas_eve.Publisher.advertise.html#compas_eve.Publisher.advertise" title="compas_eve.Publisher.advertise"><code class="xref py py-obj docutils literal notranslate"><span class="pre">advertise</span></code></a></p></td>
-<td><p></p></td>
+<td><p>Advertise the publisher for the topic.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="compas_eve.Publisher.message_published.html#compas_eve.Publisher.message_published" title="compas_eve.Publisher.message_published"><code class="xref py py-obj docutils literal notranslate"><span class="pre">message_published</span></code></a></p></td>
 <td><p>Handler called when a message has been published.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="compas_eve.Publisher.publish.html#compas_eve.Publisher.publish" title="compas_eve.Publisher.publish"><code class="xref py py-obj docutils literal notranslate"><span class="pre">publish</span></code></a></p></td>
-<td><p>Publish a message to a topic.</p></td>
+<td><p>Publish a message to the topic.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="compas_eve.Publisher.unadvertise.html#compas_eve.Publisher.unadvertise" title="compas_eve.Publisher.unadvertise"><code class="xref py py-obj docutils literal notranslate"><span class="pre">unadvertise</span></code></a></p></td>
-<td><p></p></td>
+<td><p>Unadvertise the publisher for the topic.</p></td>
 </tr>
 </tbody>
 </table>
