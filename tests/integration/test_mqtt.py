@@ -110,6 +110,7 @@ def test_compas_data_as_message():
 
     class Header(Data):
         def __init__(self, sequence_id=None):
+            super(Header, self).__init__()
             self.sequence_id = sequence_id
 
         @property
@@ -118,6 +119,7 @@ def test_compas_data_as_message():
 
     class DataTestMessage(Data):
         def __init__(self, name=None, location=None, header=None):
+            super(DataTestMessage, self).__init__()
             self.name = name
             self.location = location
             self.header = header or Header(1)
@@ -146,6 +148,47 @@ def test_compas_data_as_message():
 
     tx = MqttTransport(HOST)
     topic = Topic("/messages_compas_eve_test/test_compas_data_as_message/", DataTestMessage)
+
+    Subscriber(topic, callback, transport=tx).subscribe()
+    Publisher(topic, transport=tx).publish(DataTestMessage(name="Jazz", location=1.334))
+
+    received = result["event"].wait(timeout=3)
+    assert received, "Message not received"
+    assert result["value"].name == "Jazz"
+    assert result["value"].location == 1.334
+    assert result["value"].header.sequence_id == 1
+
+
+def test_nested_message_types():
+
+    class Header(Message):
+        def __init__(self, sequence_id=None):
+            super(Header, self).__init__()
+            self["sequence_id"] = sequence_id
+
+    class DataTestMessage(Message):
+        def __init__(self, name=None, location=None, header=None):
+            super(DataTestMessage, self).__init__()
+            self["name"] = name
+            self["location"] = location
+            self["header"] = header or Header(1)
+
+        @classmethod
+        def parse(cls, value):
+            return cls(
+                name=value["name"],
+                location=value["location"],
+                header=Header(**value["header"]),
+            )
+
+    result = dict(value=None, event=Event())
+
+    def callback(msg):
+        result["value"] = msg
+        result["event"].set()
+
+    tx = MqttTransport(HOST)
+    topic = Topic("/messages_compas_eve_test/test_nested_message_types/", DataTestMessage)
 
     Subscriber(topic, callback, transport=tx).subscribe()
     Publisher(topic, transport=tx).publish(DataTestMessage(name="Jazz", location=1.334))
