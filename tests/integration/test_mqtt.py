@@ -1,5 +1,7 @@
 from threading import Event
 
+from compas.data import Data
+
 from compas_eve import Message
 from compas_eve import Publisher
 from compas_eve import Subscriber
@@ -13,7 +15,7 @@ HOST = "broker.hivemq.com"
 def test_default_transport_publishing():
     set_default_transport(MqttTransport(HOST))
     event = Event()
-    topic = Topic("/messages_compas_eve_test/", Message)
+    topic = Topic("/messages_compas_eve_test/test_default_transport_publishing/", Message)
 
     Subscriber(topic, lambda m: event.set()).subscribe()
     Publisher(topic).publish(Message(done=True))
@@ -25,7 +27,7 @@ def test_default_transport_publishing():
 def test_pubsub():
     tx = MqttTransport(HOST)
     event = Event()
-    topic = Topic("/messages_compas_eve_test/", Message)
+    topic = Topic("/messages_compas_eve_test/test_pubsub/", Message)
 
     Subscriber(topic, lambda m: event.set(), transport=tx).subscribe()
     Publisher(topic, transport=tx).publish(Message(done=True))
@@ -38,7 +40,7 @@ def test_two_subs():
     tx = MqttTransport(HOST)
     event1 = Event()
     event2 = Event()
-    topic = Topic("/messages_compas_eve_test/", Message)
+    topic = Topic("/messages_compas_eve_test/test_two_subs/", Message)
 
     Subscriber(topic, lambda m: event1.set(), transport=tx).subscribe()
     Subscriber(topic, lambda m: event2.set(), transport=tx).subscribe()
@@ -52,7 +54,7 @@ def test_two_subs():
 
 def test_unsub():
     tx = MqttTransport(HOST)
-    topic = Topic("/messages_compas_eve_test/", Message)
+    topic = Topic("/messages_compas_eve_test/test_unsub/", Message)
 
     result = dict(count=0, event=Event())
 
@@ -92,7 +94,7 @@ def test_message_type_parsing():
         result["event"].set()
 
     tx = MqttTransport(HOST)
-    topic = Topic("/messages_compas_eve_test/", TestMessage)
+    topic = Topic("/messages_compas_eve_test/test_message_type_parsing/", TestMessage)
 
     Subscriber(topic, callback, transport=tx).subscribe()
     Publisher(topic, transport=tx).publish(TestMessage(name="Jazz"))
@@ -100,4 +102,75 @@ def test_message_type_parsing():
     received = result["event"].wait(timeout=3)
     assert received, "Message not received"
     assert result["value"].name == "Jazz"
+    assert result["value"]["name"] == "Jazz", "Messages should be accessible as dict"
     assert result["value"].hello_name == "Hello Jazz"
+
+
+def test_compas_data_as_message():
+
+    class Header(Data):
+        def __init__(self, sequence_id=None):
+            self.sequence_id = sequence_id
+
+        @property
+        def __data__(self):
+            return {"sequence_id": self.sequence_id}
+
+    class DataTestMessage(Data):
+        def __init__(self, name=None, location=None, header=None):
+            self.name = name
+            self.location = location
+            self.header = header or Header(1)
+
+        @property
+        def __data__(self):
+            return {"name": self.name, "location": self.location, "header": self.header.__data__}
+
+        @classmethod
+        def __from_data__(cls, data):
+            return cls(
+                name=data["name"],
+                location=data["location"],
+                header=Header.__from_data__(data["header"]),
+            )
+
+        @classmethod
+        def parse(cls, value):
+            return cls.__from_data__(value)
+
+    result = dict(value=None, event=Event())
+
+    def callback(msg):
+        result["value"] = msg
+        result["event"].set()
+
+    tx = MqttTransport(HOST)
+    topic = Topic("/messages_compas_eve_test/test_compas_data_as_message/", DataTestMessage)
+
+    Subscriber(topic, callback, transport=tx).subscribe()
+    Publisher(topic, transport=tx).publish(DataTestMessage(name="Jazz", location=1.334))
+
+    received = result["event"].wait(timeout=3)
+    assert received, "Message not received"
+    assert result["value"].name == "Jazz"
+    assert result["value"].location == 1.334
+    assert result["value"].header.sequence_id == 1
+
+
+def test_dict_as_message():
+    result = dict(value=None, event=Event())
+
+    def callback(msg):
+        result["value"] = msg
+        result["event"].set()
+
+    tx = MqttTransport(HOST)
+    topic = Topic("/messages_compas_eve_test/test_dict_as_message/", Message)
+
+    Subscriber(topic, callback, transport=tx).subscribe()
+    Publisher(topic, transport=tx).publish(dict(name="Jazz"))
+
+    received = result["event"].wait(timeout=3)
+    assert received, "Message not received"
+    assert result["value"].name == "Jazz"
+    assert result["value"]["name"] == "Jazz", "Messages should be accessible as dict"

@@ -4,11 +4,7 @@ from __future__ import print_function
 from ..core import Transport
 from ..event_emitter import EventEmitterMixin
 
-from compas.data import json_dumps
-from compas.data import json_loads
-
 import clr
-import json
 import os
 import sys
 
@@ -75,11 +71,11 @@ class MqttTransport(Transport, EventEmitterMixin):
             self.once("ready", callback)
 
     def publish(self, topic, message):
-        # TODO: can we avoid the additional cast to dict?
+        json_message = topic._message_to_json(message)
         application_message = (
             MqttApplicationMessageBuilder()
             .WithTopic(topic.name)
-            .WithPayload(json_dumps(dict(message)))
+            .WithPayload(json_message)
             .Build()
         )
 
@@ -94,7 +90,7 @@ class MqttTransport(Transport, EventEmitterMixin):
 
         def _local_callback(application_message):
             payload = Encoding.UTF8.GetString(application_message.Payload)
-            msg = topic.message_type.parse(json_loads(payload))
+            msg = topic._message_from_json(payload)
             callback(msg)
 
         def _subscribe_callback(**kwargs):

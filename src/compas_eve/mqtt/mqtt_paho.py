@@ -1,6 +1,3 @@
-from compas.data import json_dumps
-from compas.data import json_loads
-
 from ..core import Transport
 from ..event_emitter import EventEmitterMixin
 
@@ -63,8 +60,7 @@ class MqttTransport(Transport, EventEmitterMixin):
         """
 
         def _callback(**kwargs):
-            # TODO: can we avoid the additional cast to dict?
-            json_message = json_dumps(dict(message))
+            json_message = topic._message_to_json(message)
             self.client.publish(topic.name, json_message)
 
         self.on_ready(_callback)
@@ -91,7 +87,7 @@ class MqttTransport(Transport, EventEmitterMixin):
         subscribe_id = "{}:{}".format(event_key, id(callback))
 
         def _local_callback(msg):
-            msg = topic.message_type.parse(json_loads(msg.payload.decode()))
+            msg = topic._message_from_json(msg.payload.decode())
             callback(msg)
 
         def _subscribe_callback(**kwargs):

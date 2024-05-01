@@ -54,9 +54,17 @@ class BackgroundWorker(object):
         Grasshopper environment object
     long_running_function : function, optional
         This function will be the main entry point for the long-running task.
+    dispose_function : function, optional
+        If defined, this function will be called when the worker is disposed. It can be used for clean-up tasks
+        and resource deallocation.
+    auto_set_done : bool, optional
+        If true, the worker state will be automatically set to ``Done`` after the function returns.
+        Defaults to ``True``.
+    args : tuple, optional
+        List or tuple of arguments for the invocation of the ``long_running_function``. Defaults to ``()``.
     """
 
-    def __init__(self, ghenv, long_running_function=None):
+    def __init__(self, ghenv, long_running_function=None, dispose_function=None, auto_set_done=True, args=()):
         super(BackgroundWorker, self).__init__()
         self.ghenv = ghenv
         self._is_working = False
@@ -64,6 +72,9 @@ class BackgroundWorker(object):
         self._is_cancelled = False
         self._has_requested_cancellation = False
         self.long_running_function = long_running_function
+        self.dispose_function = dispose_function
+        self.auto_set_done = auto_set_done
+        self.args = args
 
     def is_working(self):
         """Indicate whether the worker is currently working or not."""
@@ -86,8 +97,22 @@ class BackgroundWorker(object):
         def _long_running_task_wrapper(worker):
             try:
                 worker.set_internal_state_to_working()
-                result = self.long_running_function(self)
-                worker.set_internal_state_to_done(result)
+                result = self.long_running_function(self, *self.args)
+
+                # There are (at least) two types of long running functions:
+                # 1. Those that block the thread while working
+                #    (e.g. they have a busy-wait or some kind of `while` loop)
+                # 2. Those that hookup event handlers and return immediately
+                #    so then they don't need to block the thread.
+                # The first case means that we can set the state to "DONE"
+                # right after calling the function because if it returned, it really
+                # means it's done.
+                # The second case will return immediately, and setting the state to "DONE"
+                # would be wrong because the handlers are still going to trigger.
+                # In that case we can set the flag `auto_set_done` to `False` so that
+                # we don't automatically set the state to "DONE".
+                if self.auto_set_done:
+                    worker.set_internal_state_to_done(result)
             except Exception as e:
                 worker.display_message(str(e))
                 worker.set_internal_state_to_cancelled()
@@ -95,7 +120,13 @@ class BackgroundWorker(object):
         target = _long_running_task_wrapper
         args = (self,)
         self.thread = threading.Thread(target=target, args=args)
+        self.thread.daemon = True
         self.thread.start()
+
+    def dispose(self):
+        """Invoked when the worker is being disposed."""
+        if callable(self.dispose_function):
+            self.dispose_function(self)
 
     def set_internal_state_to_working(self):
         """Set the internal state to ``working``."""
@@ -159,7 +190,9 @@ class BackgroundWorker(object):
         Rhino.RhinoApp.InvokeOnUiThread(System.Action(ui_callback))
 
     @classmethod
-    def instance_by_component(cls, ghenv, long_running_function=None, force_new=False):
+    def instance_by_component(
+        cls, ghenv, long_running_function=None, dispose_function=None, auto_set_done=True, force_new=False, args=()
+    ):
         """Get the worker instance assigned to the component.
 
         This will get a persistant instance of a background worker
@@ -172,8 +205,16 @@ class BackgroundWorker(object):
             Grasshopper environment object
         long_running_function : function, optional
             This function will be the main entry point for the long-running task.
+        dispose_function : function, optional
+            If defined, this function will be called when the worker is disposed.
+            It can be used for clean-up tasks and resource deallocation.
+        auto_set_done : bool, optional
+            If true, the worker state will be automatically set to ``Done`` after the function returns.
+            Defaults to ``True``.
         force_new : bool, optional
             Force the creation of a new background worker, by default False.
+        args : tuple, optional
+            List or tuple of arguments for the invocation of the ``long_running_function``. Defaults to ``()``.
 
         Returns
         -------
@@ -186,11 +227,18 @@ class BackgroundWorker(object):
 
         if worker and force_new:
             worker.request_cancellation()
+            worker.dispose()
             worker = None
             del scriptcontext.sticky[key]
 
         if not worker:
-            worker = cls(ghenv, long_running_function=long_running_function)
+            worker = cls(
+                ghenv,
+                long_running_function=long_running_function,
+                dispose_function=dispose_function,
+                auto_set_done=auto_set_done,
+                args=args,
+            )
             scriptcontext.sticky[key] = worker
 
         return worker
@@ -212,5 +260,6 @@ class BackgroundWorker(object):
 
         if worker:
             worker.request_cancellation()
+            worker.dispose()
             worker = None
             del scriptcontext.sticky[key]
