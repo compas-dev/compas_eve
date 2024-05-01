@@ -99,13 +99,18 @@ class BackgroundWorker(object):
                 worker.set_internal_state_to_working()
                 result = self.long_running_function(self, *self.args)
 
-                # If a long running function is not so long-running,
-                # it don't want to set done automatically
-                # e.g. a subscriber function will terminate immediately after
-                # setting up event handlers, but it's not DONE.
-                # It would be possible to busy-wait in those cases,
-                # but that's kind of silly, instead, we have this flag to control
-                # the state setting to be manual
+                # There are (at least) two types of long running functions:
+                # 1. Those that block the thread while working
+                #    (e.g. they have a busy-wait or some kind of `while` loop)
+                # 2. Those that hookup event handlers and return immediately
+                #    so then they don't need to block the thread.
+                # The first case means that we can set the state to "DONE"
+                # right after calling the function because if it returned, it really
+                # means it's done.
+                # The second case will return immediately, and setting the state to "DONE"
+                # would be wrong because the handlers are still going to trigger.
+                # In that case we can set the flag `auto_set_done` to `False` so that
+                # we don't automatically set the state to "DONE".
                 if self.auto_set_done:
                     worker.set_internal_state_to_done(result)
             except Exception as e:
