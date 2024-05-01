@@ -111,15 +111,16 @@ class Topic(object):
     message_type : type
         Class defining the message structure. Use :class:`Message` for
         a generic, non-typed checked message implementation.
+        Defaults to :class:`Message`.
     options : dict
         A dictionary of options.
     """
 
     # TODO: Add documentation/examples of possible options
 
-    def __init__(self, name, message_type, **options):
+    def __init__(self, name, message_type=None, **options):
         self.name = name
-        self.message_type = message_type
+        self.message_type = message_type or Message
         self.options = options
 
     def _message_to_json(self, message):
@@ -144,19 +145,30 @@ class Topic(object):
 
 
 class Publisher(object):
-    """Publisher interface."""
+    """Publisher for a specific topic.
+
+    Parameters
+    ----------
+    topic : :class:`Topic` or str
+        The topic to publish messages to. If a string is provided, a new topic instance
+        will be created using the string as topic name.
+    transport : :class:`Transport`, optional
+        The transport to use for publishing. If not provided, the default transport will be used.
+    """
 
     def __init__(self, topic, transport=None):
-        self.topic = topic
+        self.topic = topic if isinstance(topic, Topic) else Topic(topic)
         self.transport = transport or get_default_transport()
         self._advertise_id = None
 
     @property
     def is_advertised(self):
-        """Indicate if the publisher has announce its topic as advertised or not.
+        """Indicate if the publisher has announced its topic as advertised or not.
 
-        Returns:
-            bool: True if advertised as publisher of this topic, False otherwise.
+        Returns
+        -------
+        bool
+            True if advertised as publisher of this topic, False otherwise.
         """
         return self._advertise_id is not None
 
@@ -165,7 +177,13 @@ class Publisher(object):
         pass
 
     def publish(self, message):
-        """Publish a message to a topic."""
+        """Publish a message to the topic.
+
+        Parameters
+        ----------
+        message : :class:`Message` or dict
+            The message to publish.
+        """
         # TODO: check if message type matches self.topic.message_type declared
         if not self.is_advertised:
             self.advertise()
@@ -174,12 +192,14 @@ class Publisher(object):
         self.message_published(message)
 
     def advertise(self):
+        """Advertise the publisher for the topic."""
         if self.is_advertised:
             return
 
         self._advertise_id = self.transport.advertise(self.topic)
 
     def unadvertise(self):
+        """Unadvertise the publisher for the topic."""
         if not self.is_advertised:
             return
 
@@ -188,11 +208,20 @@ class Publisher(object):
 
 
 class Subscriber(object):
-    """Subscriber interface."""
+    """Subscriber for a specific topic.
+
+    Parameters
+    ----------
+    topic : :class:`Topic` or str
+        The topic to subscribe to. If a string is provided, a new topic instance
+        will be created using the string as topic name.
+    transport : :class:`Transport`, optional
+        The transport to use for subscribing. If not provided, the default transport will be used.
+    """
 
     def __init__(self, topic, callback=None, transport=None):
         self.transport = transport or get_default_transport()
-        self.topic = topic
+        self.topic = topic if isinstance(topic, Topic) else Topic(topic)
         self._subscribe_id = None
         self._callback = callback
 
@@ -222,3 +251,21 @@ class Subscriber(object):
 
         self.transport.unsubscribe_by_id(self._subscribe_id)
         self._subscribe_id = None
+
+
+class EchoSubscriber(Subscriber):
+    """Simple subscriber that prints received messages on the console (ie. `stdout`).
+
+    Parameters
+    ----------
+    topic : :class:`Topic` or str
+        The topic to subscribe to. If a string is provided, a new topic instance
+        will be created using the string as topic name.
+    """
+
+    def __init__(self, topic, transport=None):
+        super(EchoSubscriber, self).__init__(topic, callback=self.echo, transport=transport)
+
+    def echo(self, message):
+        """Print received messages to the console."""
+        print(str(message))

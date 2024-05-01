@@ -1,92 +1,90 @@
-# compas_eve
+# COMPAS EVE
 
-COMPAS Event Extensions: adds event-based communication infrastructure to the COMPAS framework.
+Event-based communication for the COMPAS framework.
 
+```python
+>>> import compas_eve as eve
+>>> pub = eve.Publisher("/hello_world")
+>>> sub = eve.EchoSubscriber("/hello_world")
+>>> sub.subscribe()
+>>> for i in range(10):
+...    pub.publish(dict(text=f"Hello World {i}"))
+```
 
-## Getting started with this project
+It is extremely easy to send messages around. COMPAS EVE supports
+different transport mechanisms to send messages between different threads, processes, computers, etc.
 
-### Setup code editor
+## Installation
 
-1. Open project folder in VS Code
-2. Select python environment for the project
-3. First time using VS Code and on Windows? Make sure select the correct terminal profile: `Ctrl+Shift+P`, `Terminal: Select Default Profile` and select `Command Prompt`.
+Install using `pip`:
 
-> All terminal commands in the following sections can be run from the VS Code integrated terminal. 
+```bash
 
+    pip install compas_eve
+```
 
-### First steps with git
+Or using `conda`:
 
-1. Go to the `Source control` tab
-2. Make an initial commit with all newly created files
+```bash
 
+    conda install compas_eve
+```
 
-### First steps with code
+## Supported features
 
-1. Install the newly created project 
+* Publisher/subscriber communication model (N-to-N communication)
+* In-process events
+* MQTT support
+* CPython & IronPython support
 
-        pip install -e .
+## Examples
 
-2. Install it on Rhino
+### In-process events
 
-        python -m compas_rhino.install
+The simplest option is to use in-process events. This works for
+simple applications and allows to communicate between threads.
 
+```python
+import compas_eve as eve
 
-### Code conventions
+pub = eve.Publisher("/hello_world")
+sub = eve.EchoSubscriber("/hello_world")
+sub.subscribe()
 
-Code convention follows [PEP8](https://pep8.org/) style guidelines and line length of 120 characters.
+for i in range(10):
+    pub.publish(dict(text=f"Hello World {i}"))
+```
 
-1. Check adherence to style guidelines
+### MQTT
 
-        invoke lint
+MQTT is a protocol that allows to send messages between different
+systems/computers. Using MQTT is very simple as well:
 
-2. Format code automatically
+```python
+import compas_eve as eve
+from compas_eve.mqtt import MqttTransport
 
-        invoke format
+tx = MqttTransport("broker.hivemq.com")
+eve.set_default_transport(tx)
 
+pub = eve.Publisher("/hello_world")
+sub = eve.EchoSubscriber("/hello_world")
+sub.subscribe()
 
-### Documentation
+for i in range(10):
+    pub.publish(dict(text=f"Hello World {i}"))
+```
 
-Documentation is generated automatically out of docstrings and [RST](https://www.sphinx-doc.org/en/master/usage/restructuredtext/basics.html) files in this repository
-
-1. Generate the docs
-
-        invoke docs
-
-2. Check links in docs are valid
-
-        invoke linkcheck
-
-3. Open docs in your browser (file explorer -> `dist/docs/index.html`)
-
-
-### Testing
-
-Tests are written using the [pytest](https://docs.pytest.org/) framework
-
-1. Run all tests from terminal
-
-        invoke test
-
-2. Or run them from VS Code from the `Testing` tab
-
-
-### Developing Grasshopper components
-
-We use [Grasshopper Componentizer](https://github.com/compas-dev/compas-actions.ghpython_components) to develop Python components that can be stored and edited on git.
-
-1. Build components
-
-        invoke build-ghuser-components
-
-2. Install components on Rhino
-
-        python -m compas_rhino.install
+This example shows how to send and receive from a single script, but
+running publishers and subscribers on different scripts, different processes, or even different computers will work the exact same way.
 
 
-### Publish release
+### Usage from Rhinoceros 3D
 
-Releases follow the [semver](https://semver.org/spec/v2.0.0.html) versioning convention.
+It is possible to use the same code from within Rhino/Grasshopper.
 
-1. Create a new release
+Make sure you have installed it to Rhino using the COMPAS installation mechanism:
 
-        invoke release major
+```bash
+    python -m compas_rhino.install -v 7.0
+```
