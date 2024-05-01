@@ -77,11 +77,20 @@ class Message(object):
     def __getattr__(self, name):
         return self.data[name]
 
+    def __setattr__(self, key, value):
+        if key == "data" or key in self.__dict__:
+            super(Message, self).__setattr__(key, value)
+        else:
+            self.data[key] = value
+
     def __getitem__(self, key):
         return self.data[key]
 
     def __setitem__(self, key, value):
         self.data[key] = value
+
+    def __jsondump__(self, minimal=False):
+        return self.data
 
     @classmethod
     def parse(cls, value):

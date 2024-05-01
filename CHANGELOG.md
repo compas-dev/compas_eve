@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+* Fix/add json serialization support to `Message` class.
+* Fix get/set attr/item recursion bug. 
 * Simplify API: 
   * Default to `Message` class if no message type is specified.
   * Allow to use a string with the topic name in place of an instance of `Topic`.
