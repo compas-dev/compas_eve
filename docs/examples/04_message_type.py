@@ -5,7 +5,7 @@ import compas_eve as eve
 class CustomMessage(eve.Message):
     def __init__(self, value=None):
         super(CustomMessage, self).__init__()
-        self.data["value"] = value
+        self["value"] = value
 
 
 # Define a default transport using MQTT
