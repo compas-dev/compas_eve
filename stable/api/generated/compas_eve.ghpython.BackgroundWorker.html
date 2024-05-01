@@ -55,7 +55,7 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'api/generated/compas_eve.ghpython.BackgroundWorker';</script>
     <script>
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://raw.githubusercontent.com/compas-dev/compas_eve/gh-pages/versions.json';
-        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '0.3';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '0.4';
         </script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -231,7 +231,7 @@ document.write(`
 document.write(`
   <div class="version-switcher__container dropdown">
     <button type="button" class="version-switcher__button btn btn-sm navbar-btn dropdown-toggle" data-bs-toggle="dropdown">
-      0.3  <!-- this text may get changed later by javascript -->
+      0.4  <!-- this text may get changed later by javascript -->
       <span class="caret"></span>
     </button>
     <div class="version-switcher__menu dropdown-menu list-group-flush py-0">
@@ -408,7 +408,7 @@ document.write(`
 document.write(`
   <div class="version-switcher__container dropdown">
     <button type="button" class="version-switcher__button btn btn-sm navbar-btn dropdown-toggle" data-bs-toggle="dropdown">
-      0.3  <!-- this text may get changed later by javascript -->
+      0.4  <!-- this text may get changed later by javascript -->
       <span class="caret"></span>
     </button>
     <div class="version-switcher__menu dropdown-menu list-group-flush py-0">
@@ -559,7 +559,7 @@ document.write(`
 <h1>BackgroundWorker</h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="compas_eve.ghpython.BackgroundWorker">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">compas_eve.ghpython.</span></span><span class="sig-name descname"><span class="pre">BackgroundWorker</span></span><a class="reference external" href="https://github.com/compas-dev/compas_eve/blob/78b5565/src/compas_eve/ghpython/background.py#L19"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">compas_eve.ghpython.</span></span><span class="sig-name descname"><span class="pre">BackgroundWorker</span></span><a class="reference external" href="https://github.com/compas-dev/compas_eve/blob/2004e96/src/compas_eve/ghpython/background.py#L19"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Background worker simplifies the creation of long-running tasks inside Grasshopper.</p>
 <p>A long-running task is any piece of code that will run for an extended period of time,
@@ -593,6 +593,14 @@ progress while it runs.</p>
 </dd>
 <dt><strong>long_running_function</strong><span class="classifier">function, optional</span></dt><dd><p>This function will be the main entry point for the long-running task.</p>
 </dd>
+<dt><strong>dispose_function</strong><span class="classifier">function, optional</span></dt><dd><p>If defined, this function will be called when the worker is disposed. It can be used for clean-up tasks
+and resource deallocation.</p>
+</dd>
+<dt><strong>auto_set_done</strong><span class="classifier">bool, optional</span></dt><dd><p>If true, the worker state will be automatically set to <code class="docutils literal notranslate"><span class="pre">Done</span></code> after the function returns.
+Defaults to <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
+</dd>
+<dt><strong>args</strong><span class="classifier">tuple, optional</span></dt><dd><p>List or tuple of arguments for the invocation of the <code class="docutils literal notranslate"><span class="pre">long_running_function</span></code>. Defaults to <code class="docutils literal notranslate"><span class="pre">()</span></code>.</p>
+</dd>
 </dl>
 </dd>
 </dl>
@@ -605,37 +613,40 @@ progress while it runs.</p>
 <tr class="row-even"><td><p><a class="reference internal" href="compas_eve.ghpython.BackgroundWorker.display_progress.html#compas_eve.ghpython.BackgroundWorker.display_progress" title="compas_eve.ghpython.BackgroundWorker.display_progress"><code class="xref py py-obj docutils literal notranslate"><span class="pre">display_progress</span></code></a></p></td>
 <td><p>Display a progress indicator in the component.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_eve.ghpython.BackgroundWorker.has_requested_cancellation.html#compas_eve.ghpython.BackgroundWorker.has_requested_cancellation" title="compas_eve.ghpython.BackgroundWorker.has_requested_cancellation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">has_requested_cancellation</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_eve.ghpython.BackgroundWorker.dispose.html#compas_eve.ghpython.BackgroundWorker.dispose" title="compas_eve.ghpython.BackgroundWorker.dispose"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dispose</span></code></a></p></td>
+<td><p>Invoked when the worker is being disposed.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_eve.ghpython.BackgroundWorker.has_requested_cancellation.html#compas_eve.ghpython.BackgroundWorker.has_requested_cancellation" title="compas_eve.ghpython.BackgroundWorker.has_requested_cancellation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">has_requested_cancellation</span></code></a></p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_eve.ghpython.BackgroundWorker.instance_by_component.html#compas_eve.ghpython.BackgroundWorker.instance_by_component" title="compas_eve.ghpython.BackgroundWorker.instance_by_component"><code class="xref py py-obj docutils literal notranslate"><span class="pre">instance_by_component</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_eve.ghpython.BackgroundWorker.instance_by_component.html#compas_eve.ghpython.BackgroundWorker.instance_by_component" title="compas_eve.ghpython.BackgroundWorker.instance_by_component"><code class="xref py py-obj docutils literal notranslate"><span class="pre">instance_by_component</span></code></a></p></td>
 <td><p>Get the worker instance assigned to the component.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_eve.ghpython.BackgroundWorker.is_done.html#compas_eve.ghpython.BackgroundWorker.is_done" title="compas_eve.ghpython.BackgroundWorker.is_done"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_done</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_eve.ghpython.BackgroundWorker.is_done.html#compas_eve.ghpython.BackgroundWorker.is_done" title="compas_eve.ghpython.BackgroundWorker.is_done"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_done</span></code></a></p></td>
 <td><p>Indicate whether the worker is done or not.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_eve.ghpython.BackgroundWorker.is_working.html#compas_eve.ghpython.BackgroundWorker.is_working" title="compas_eve.ghpython.BackgroundWorker.is_working"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_working</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_eve.ghpython.BackgroundWorker.is_working.html#compas_eve.ghpython.BackgroundWorker.is_working" title="compas_eve.ghpython.BackgroundWorker.is_working"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_working</span></code></a></p></td>
 <td><p>Indicate whether the worker is currently working or not.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_eve.ghpython.BackgroundWorker.request_cancellation.html#compas_eve.ghpython.BackgroundWorker.request_cancellation" title="compas_eve.ghpython.BackgroundWorker.request_cancellation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">request_cancellation</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_eve.ghpython.BackgroundWorker.request_cancellation.html#compas_eve.ghpython.BackgroundWorker.request_cancellation" title="compas_eve.ghpython.BackgroundWorker.request_cancellation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">request_cancellation</span></code></a></p></td>
 <td><p>Mark the current worker as cancelled, so that the background task can stop processing.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_eve.ghpython.BackgroundWorker.set_internal_state_to_cancelled.html#compas_eve.ghpython.BackgroundWorker.set_internal_state_to_cancelled" title="compas_eve.ghpython.BackgroundWorker.set_internal_state_to_cancelled"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_internal_state_to_cancelled</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_eve.ghpython.BackgroundWorker.set_internal_state_to_cancelled.html#compas_eve.ghpython.BackgroundWorker.set_internal_state_to_cancelled" title="compas_eve.ghpython.BackgroundWorker.set_internal_state_to_cancelled"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_internal_state_to_cancelled</span></code></a></p></td>
 <td><p>Set the internal state to <code class="docutils literal notranslate"><span class="pre">cancelled</span></code>.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_eve.ghpython.BackgroundWorker.set_internal_state_to_done.html#compas_eve.ghpython.BackgroundWorker.set_internal_state_to_done" title="compas_eve.ghpython.BackgroundWorker.set_internal_state_to_done"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_internal_state_to_done</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_eve.ghpython.BackgroundWorker.set_internal_state_to_done.html#compas_eve.ghpython.BackgroundWorker.set_internal_state_to_done" title="compas_eve.ghpython.BackgroundWorker.set_internal_state_to_done"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_internal_state_to_done</span></code></a></p></td>
 <td><p>Set the internal state to <code class="docutils literal notranslate"><span class="pre">done</span></code>, which indicates the worker has completed.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_eve.ghpython.BackgroundWorker.set_internal_state_to_working.html#compas_eve.ghpython.BackgroundWorker.set_internal_state_to_working" title="compas_eve.ghpython.BackgroundWorker.set_internal_state_to_working"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_internal_state_to_working</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_eve.ghpython.BackgroundWorker.set_internal_state_to_working.html#compas_eve.ghpython.BackgroundWorker.set_internal_state_to_working" title="compas_eve.ghpython.BackgroundWorker.set_internal_state_to_working"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_internal_state_to_working</span></code></a></p></td>
 <td><p>Set the internal state to <code class="docutils literal notranslate"><span class="pre">working</span></code>.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_eve.ghpython.BackgroundWorker.start_work.html#compas_eve.ghpython.BackgroundWorker.start_work" title="compas_eve.ghpython.BackgroundWorker.start_work"><code class="xref py py-obj docutils literal notranslate"><span class="pre">start_work</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_eve.ghpython.BackgroundWorker.start_work.html#compas_eve.ghpython.BackgroundWorker.start_work" title="compas_eve.ghpython.BackgroundWorker.start_work"><code class="xref py py-obj docutils literal notranslate"><span class="pre">start_work</span></code></a></p></td>
 <td><p>Start the background processing thread where work will be performed.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_eve.ghpython.BackgroundWorker.stop_instance_by_component.html#compas_eve.ghpython.BackgroundWorker.stop_instance_by_component" title="compas_eve.ghpython.BackgroundWorker.stop_instance_by_component"><code class="xref py py-obj docutils literal notranslate"><span class="pre">stop_instance_by_component</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_eve.ghpython.BackgroundWorker.stop_instance_by_component.html#compas_eve.ghpython.BackgroundWorker.stop_instance_by_component" title="compas_eve.ghpython.BackgroundWorker.stop_instance_by_component"><code class="xref py py-obj docutils literal notranslate"><span class="pre">stop_instance_by_component</span></code></a></p></td>
 <td><p>Stops the worker instance assigned to the component.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_eve.ghpython.BackgroundWorker.update_result.html#compas_eve.ghpython.BackgroundWorker.update_result" title="compas_eve.ghpython.BackgroundWorker.update_result"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update_result</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_eve.ghpython.BackgroundWorker.update_result.html#compas_eve.ghpython.BackgroundWorker.update_result" title="compas_eve.ghpython.BackgroundWorker.update_result"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update_result</span></code></a></p></td>
 <td><p>Update the result of the worker.</p></td>
 </tr>
 </tbody>

@@ -55,11 +55,11 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'api/generated/compas_eve.Message';</script>
     <script>
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://raw.githubusercontent.com/compas-dev/compas_eve/gh-pages/versions.json';
-        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '0.3';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '0.4';
         </script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Message.parse" href="compas_eve.Message.parse.html" />
+    <link rel="next" title="Message.ToString" href="compas_eve.Message.ToString.html" />
     <link rel="prev" title="compas_eve" href="../compas_eve.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -231,7 +231,7 @@ document.write(`
 document.write(`
   <div class="version-switcher__container dropdown">
     <button type="button" class="version-switcher__button btn btn-sm navbar-btn dropdown-toggle" data-bs-toggle="dropdown">
-      0.3  <!-- this text may get changed later by javascript -->
+      0.4  <!-- this text may get changed later by javascript -->
       <span class="caret"></span>
     </button>
     <div class="version-switcher__menu dropdown-menu list-group-flush py-0">
@@ -408,7 +408,7 @@ document.write(`
 document.write(`
   <div class="version-switcher__container dropdown">
     <button type="button" class="version-switcher__button btn btn-sm navbar-btn dropdown-toggle" data-bs-toggle="dropdown">
-      0.3  <!-- this text may get changed later by javascript -->
+      0.4  <!-- this text may get changed later by javascript -->
       <span class="caret"></span>
     </button>
     <div class="version-switcher__menu dropdown-menu list-group-flush py-0">
@@ -559,52 +559,17 @@ document.write(`
 <h1>Message</h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="compas_eve.Message">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">compas_eve.</span></span><span class="sig-name descname"><span class="pre">Message</span></span><a class="reference external" href="https://github.com/compas-dev/compas_eve/blob/78b5565/src/compas_eve/core.py#L64"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/collections.html#collections.UserDict" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">UserDict</span></code></a></p>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">compas_eve.</span></span><span class="sig-name descname"><span class="pre">Message</span></span><a class="reference external" href="https://github.com/compas-dev/compas_eve/blob/2004e96/src/compas_eve/core.py#L61"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Message objects used for publishing and subscribing to/from topics.</p>
 <p>A message is fundamentally a dictionary and behaves as one.</p>
 <p class="rubric">Methods</p>
 <table class="autosummary longtable table autosummary">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_eve.Message.parse.html#compas_eve.Message.parse" title="compas_eve.Message.parse"><code class="xref py py-obj docutils literal notranslate"><span class="pre">parse</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="compas_eve.Message.ToString.html#compas_eve.Message.ToString" title="compas_eve.Message.ToString"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ToString</span></code></a></p></td>
 <td><p></p></td>
 </tr>
-</tbody>
-</table>
-<p class="rubric">Inherited Methods</p>
-<table class="autosummary longtable table autosummary">
-<tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_eve.Message.clear.html#compas_eve.Message.clear" title="compas_eve.Message.clear"><code class="xref py py-obj docutils literal notranslate"><span class="pre">clear</span></code></a></p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_eve.Message.copy.html#compas_eve.Message.copy" title="compas_eve.Message.copy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">copy</span></code></a></p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_eve.Message.fromkeys.html#compas_eve.Message.fromkeys" title="compas_eve.Message.fromkeys"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fromkeys</span></code></a></p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_eve.Message.get.html#compas_eve.Message.get" title="compas_eve.Message.get"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get</span></code></a></p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_eve.Message.items.html#compas_eve.Message.items" title="compas_eve.Message.items"><code class="xref py py-obj docutils literal notranslate"><span class="pre">items</span></code></a></p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_eve.Message.keys.html#compas_eve.Message.keys" title="compas_eve.Message.keys"><code class="xref py py-obj docutils literal notranslate"><span class="pre">keys</span></code></a></p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_eve.Message.pop.html#compas_eve.Message.pop" title="compas_eve.Message.pop"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pop</span></code></a></p></td>
-<td><p>If key is not found, d is returned if given, otherwise KeyError is raised.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_eve.Message.popitem.html#compas_eve.Message.popitem" title="compas_eve.Message.popitem"><code class="xref py py-obj docutils literal notranslate"><span class="pre">popitem</span></code></a></p></td>
-<td><p>as a 2-tuple; but raise KeyError if D is empty.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_eve.Message.setdefault.html#compas_eve.Message.setdefault" title="compas_eve.Message.setdefault"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setdefault</span></code></a></p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="compas_eve.Message.update.html#compas_eve.Message.update" title="compas_eve.Message.update"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update</span></code></a></p></td>
-<td><p>If E present and has a .keys() method, does:     for k in E: D[k] = E[k] If E present and lacks .keys() method, does:     for (k, v) in E: D[k] = v In either case, this is followed by: for k, v in F.items(): D[k] = v</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="compas_eve.Message.values.html#compas_eve.Message.values" title="compas_eve.Message.values"><code class="xref py py-obj docutils literal notranslate"><span class="pre">values</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="compas_eve.Message.parse.html#compas_eve.Message.parse" title="compas_eve.Message.parse"><code class="xref py py-obj docutils literal notranslate"><span class="pre">parse</span></code></a></p></td>
 <td><p></p></td>
 </tr>
 </tbody>
