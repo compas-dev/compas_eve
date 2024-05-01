@@ -59,7 +59,7 @@ Hello Distributed World
 -----------------------
 
 Fortunately, it is very easy to extend our example and enable communication across processes, machines,
-networks, continents, anything that is connected to the Internet!
+networks, continents, and anything that is connected to the Internet!
 
 The only difference is that we are going to configure a different :class:`Transport` implementation for
 our messages. In this case, we will use the MQTT transport method. `MQTT <https://en.wikipedia.org/wiki/MQTT>`_
@@ -85,3 +85,16 @@ or even completely different computers and they will be able to communicate!
 And since pub/sub allows any number of publishers and any number of
 subscriber per topic, you can start the same scripts more than once and the
 messages will be received and send multiple times!
+
+Add typing information to messages
+----------------------------------
+
+So far, we have defined our messages as simple dictionaries.
+It is also possible to define a class that messages need to comform to,
+in order to get typing information on the messages.
+
+.. literalinclude :: examples/04_message_type.py
+   :language: python
+
+This example also shows how to set a default transport so that it does
+not need to be specified on every publisher and subscriber instance.
