@@ -13,7 +13,7 @@ from scriptcontext import sticky as st
 from compas_eve.mqtt import MqttTransport
 
 
-class MqttTransportConnect(component):
+class MqttConnectComponent(component):
     def RunScript(self, host, port, connect):
         mqtt_transport = None
 
