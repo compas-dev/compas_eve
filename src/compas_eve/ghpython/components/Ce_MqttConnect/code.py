@@ -1,7 +1,7 @@
 """
 Connect or disconnect to an MQTT broker.
 
-COMPAS EVE v0.5.0
+COMPAS EVE v1.0.0
 """
 
 from threading import Event

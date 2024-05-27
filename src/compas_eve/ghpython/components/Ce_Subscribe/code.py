@@ -1,7 +1,7 @@
 """
 Subscribe to a topic to receive messages.
 
-COMPAS EVE v0.5.0
+COMPAS EVE v1.0.0
 """
 
 from ghpythonlib.componentbase import executingcomponent as component
