@@ -1,0 +1,41 @@
+{
+    "name": "Subscribe to topic",
+    "nickname": "Subscribe",
+    "category": "COMPAS EVE",
+    "subcategory": "Events",
+    "description": "Subscribe to a topic to receive messages.",
+    "exposure": 4,
+
+    "ghpython": {
+        "isAdvancedMode": true,
+        "iconDisplay": 2,
+        "inputParameters": [
+            {
+                "name": "transport",
+                "description": "An instance of transport. If no transport is specified, it will use in-memory transport."
+            },
+            {
+                "name": "topic_name",
+                "description": "The name of the topic to subscribe to, e.g. `/compas_eve/hello_world/`.",
+                "typeHintID": "str"
+            },
+            {
+                "name": "start",
+                "description": "Starts/Restarts the subscriber.",
+                "typeHintID": "bool"
+            },
+            {
+                "name": "on",
+                "description": "Turn ON or OFF the subscriber. Defaults to True.",
+                "typeHintID": "bool"
+            }
+
+        ],
+        "outputParameters": [
+            {
+                "name": "message",
+                "description": "The last message received on the selected topic."
+            }
+        ]
+    }
+}

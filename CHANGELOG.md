@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+* Add Grasshopper components for publishing and subscribing to topics, for creating messages and connecting to MQTT transports.
+
 ### Changed
 
 ### Removed
