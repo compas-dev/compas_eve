@@ -1,0 +1,25 @@
+{
+    "name": "Create message",
+    "nickname": "Message",
+    "category": "COMPAS EVE",
+    "subcategory": "Events",
+    "description": "Create a new message.",
+    "exposure": 2,
+
+    "ghpython": {
+        "isAdvancedMode": false,
+        "iconDisplay": 2,
+        "inputParameters": [
+            {
+                "name": "x",
+                "description": "Example input field. Add or remove fields as needed."
+            }
+        ],
+        "outputParameters": [
+            {
+                "name": "message",
+                "description": "The newly created message."
+            }
+        ]
+    }
+}

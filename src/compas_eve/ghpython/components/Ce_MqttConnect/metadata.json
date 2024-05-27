@@ -1,0 +1,40 @@
+{
+    "name": "MQTT Transport",
+    "nickname": "MQTT",
+    "category": "COMPAS EVE",
+    "subcategory": "Events",
+    "description": "Connect or disconnect to an MQTT broker.",
+    "exposure": 2,
+
+    "ghpython": {
+        "isAdvancedMode": true,
+        "iconDisplay": 2,
+        "inputParameters": [
+            {
+                "name": "host",
+                "description": "The host address of the MQTT broker. Defaults to 127.0.0.1.",
+                "typeHintID": "str"
+            },
+            {
+                "name": "port",
+                "description": "The port of MQTT broker. Defaults to 1883.",
+                "typeHintID": "int"
+            },
+            {
+                "name": "connect",
+                "description": "If True, connects to MQTT broker. If False, disconnects from MQTT. Defaults to False.",
+                "typeHintID": "bool"
+            }
+        ],
+        "outputParameters": [
+            {
+                "name": "mqtt_transport",
+                "description": "The MQTT transport instance."
+            },
+            {
+                "name": "is_connected",
+                "description": "True if connection established."
+            }
+        ]
+    }
+}

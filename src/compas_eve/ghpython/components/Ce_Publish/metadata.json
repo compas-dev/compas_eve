@@ -1,0 +1,40 @@
+{
+    "name": "Publish to topic",
+    "nickname": "Publish",
+    "category": "COMPAS EVE",
+    "subcategory": "Events",
+    "description": "Publish messages to a topic.",
+    "exposure": 4,
+
+    "ghpython": {
+        "isAdvancedMode": true,
+        "iconDisplay": 2,
+        "inputParameters": [
+            {
+                "name": "transport",
+                "description": "An instance of transport. If no transport is specified, it will use in-memory transport."
+            },
+            {
+                "name": "topic_name",
+                "description": "The name of the topic to publish to to, e.g. `/compas_eve/hello_world/`.",
+                "typeHintID": "str"
+            },
+            {
+                "name": "message",
+                "description": "The message to publish. It can be an instance of `Message` or a dictionary"
+            },
+            {
+                "name": "on",
+                "description": "Turn ON or OFF the publisher. Defaults to True.",
+                "typeHintID": "bool"
+            }
+
+        ],
+        "outputParameters": [
+            {
+                "name": "count",
+                "description": "The count of published messages on the selected topic."
+            }
+        ]
+    }
+}
