@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+* Add binary serialization support to `Transport` class.
+* Add classes `MessageCodec`, `JsonMessageCodec`, `BinaryMessageCodec`.
+* Add `msgpack` depedency for binary serialization support.
+
 ### Changed
 
 ### Removed
