@@ -58,6 +58,147 @@ class Transport(object):
         pass
 
 
+class MessageCodec:
+    """
+    Base class for message codecs.
+
+    This class defines the interface for message encoding and decoding.
+    Subclasses should implement the `encode` and `decode` methods to handle
+    specific serialization formats.
+    """
+    def encode(self, message):
+        """
+        Encode a message into a serialized format.
+
+        Parameters
+        ----------
+        message : Message or dict
+            The message to encode.
+
+        Returns
+        -------
+        bytes or str
+            The encoded message.
+
+        Raises
+        ------
+        NotImplementedError
+            If the method is not implemented by a subclass.
+        """
+        raise NotImplementedError
+
+    def decode(self, message):
+        """
+        Decode a serialized message back into a `Message` object.
+
+        Parameters
+        ----------
+        message : bytes or str
+            The serialized message to decode.
+
+        Returns
+        -------
+        Message
+            The decoded message.
+
+        Raises
+        ------
+        NotImplementedError
+            If the method is not implemented by a subclass.
+        """
+        raise NotImplementedError
+
+
+class JsonMessageCodec(MessageCodec):
+    """
+    Message codec for JSON serialization.
+
+    This codec handles encoding and decoding messages using JSON format.
+    It supports messages that are instances of `Message` or dictionaries.
+    """
+    def encode(self, message):
+        """
+        Encode a message into a JSON string.
+
+        Parameters
+        ----------
+        message : Message or dict
+            The message to encode.
+
+        Returns
+        -------
+        str
+            The JSON-encoded message.
+        """
+        if isinstance(message, Message):
+            data = message.data
+        else:
+            data = message
+        return json_dumps(data)
+
+    def decode(self, message):
+        """
+        Decode a JSON string back into a `Message` object.
+
+        Parameters
+        ----------
+        message : bytes or str
+            The JSON-encoded message to decode.
+
+        Returns
+        -------
+        Message
+            The decoded message.
+        """
+        data = json_loads(message.decode("utf-8"))
+        return Message(**data)
+
+
+class BinaryMessageCodec(MessageCodec):
+    """
+    Message codec for binary serialization using MessagePack.
+
+    This codec handles encoding and decoding messages using MessagePack.
+    """
+    def encode(self, message):
+        """
+        Encode a message into a binary format using MessagePack.
+
+        Parameters
+        ----------
+        message : Message or dict
+            The message to encode.
+
+        Returns
+        -------
+        bytes
+            The MessagePack-encoded message.
+        """
+
+        if isinstance(message, Message):
+            data = message.data
+        else:
+            data = message
+        return msgpack.packb(data)
+
+    def decode(self, message):
+        """
+        Decode a MessagePack binary message back into a `Message` object.
+
+        Parameters
+        ----------
+        message : bytes
+            The MessagePack-encoded message to decode.
+
+        Returns
+        -------
+        Message
+            The decoded message.
+        """
+        data = msgpack.unpackb(message)
+        return Message(**data)
+
+
 class Message(object):
     """Message objects used for publishing and subscribing to/from topics.
 
