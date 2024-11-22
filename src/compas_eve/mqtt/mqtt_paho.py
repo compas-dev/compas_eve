@@ -60,8 +60,8 @@ class MqttTransport(Transport, EventEmitterMixin):
         """
 
         def _callback(**kwargs):
-            json_message = topic._message_to_json(message)
-            self.client.publish(topic.name, json_message)
+            encoded_message = self.codec.encode(message)
+            self.client.publish(topic.name, encoded_message)
 
         self.on_ready(_callback)
 
@@ -87,8 +87,11 @@ class MqttTransport(Transport, EventEmitterMixin):
         subscribe_id = "{}:{}".format(event_key, id(callback))
 
         def _local_callback(msg):
-            msg = topic._message_from_json(msg.payload.decode())
-            callback(msg)
+            decoded_message = self.codec.decode(msg.payload)
+            callback(decoded_message)
+
+            # msg = topic._message_from_json(msg.payload.decode())
+            # callback(msg)
 
         def _subscribe_callback(**kwargs):
             self.client.subscribe(topic.name)

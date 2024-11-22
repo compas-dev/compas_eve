@@ -44,6 +44,8 @@ from .core import (
     EchoSubscriber,
     Transport,
     Topic,
+    JsonMessageCodec,
+    BinaryMessageCodec,
     get_default_transport,
     set_default_transport,
 )
@@ -61,6 +63,8 @@ __all__ = [
     "Subscriber",
     "EchoSubscriber",
     "Topic",
+    "JsonMessageCodec",
+    "BinaryMessageCodec",
     "Transport",
     "get_default_transport",
     "set_default_transport",
