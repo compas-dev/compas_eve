@@ -69,6 +69,7 @@ class MessageCodec:
     Subclasses should implement the `encode` and `decode` methods to handle
     specific serialization formats.
     """
+
     def encode(self, message):
         """
         Encode a message into a serialized format.
@@ -119,6 +120,7 @@ class JsonMessageCodec(MessageCodec):
     This codec handles encoding and decoding messages using JSON format.
     It supports messages that are instances of `Message` or dictionaries.
     """
+
     def encode(self, message):
         """
         Encode a message into a JSON string.
@@ -163,6 +165,7 @@ class BinaryMessageCodec(MessageCodec):
 
     This codec handles encoding and decoding messages using MessagePack.
     """
+
     def encode(self, message):
         """
         Encode a message into a binary format using MessagePack.
