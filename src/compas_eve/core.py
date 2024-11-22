@@ -1,5 +1,6 @@
 from compas.data import json_dumps
 from compas.data import json_loads
+import msgpack
 
 DEFAULT_TRANSPORT = None
 
@@ -32,9 +33,10 @@ def set_default_transport(transport):
 class Transport(object):
     """Defines the base interface for different transport implementations."""
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, codec=None, *args, **kwargs):
         super(Transport, self).__init__(*args, **kwargs)
         self._id_counter = 0
+        self.codec = codec or JsonMessageCodec()
 
     @property
     def id_counter(self):
@@ -43,6 +45,7 @@ class Transport(object):
         return self._id_counter
 
     def publish(self, topic, message):
+        self.codec.encode(message)
         pass
 
     def subscribe(self, topic, callback):
