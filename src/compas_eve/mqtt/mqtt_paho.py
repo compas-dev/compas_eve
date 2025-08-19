@@ -3,6 +3,13 @@ from ..event_emitter import EventEmitterMixin
 
 import paho.mqtt.client as mqtt
 
+try:
+    from paho.mqtt.enums import CallbackAPIVersion
+
+    PAHO_MQTT_V2_AVAILABLE = True
+except ImportError:
+    PAHO_MQTT_V2_AVAILABLE = False
+
 
 class MqttTransport(Transport, EventEmitterMixin):
     """MQTT transport allows sending and receiving messages using an MQTT broker.
@@ -22,7 +29,10 @@ class MqttTransport(Transport, EventEmitterMixin):
         self.port = port
         self._is_connected = False
         self._local_callbacks = {}
-        self.client = mqtt.Client()  # todo: generate client_id
+        if PAHO_MQTT_V2_AVAILABLE:
+            self.client = mqtt.Client(callback_api_version=CallbackAPIVersion.VERSION1)
+        else:
+            self.client = mqtt.Client()  # todo: generate client_id
         self.client.on_connect = self._on_connect
         self.client.connect(self.host, self.port)
         self.client.loop_start()
