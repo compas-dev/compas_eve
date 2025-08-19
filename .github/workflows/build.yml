@@ -18,7 +18,7 @@ jobs:
         python: ['3.9', '3.10', '3.11']
 
     steps:
-      - uses: compas-dev/compas-actions.build@v3
+      - uses: compas-dev/compas-actions.build@v4
         with:
           python: ${{ matrix.python }}
           invoke_lint: true
@@ -54,7 +54,7 @@ jobs:
         run: |
           docker run -d --name nanomq -p 1883:1883 -p 8083:8083 -p 8883:8883 emqx/nanomq:latest
           docker ps -a
-      - uses: compas-dev/compas-actions.build@v3
+      - uses: compas-dev/compas-actions.build@v4
         with:
           python: '3.11'
           invoke_lint: false

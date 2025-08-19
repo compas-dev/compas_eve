@@ -19,8 +19,12 @@ def test_paho_mqtt_v1_compatibility():
         # This should work as if paho-mqtt 1.x is installed
         transport = MqttTransport("localhost")
 
-        # Should have called mqtt.Client() without parameters
-        mock_client_class.assert_called_once_with()
+        # Should have called mqtt.Client() with client_id parameter only (no callback_api_version)
+        mock_client_class.assert_called_once()
+        call_args = mock_client_class.call_args
+        assert "client_id" in call_args.kwargs
+        assert call_args.kwargs["client_id"].startswith("compas_eve_")
+        assert "callback_api_version" not in call_args.kwargs
         assert transport.client == mock_client
 
 
@@ -38,8 +42,13 @@ def test_paho_mqtt_v2_compatibility():
         # This should work as if paho-mqtt 2.x is installed
         transport = MqttTransport("localhost")
 
-        # Should have called mqtt.Client() with callback_api_version parameter
-        mock_client_class.assert_called_once_with(callback_api_version=CallbackAPIVersion.VERSION1)
+        # Should have called mqtt.Client() with both client_id and callback_api_version parameters
+        mock_client_class.assert_called_once()
+        call_args = mock_client_class.call_args
+        assert "client_id" in call_args.kwargs
+        assert call_args.kwargs["client_id"].startswith("compas_eve_")
+        assert "callback_api_version" in call_args.kwargs
+        assert call_args.kwargs["callback_api_version"] == CallbackAPIVersion.VERSION1
         assert transport.client == mock_client
 
 
@@ -55,3 +64,21 @@ def test_version_detection():
         # If v2 is not available, import should fail
         with pytest.raises(ImportError):
             from paho.mqtt.enums import CallbackAPIVersion
+
+
+def test_custom_client_id():
+    """Test that custom client_id parameter works correctly."""
+    with patch("paho.mqtt.client.Client") as mock_client_class:
+        mock_client = Mock()
+        mock_client_class.return_value = mock_client
+
+        # Test with custom client_id
+        custom_client_id = "my_custom_client_id"
+        transport = MqttTransport("localhost", client_id=custom_client_id)
+
+        # Should have called mqtt.Client() with the custom client_id
+        mock_client_class.assert_called_once()
+        call_args = mock_client_class.call_args
+        assert "client_id" in call_args.kwargs
+        assert call_args.kwargs["client_id"] == custom_client_id
+        assert transport.client == mock_client
