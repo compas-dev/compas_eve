@@ -19,6 +19,9 @@ jobs:
           python: ${{ matrix.python }}
           invoke_lint: true
           invoke_test: false
+      - name: Install development dependencies
+        run: |
+          python -m pip install -e .[dev]
       - name: Run unit tests
         run: |
           pytest tests/unit
@@ -36,6 +39,9 @@ jobs:
           python: '3.11'
           invoke_lint: false
           invoke_test: false
+      - name: Install development dependencies
+        run: |
+          python -m pip install -e .[dev]
       - name: Run integration tests
         run: |
           pytest tests/integration
@@ -100,7 +106,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           python -m pip install wheel
-          python -m pip install --no-cache-dir -r requirements-dev.txt
+          python -m pip install --no-cache-dir -e .[dev]
 
       - uses: NuGet/setup-nuget@v1.0.5
       - name: Install dependencies
