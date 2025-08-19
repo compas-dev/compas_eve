@@ -20,6 +20,7 @@ Classes
     EchoSubscriber
     Transport
     InMemoryTransport
+    ZeroMQTransport
     get_default_transport
     set_default_transport
 
@@ -49,6 +50,11 @@ from .core import (
 )
 from .memory import InMemoryTransport
 
+try:
+    from .zeromq import ZeroMQTransport
+except ImportError:
+    ZeroMQTransport = None
+
 HERE = os.path.dirname(__file__)
 HOME = os.path.abspath(os.path.join(HERE, "../../"))
 
@@ -66,4 +72,7 @@ __all__ = [
     "set_default_transport",
     "InMemoryTransport",
 ]
+
+if ZeroMQTransport is not None:
+    __all__.append("ZeroMQTransport")
 __all_plugins__ = ["compas_eve.rhino.install"]
