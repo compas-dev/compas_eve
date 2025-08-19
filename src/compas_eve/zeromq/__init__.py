@@ -35,16 +35,20 @@ class ZeroMQTransport(Transport, EventEmitterMixin):
     ----------
     endpoint : str
         Endpoint for the pub/sub communication, e.g. ``tcp://localhost:5555`` or ``inproc://test``.
-        Publishers will connect to this endpoint, subscribers will bind to it.
+    bind_subscriber : bool, optional
+        If True, the subscriber socket will bind to the endpoint and publisher will connect.
+        If False, the publisher will bind to the endpoint and subscriber will connect.
+        Defaults to True for most use cases.
     """
 
-    def __init__(self, endpoint, *args, **kwargs):
+    def __init__(self, endpoint, bind_subscriber=True, *args, **kwargs):
         if zmq is None:
             raise ImportError("pyzmq is required for ZeroMQ transport. Please install it with: pip install pyzmq")
         
         super(ZeroMQTransport, self).__init__(*args, **kwargs)
         
         self.endpoint = endpoint
+        self.bind_subscriber = bind_subscriber
         self._is_connected = False
         self._local_callbacks = {}
         
@@ -53,18 +57,15 @@ class ZeroMQTransport(Transport, EventEmitterMixin):
         self.pub_socket = self.context.socket(zmq.PUB)
         self.sub_socket = self.context.socket(zmq.SUB)
         
-        # Publisher connects to endpoint, subscriber binds to it
-        # This allows multiple publishers to connect to one subscriber endpoint
-        try:
+        # Configure sockets based on bind_subscriber setting
+        if self.bind_subscriber:
+            # Subscriber binds, publisher connects - good for many publishers, few subscribers
             self.sub_socket.bind(self.endpoint)
             self.pub_socket.connect(self.endpoint)
-        except zmq.ZMQError as e:
-            # If bind fails, try the reverse (useful for tcp endpoints that might be in use)
-            try:
-                self.pub_socket.connect(self.endpoint)
-                self.sub_socket.connect(self.endpoint)
-            except zmq.ZMQError:
-                raise e
+        else:
+            # Publisher binds, subscriber connects - good for one publisher, many subscribers  
+            self.pub_socket.bind(self.endpoint)
+            self.sub_socket.connect(self.endpoint)
         
         # Set up polling for subscriber
         self.poller = zmq.Poller()

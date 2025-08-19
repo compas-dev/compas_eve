@@ -21,7 +21,9 @@ def read(*names, **kwargs):
 
 long_description = read("README.md")
 requirements = read("requirements.txt").split("\n")
-optional_requirements = {}
+optional_requirements = {
+    "zeromq": ["pyzmq>=19.0"],
+}
 
 setup(
     name="compas_eve",
