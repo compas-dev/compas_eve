@@ -33,6 +33,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Install dependencies
+        shell: cmd
         run: |
           curl -o compas.tar.gz -LJO https://pypi.debian.net/compas/latest
           curl -o ironpython-pytest.tar.gz -LJO https://pypi.debian.net/ironpython-pytest/latest
@@ -40,7 +41,7 @@ jobs:
           ipy -X:Frames -m ensurepip
           ipy -X:Frames -m pip install --no-deps ironpython-pytest.tar.gz
 
-          # untar and rename, these cannot be installed using ironpip because they not longer have a setup.py
+          rem untar and rename, these cannot be installed using ironpip because they not longer have a setup.py
           tar -xf compas.tar.gz && for /d %%i in (compas-*) do ren "%%i" compas
 
       - name: Run tests
