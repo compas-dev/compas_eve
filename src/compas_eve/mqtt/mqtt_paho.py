@@ -34,7 +34,7 @@ class MqttTransport(Transport, EventEmitterMixin):
         self._local_callbacks = {}
         # Generate client ID if not provided
         if client_id is None:
-            client_id = f"compas_eve_{uuid.uuid4().hex[:8]}"
+            client_id = "compas_eve_{}".format(uuid.uuid4().hex[:8])
         if PAHO_MQTT_V2_AVAILABLE:
             self.client = mqtt.Client(client_id=client_id, callback_api_version=CallbackAPIVersion.VERSION1)
         else:
