@@ -43,7 +43,7 @@ class ZeroMQTransport(Transport, EventEmitterMixin):
 
     def __init__(self, endpoint, bind_subscriber=True, *args, **kwargs):
         if zmq is None:
-            raise ImportError("pyzmq is required for ZeroMQ transport. Please install it with: pip install pyzmq")
+            raise ImportError("pyzmq is required for ZeroMQ transport. Please install it with: pip install pyzmq or conda install pyzmq")
         
         super(ZeroMQTransport, self).__init__(*args, **kwargs)
         

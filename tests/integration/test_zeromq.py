@@ -5,17 +5,11 @@ from compas_eve import Publisher
 from compas_eve import Subscriber
 from compas_eve import Topic
 from compas_eve import set_default_transport
-
-try:
-    from compas_eve import ZeroMQTransport
-    ZEROMQ_AVAILABLE = True
-except ImportError:
-    ZEROMQ_AVAILABLE = False
+from compas_eve.zeromq import ZeroMQTransport
 
 import pytest
 
 
-@pytest.mark.skipif(not ZEROMQ_AVAILABLE, reason="ZeroMQ transport not available")
 def test_zeromq_tcp_pubsub():
     """Test ZeroMQ transport with TCP endpoints."""
     tx = ZeroMQTransport("tcp://localhost:25555")
@@ -36,7 +30,6 @@ def test_zeromq_tcp_pubsub():
     tx.close()
 
 
-@pytest.mark.skipif(not ZEROMQ_AVAILABLE, reason="ZeroMQ transport not available")
 def test_zeromq_tcp_message_content():
     """Test that message content is preserved correctly with TCP transport."""
     tx = ZeroMQTransport("tcp://localhost:25556")
@@ -72,7 +65,6 @@ def test_zeromq_tcp_message_content():
     tx.close()
 
 
-@pytest.mark.skipif(not ZEROMQ_AVAILABLE, reason="ZeroMQ transport not available") 
 def test_zeromq_tcp_multiple_topics():
     """Test that multiple topics work correctly with TCP transport."""
     tx = ZeroMQTransport("tcp://localhost:25557")
@@ -118,7 +110,6 @@ def test_zeromq_tcp_multiple_topics():
     tx.close()
 
 
-@pytest.mark.skipif(not ZEROMQ_AVAILABLE, reason="ZeroMQ transport not available")
 def test_zeromq_tcp_unsubscribe():
     """Test unsubscribe functionality with TCP transport."""
     tx = ZeroMQTransport("tcp://localhost:25558") 

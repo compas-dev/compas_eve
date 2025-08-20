@@ -5,23 +5,16 @@ from compas_eve import Publisher
 from compas_eve import Subscriber
 from compas_eve import Topic
 from compas_eve import set_default_transport
-
-try:
-    from compas_eve import ZeroMQTransport
-    ZEROMQ_AVAILABLE = True
-except ImportError:
-    ZEROMQ_AVAILABLE = False
+from compas_eve.zeromq import ZeroMQTransport
 
 import pytest
 
 
-@pytest.mark.skipif(not ZEROMQ_AVAILABLE, reason="ZeroMQ transport not available")
 def test_zeromq_import():
     """Test that ZeroMQ transport can be imported."""
     assert ZeroMQTransport is not None
 
 
-@pytest.mark.skipif(not ZEROMQ_AVAILABLE, reason="ZeroMQ transport not available")
 def test_default_transport_publishing():
     set_default_transport(ZeroMQTransport("inproc://test1"))
     event = Event()
@@ -34,7 +27,6 @@ def test_default_transport_publishing():
     assert received, "Message not received"
 
 
-@pytest.mark.skipif(not ZEROMQ_AVAILABLE, reason="ZeroMQ transport not available")
 def test_pubsub():
     tx = ZeroMQTransport("inproc://test2")
     event = Event()
@@ -49,7 +41,6 @@ def test_pubsub():
     tx.close()
 
 
-@pytest.mark.skipif(not ZEROMQ_AVAILABLE, reason="ZeroMQ transport not available")
 def test_two_subs():
     tx = ZeroMQTransport("inproc://test3")
     event1 = Event()
@@ -68,7 +59,6 @@ def test_two_subs():
     tx.close()
 
 
-@pytest.mark.skipif(not ZEROMQ_AVAILABLE, reason="ZeroMQ transport not available")
 def test_unsub():
     tx = ZeroMQTransport("inproc://test4")
     topic = Topic("/messages_compas_eve_test/test_unsub/", Message)
@@ -100,7 +90,6 @@ def test_unsub():
     tx.close()
 
 
-@pytest.mark.skipif(not ZEROMQ_AVAILABLE, reason="ZeroMQ transport not available")
 def test_message_type_parsing():
     tx = ZeroMQTransport("inproc://test5")
     event = Event()
@@ -123,7 +112,6 @@ def test_message_type_parsing():
     tx.close()
 
 
-@pytest.mark.skipif(not ZEROMQ_AVAILABLE, reason="ZeroMQ transport not available")
 def test_dict_as_message():
     tx = ZeroMQTransport("inproc://test6")
     event = Event()
