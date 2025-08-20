@@ -20,6 +20,7 @@ def test_client_id():
     transport = MqttTransport(HOST, client_id=None)
     assert transport.client._client_id.startswith("compas_eve_".encode('utf-8'))
 
+
 def test_default_transport_publishing():
     set_default_transport(MqttTransport(HOST))
     event = Event()
