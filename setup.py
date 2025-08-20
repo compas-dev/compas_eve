@@ -21,7 +21,16 @@ def read(*names, **kwargs):
 
 long_description = read("README.md")
 requirements = read("requirements.txt").split("\n")
+
+# Read dev requirements for optional dependencies
+dev_requirements = [
+    line.strip() 
+    for line in read("requirements-dev.txt").split("\n") 
+    if line.strip() and not line.strip().startswith("#") and line.strip() != "-e ."
+]
+
 optional_requirements = {
+    "dev": dev_requirements,
     "zeromq": ["pyzmq>=19.0"],
 }
 

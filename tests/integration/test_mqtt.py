@@ -9,7 +9,16 @@ from compas_eve import Topic
 from compas_eve import set_default_transport
 from compas_eve.mqtt import MqttTransport
 
-HOST = "broker.hivemq.com"
+HOST = "localhost"
+
+
+def test_client_id():
+    custom_client_id = "my_custom_client_id"
+    transport = MqttTransport(HOST, client_id=custom_client_id)
+    assert transport.client._client_id == custom_client_id.encode("utf-8")
+
+    transport = MqttTransport(HOST, client_id=None)
+    assert transport.client._client_id.startswith("compas_eve_".encode("utf-8"))
 
 
 def test_default_transport_publishing():

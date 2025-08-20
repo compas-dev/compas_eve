@@ -9,7 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+* Added support for MQTT-PAHO 2.0 versioned callbacks.
+
 ### Changed
+
+* Updated dependency on `paho-mqtt` to support `>=1, <3` to include version `2.x` with backward compatibility.
 
 ### Removed
 

@@ -2,6 +2,14 @@ from ..core import Transport
 from ..event_emitter import EventEmitterMixin
 
 import paho.mqtt.client as mqtt
+import uuid
+
+try:
+    from paho.mqtt.enums import CallbackAPIVersion
+
+    PAHO_MQTT_V2_AVAILABLE = True
+except ImportError:
+    PAHO_MQTT_V2_AVAILABLE = False
 
 
 class MqttTransport(Transport, EventEmitterMixin):
@@ -14,15 +22,23 @@ class MqttTransport(Transport, EventEmitterMixin):
         you are running a local broker on your machine.
     port : int
         MQTT broker port, defaults to ``1883``.
+    client_id : str, optional
+        Client ID for the MQTT connection. If not provided, a unique ID will be generated.
     """
 
-    def __init__(self, host, port=1883, *args, **kwargs):
+    def __init__(self, host, port=1883, client_id=None, *args, **kwargs):
         super(MqttTransport, self).__init__(*args, **kwargs)
         self.host = host
         self.port = port
         self._is_connected = False
         self._local_callbacks = {}
-        self.client = mqtt.Client()  # todo: generate client_id
+        # Generate client ID if not provided
+        if client_id is None:
+            client_id = "compas_eve_{}".format(uuid.uuid4().hex[:8])
+        if PAHO_MQTT_V2_AVAILABLE:
+            self.client = mqtt.Client(client_id=client_id, callback_api_version=CallbackAPIVersion.VERSION1)
+        else:
+            self.client = mqtt.Client(client_id=client_id)
         self.client.on_connect = self._on_connect
         self.client.connect(self.host, self.port)
         self.client.loop_start()
