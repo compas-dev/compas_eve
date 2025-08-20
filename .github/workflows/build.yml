@@ -40,7 +40,7 @@ jobs:
           ipy -X:Frames -m ensurepip
           ipy -X:Frames -m pip install --no-deps ironpython-pytest.tar.gz
 
-          rem untar and rename, these cannot be installed using ironpip because they not longer have a setup.py
+          # untar and rename, these cannot be installed using ironpip because they not longer have a setup.py
           tar -xf compas.tar.gz && for /d %%i in (compas-*) do ren "%%i" compas
 
       - name: Run tests
