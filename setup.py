@@ -31,6 +31,7 @@ dev_requirements = [
 
 optional_requirements = {
     "dev": dev_requirements,
+    "zeromq": ["pyzmq>=19.0"],
 }
 
 setup(
