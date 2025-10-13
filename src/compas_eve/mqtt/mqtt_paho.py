@@ -26,8 +26,8 @@ class MqttTransport(Transport, EventEmitterMixin):
         Client ID for the MQTT connection. If not provided, a unique ID will be generated.
     """
 
-    def __init__(self, host, port=1883, client_id=None, *args, **kwargs):
-        super(MqttTransport, self).__init__(*args, **kwargs)
+    def __init__(self, host, port=1883, client_id=None, codec=None, *args, **kwargs):
+        super(MqttTransport, self).__init__(codec=codec, *args, **kwargs)
         self.host = host
         self.port = port
         self._is_connected = False
@@ -76,8 +76,9 @@ class MqttTransport(Transport, EventEmitterMixin):
         """
 
         def _callback(**kwargs):
-            json_message = topic._message_to_json(message)
-            self.client.publish(topic.name, json_message)
+            data = topic._message_to_data(message)
+            encoded_message = self.codec.encode(data)
+            self.client.publish(topic.name, encoded_message)
 
         self.on_ready(_callback)
 
@@ -103,8 +104,9 @@ class MqttTransport(Transport, EventEmitterMixin):
         subscribe_id = "{}:{}".format(event_key, id(callback))
 
         def _local_callback(msg):
-            msg = topic._message_from_json(msg.payload.decode())
-            callback(msg)
+            decoded_data = self.codec.decode(msg.payload.decode())
+            message_obj = topic.message_type.parse(decoded_data)
+            callback(message_obj)
 
         def _subscribe_callback(**kwargs):
             self.client.subscribe(topic.name)

@@ -26,10 +26,17 @@ __all__ = ["InMemoryTransport"]
 class InMemoryTransport(Transport, EventEmitterMixin):
     """In-Memory transport is ideal for simple single-process apps and testing.
 
-    It will only distribute messages within the same process, not across different processes."""
+    It will only distribute messages within the same process, not across different processes.
+    
+    Parameters
+    ----------
+    codec : :class:`MessageCodec`, optional
+        The codec to use for encoding and decoding messages. 
+        If not provided, defaults to :class:`JsonMessageCodec`.
+    """
 
-    def __init__(self, *args, **kwargs):
-        super(InMemoryTransport, self).__init__(*args, **kwargs)
+    def __init__(self, codec=None, *args, **kwargs):
+        super(InMemoryTransport, self).__init__(codec=codec, *args, **kwargs)
         self._local_callbacks = {}
 
     def on_ready(self, callback):

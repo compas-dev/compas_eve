@@ -4,6 +4,82 @@ from compas.data import json_loads
 DEFAULT_TRANSPORT = None
 
 
+class MessageCodec(object):
+    """Abstract base class for message codecs.
+    
+    A codec is responsible for encoding and decoding message data
+    to/from a specific representation format (e.g., JSON, Protocol Buffers).
+    """
+
+    def encode(self, data):
+        """Encode data to the codec's representation format.
+        
+        Parameters
+        ----------
+        data : dict
+            Data dictionary to encode.
+            
+        Returns
+        -------
+        bytes or str
+            Encoded representation of the data.
+        """
+        raise NotImplementedError("Subclasses must implement encode()")
+
+    def decode(self, encoded_data):
+        """Decode data from the codec's representation format.
+        
+        Parameters
+        ----------
+        encoded_data : bytes or str
+            Encoded data to decode.
+            
+        Returns
+        -------
+        dict
+            Decoded data dictionary.
+        """
+        raise NotImplementedError("Subclasses must implement decode()")
+
+
+class JsonMessageCodec(MessageCodec):
+    """JSON codec for message serialization.
+    
+    This codec uses the COMPAS framework's JSON serialization functions
+    to encode and decode message data.
+    """
+
+    def encode(self, data):
+        """Encode data to JSON string.
+        
+        Parameters
+        ----------
+        data : dict
+            Data dictionary to encode.
+            
+        Returns
+        -------
+        str
+            JSON string representation of the data.
+        """
+        return json_dumps(data)
+
+    def decode(self, encoded_data):
+        """Decode JSON string to data dictionary.
+        
+        Parameters
+        ----------
+        encoded_data : str
+            JSON string to decode.
+            
+        Returns
+        -------
+        dict
+            Decoded data dictionary.
+        """
+        return json_loads(encoded_data)
+
+
 def get_default_transport():
     """Retrieve the default transport implementation to be used system-wide.
 
@@ -30,11 +106,19 @@ def set_default_transport(transport):
 
 
 class Transport(object):
-    """Defines the base interface for different transport implementations."""
+    """Defines the base interface for different transport implementations.
+    
+    Parameters
+    ----------
+    codec : :class:`MessageCodec`, optional
+        The codec to use for encoding and decoding messages. 
+        If not provided, defaults to :class:`JsonMessageCodec`.
+    """
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, codec=None, *args, **kwargs):
         super(Transport, self).__init__(*args, **kwargs)
         self._id_counter = 0
+        self.codec = codec if codec is not None else JsonMessageCodec()
 
     @property
     def id_counter(self):
@@ -123,12 +207,23 @@ class Topic(object):
         self.message_type = message_type or Message
         self.options = options
 
-    def _message_to_json(self, message):
-        """Convert a message to a JSON string.
+    def _message_to_data(self, message):
+        """Convert a message to a data representation ready to be encoded.
 
-        Normally, this method expects sub-classes of ``Message`` as input.
+        Normally, this method expects sub-classes of Message as input.
         However, it can deal with regular dictionaries as well as classes
         implementing the COMPAS data framework.
+        
+        Parameters
+        ----------
+        message : :class:`Message` or dict or object
+            Message to convert. Can be a Message instance, a dict, or 
+            an object implementing __data__.
+            
+        Returns
+        -------
+        dict
+            Data dictionary representation of the message.
         """
         try:
             data = message.data
@@ -137,6 +232,16 @@ class Topic(object):
                 data = message.__data__
             except (KeyError, AttributeError):
                 data = dict(message)
+        return data
+
+    def _message_to_json(self, message):
+        """Convert a message to a JSON string.
+
+        Normally, this method expects sub-classes of ``Message`` as input.
+        However, it can deal with regular dictionaries as well as classes
+        implementing the COMPAS data framework.
+        """
+        data = self._message_to_data(message)
         return json_dumps(data)
 
     def _message_from_json(self, json_message):

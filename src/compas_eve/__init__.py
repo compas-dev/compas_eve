@@ -20,6 +20,8 @@ Classes
     EchoSubscriber
     Transport
     InMemoryTransport
+    MessageCodec
+    JsonMessageCodec
     get_default_transport
     set_default_transport
 
@@ -44,6 +46,8 @@ from .core import (
     EchoSubscriber,
     Transport,
     Topic,
+    MessageCodec,
+    JsonMessageCodec,
     get_default_transport,
     set_default_transport,
 )
@@ -62,6 +66,8 @@ __all__ = [
     "EchoSubscriber",
     "Topic",
     "Transport",
+    "MessageCodec",
+    "JsonMessageCodec",
     "get_default_transport",
     "set_default_transport",
     "InMemoryTransport",
