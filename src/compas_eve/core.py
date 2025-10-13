@@ -234,20 +234,6 @@ class Topic(object):
                 data = dict(message)
         return data
 
-    def _message_to_json(self, message):
-        """Convert a message to a JSON string.
-
-        Normally, this method expects sub-classes of ``Message`` as input.
-        However, it can deal with regular dictionaries as well as classes
-        implementing the COMPAS data framework.
-        """
-        data = self._message_to_data(message)
-        return json_dumps(data)
-
-    def _message_from_json(self, json_message):
-        """Converts a JSON string back into a message instance."""
-        return self.message_type.parse(json_loads(json_message))
-
 
 class Publisher(object):
     """Publisher for a specific topic.
