@@ -24,6 +24,9 @@ class MqttTransport(Transport, EventEmitterMixin):
         MQTT broker port, defaults to ``1883``.
     client_id : str, optional
         Client ID for the MQTT connection. If not provided, a unique ID will be generated.
+    codec : :class:`MessageCodec`, optional
+        The codec to use for encoding and decoding messages. 
+        If not provided, defaults to :class:`JsonMessageCodec`.
     """
 
     def __init__(self, host, port=1883, client_id=None, codec=None, *args, **kwargs):
