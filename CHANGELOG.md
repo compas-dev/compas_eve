@@ -10,12 +10,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 * Added support for MQTT-PAHO 2.0 versioned callbacks.
+* Added `MessageCodec` abstract base class for extensible message serialization.
+* Added `JsonMessageCodec` for JSON-based message serialization (default).
+* Added `ProtobufMessageCodec` for binary message serialization using Protocol Buffers (requires `compas_pb`).
+* Added `codec` parameter to `Transport`, `InMemoryTransport`, and `MqttTransport` classes.
+* Added `_message_to_data()` method to `Topic` class for extracting data from various message types.
 
 ### Changed
 
 * Updated dependency on `paho-mqtt` to support `>=1, <3` to include version `2.x` with backward compatibility.
+* **BREAKING**: Transport implementations now use codec-based serialization instead of direct JSON calls.
+* **BREAKING**: Removed `_message_to_json()` and `_message_from_json()` methods from `Topic` class (internal API).
 
 ### Removed
+
+* **BREAKING**: Removed IronPython support and `mqtt_cli` implementation.
+* **BREAKING**: Removed IronPython MQTTnet.dll library.
+* **BREAKING**: Removed support for Rhino 7 (IronPython-based).
 
 
 ## [1.0.0] 2024-05-27
