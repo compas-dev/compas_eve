@@ -17,7 +17,7 @@ Classes
 
 """
 
-from .core import MessageCodec
+from compas_eve.core import MessageCodec
 
 __all__ = ["ProtobufMessageCodec"]
 
