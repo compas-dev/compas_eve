@@ -6,19 +6,19 @@ DEFAULT_TRANSPORT = None
 
 class MessageCodec(object):
     """Abstract base class for message codecs.
-    
+
     A codec is responsible for encoding and decoding message data
     to/from a specific representation format (e.g., JSON, Protocol Buffers).
     """
 
     def encode(self, data):
         """Encode data to the codec's representation format.
-        
+
         Parameters
         ----------
         data : dict
             Data dictionary to encode.
-            
+
         Returns
         -------
         bytes or str
@@ -28,12 +28,12 @@ class MessageCodec(object):
 
     def decode(self, encoded_data):
         """Decode data from the codec's representation format.
-        
+
         Parameters
         ----------
         encoded_data : bytes or str
             Encoded data to decode.
-            
+
         Returns
         -------
         dict
@@ -44,19 +44,19 @@ class MessageCodec(object):
 
 class JsonMessageCodec(MessageCodec):
     """JSON codec for message serialization.
-    
+
     This codec uses the COMPAS framework's JSON serialization functions
     to encode and decode message data.
     """
 
     def encode(self, data):
         """Encode data to JSON string.
-        
+
         Parameters
         ----------
         data : dict
             Data dictionary to encode.
-            
+
         Returns
         -------
         str
@@ -66,12 +66,12 @@ class JsonMessageCodec(MessageCodec):
 
     def decode(self, encoded_data):
         """Decode JSON string to data dictionary.
-        
+
         Parameters
         ----------
         encoded_data : str
             JSON string to decode.
-            
+
         Returns
         -------
         dict
@@ -107,11 +107,11 @@ def set_default_transport(transport):
 
 class Transport(object):
     """Defines the base interface for different transport implementations.
-    
+
     Parameters
     ----------
     codec : :class:`MessageCodec`, optional
-        The codec to use for encoding and decoding messages. 
+        The codec to use for encoding and decoding messages.
         If not provided, defaults to :class:`JsonMessageCodec`.
     """
 
@@ -213,13 +213,13 @@ class Topic(object):
         Normally, this method expects sub-classes of Message as input.
         However, it can deal with regular dictionaries as well as classes
         implementing the COMPAS data framework.
-        
+
         Parameters
         ----------
         message : :class:`Message` or dict or object
-            Message to convert. Can be a Message instance, a dict, or 
+            Message to convert. Can be a Message instance, a dict, or
             an object implementing __data__.
-            
+
         Returns
         -------
         dict
