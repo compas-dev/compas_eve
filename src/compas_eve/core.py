@@ -1,6 +1,3 @@
-from compas.data import json_dumps
-from compas.data import json_loads
-
 DEFAULT_TRANSPORT = None
 
 
@@ -27,68 +24,22 @@ class MessageCodec(object):
         """
         raise NotImplementedError("Subclasses must implement encode()")
 
-    def decode(self, encoded_data):
+    def decode(self, encoded_data, message_type):
         """Decode data from the codec's representation format.
 
         Parameters
         ----------
         encoded_data : bytes or str
             Encoded data to decode.
+        message_type : type
+            The message type class to use for parsing.
 
         Returns
         -------
-        dict
-            Decoded data dictionary that can be used to reconstruct a message.
+        :class:`Message`
+            Decoded message object.
         """
         raise NotImplementedError("Subclasses must implement decode()")
-
-
-class JsonMessageCodec(MessageCodec):
-    """JSON codec for message serialization.
-
-    This codec uses the COMPAS framework's JSON serialization functions
-    to encode and decode message data. It can handle Message objects,
-    COMPAS Data objects, and regular dictionaries.
-    """
-
-    def encode(self, message):
-        """Encode a message to JSON string.
-
-        Parameters
-        ----------
-        message : :class:`Message` or dict or object
-            Message to encode. Can be a Message instance, a dict, or
-            an object implementing the COMPAS data framework.
-
-        Returns
-        -------
-        str
-            JSON string representation of the message.
-        """
-        # Extract data from the message
-        try:
-            data = message.data
-        except (KeyError, AttributeError):
-            try:
-                data = message.__data__
-            except (KeyError, AttributeError):
-                data = dict(message)
-        return json_dumps(data)
-
-    def decode(self, encoded_data):
-        """Decode JSON string to data dictionary.
-
-        Parameters
-        ----------
-        encoded_data : str
-            JSON string to decode.
-
-        Returns
-        -------
-        dict
-            Decoded data dictionary.
-        """
-        return json_loads(encoded_data)
 
 
 def get_default_transport():
@@ -129,7 +80,11 @@ class Transport(object):
     def __init__(self, codec=None, *args, **kwargs):
         super(Transport, self).__init__(*args, **kwargs)
         self._id_counter = 0
-        self.codec = codec if codec is not None else JsonMessageCodec()
+        if codec is None:
+            from compas_eve.codecs import JsonMessageCodec
+
+            codec = JsonMessageCodec()
+        self.codec = codec
 
     @property
     def id_counter(self):

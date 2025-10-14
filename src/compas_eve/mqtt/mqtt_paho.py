@@ -106,8 +106,7 @@ class MqttTransport(Transport, EventEmitterMixin):
         subscribe_id = "{}:{}".format(event_key, id(callback))
 
         def _local_callback(msg):
-            decoded_data = self.codec.decode(msg.payload.decode())
-            message_obj = topic.message_type.parse(decoded_data)
+            message_obj = self.codec.decode(msg.payload.decode(), topic.message_type)
             callback(message_obj)
 
         def _subscribe_callback(**kwargs):

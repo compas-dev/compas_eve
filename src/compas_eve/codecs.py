@@ -13,13 +13,106 @@ Classes
     :toctree: generated/
     :nosignatures:
 
+    MessageCodec
+    JsonMessageCodec
     ProtobufMessageCodec
 
 """
 
-from compas_eve.core import MessageCodec
+from compas.data import json_dumps
+from compas.data import json_loads
 
-__all__ = ["ProtobufMessageCodec"]
+__all__ = ["MessageCodec", "JsonMessageCodec", "ProtobufMessageCodec"]
+
+
+class MessageCodec(object):
+    """Abstract base class for message codecs.
+
+    A codec is responsible for encoding and decoding messages
+    to/from a specific representation format (e.g., JSON, Protocol Buffers).
+    """
+
+    def encode(self, message):
+        """Encode a message to the codec's representation format.
+
+        Parameters
+        ----------
+        message : :class:`Message` or dict or object
+            Message to encode. Can be a Message instance, a dict, or
+            an object implementing the COMPAS data framework.
+
+        Returns
+        -------
+        bytes or str
+            Encoded representation of the message.
+        """
+        raise NotImplementedError("Subclasses must implement encode()")
+
+    def decode(self, encoded_data):
+        """Decode data from the codec's representation format.
+
+        Parameters
+        ----------
+        encoded_data : bytes or str
+            Encoded data to decode.
+
+        Returns
+        -------
+        dict
+            Decoded data dictionary that can be used to reconstruct a message.
+        """
+        raise NotImplementedError("Subclasses must implement decode()")
+
+
+class JsonMessageCodec(MessageCodec):
+    """JSON codec for message serialization.
+
+    This codec uses the COMPAS framework's JSON serialization functions
+    to encode and decode message data. It can handle Message objects,
+    COMPAS Data objects, and regular dictionaries.
+    """
+
+    def encode(self, message):
+        """Encode a message to JSON string.
+
+        Parameters
+        ----------
+        message : :class:`Message` or dict or object
+            Message to encode. Can be a Message instance, a dict, or
+            an object implementing the COMPAS data framework.
+
+        Returns
+        -------
+        str
+            JSON string representation of the message.
+        """
+        # Extract data from the message
+        try:
+            data = message.data
+        except (KeyError, AttributeError):
+            try:
+                data = message.__data__
+            except (KeyError, AttributeError):
+                data = dict(message)
+        return json_dumps(data)
+
+    def decode(self, encoded_data, message_type):
+        """Decode JSON string to message object.
+
+        Parameters
+        ----------
+        encoded_data : str
+            JSON string to decode.
+        message_type : type
+            The message type class to use for parsing.
+
+        Returns
+        -------
+        :class:`Message`
+            Decoded message object.
+        """
+        data = json_loads(encoded_data)
+        return message_type.parse(data)
 
 
 try:
@@ -34,8 +127,7 @@ class ProtobufMessageCodec(MessageCodec):
     """Protocol Buffers codec for message serialization.
 
     This codec uses the compas_pb package to encode and decode message data
-    using Protocol Buffers binary format. It can handle Message objects,
-    COMPAS Data objects, and regular dictionaries.
+    using Protocol Buffers binary format.
 
     Note
     ----
@@ -71,32 +163,26 @@ class ProtobufMessageCodec(MessageCodec):
                 "The ProtobufMessageCodec requires 'compas_pb' to be installed. "
                 "Please install it with: pip install compas_pb"
             )
-        # Extract data from the message
-        try:
-            data = message.data
-        except (KeyError, AttributeError):
-            try:
-                data = message.__data__
-            except (KeyError, AttributeError):
-                data = dict(message)
-        return compas_pb.encode(data)
+        return compas_pb.pb_dump_bts(message)
 
-    def decode(self, encoded_data):
-        """Decode Protocol Buffers binary data to data dictionary.
+    def decode(self, encoded_data, message_type=None):
+        """Decode Protocol Buffers binary data to message object.
 
         Parameters
         ----------
         encoded_data : bytes
             Protocol Buffers binary data to decode.
+        message_type : type, optional
+            The message type class (not used for protobuf as it's encoded in the data).
 
         Returns
         -------
-        dict
-            Decoded data dictionary.
+        object
+            Decoded message object.
         """
         if not COMPAS_PB_AVAILABLE:
             raise ImportError(
                 "The ProtobufMessageCodec requires 'compas_pb' to be installed. "
                 "Please install it with: pip install compas_pb"
             )
-        return compas_pb.decode(encoded_data)
+        return compas_pb.pb_load_bts(encoded_data)

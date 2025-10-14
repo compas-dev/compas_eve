@@ -85,6 +85,7 @@ By default, COMPAS EVE uses JSON for message serialization. However, you can use
 ```python
 import compas_eve as eve
 from compas_eve import JsonMessageCodec
+from compas_eve.codecs import ProtobufMessageCodec
 from compas_eve.mqtt import MqttTransport
 
 # Use JSON codec (default)
@@ -92,12 +93,8 @@ json_codec = JsonMessageCodec()
 tx = MqttTransport("broker.hivemq.com", codec=json_codec)
 
 # Or use Protocol Buffers for binary serialization (requires compas_pb)
-try:
-    from compas_eve.codecs import ProtobufMessageCodec
-    pb_codec = ProtobufMessageCodec()
-    tx = MqttTransport("broker.hivemq.com", codec=pb_codec)
-except ImportError:
-    print("Install compas_pb for Protocol Buffers support: pip install compas_pb")
+pb_codec = ProtobufMessageCodec()
+tx = MqttTransport("broker.hivemq.com", codec=pb_codec)
 ```
 
 
@@ -105,10 +102,4 @@ except ImportError:
 
 It is possible to use the same code from within Rhino/Grasshopper.
 
-Make sure you have installed it to Rhino using the COMPAS installation mechanism:
-
-```bash
-    python -m compas_rhino.install
-```
-
-Note: Rhino 7 (IronPython) is no longer supported. Please use Rhino 8 or later.
+To install `compas_eve`, use the the syntax `# r: compas_eve` at the top of any Python 3.x script in Rhino/Grasshopper.

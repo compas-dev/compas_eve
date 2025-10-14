@@ -7,6 +7,8 @@ This example shows how to:
 3. Use ProtobufMessageCodec (if compas_pb is installed)
 """
 
+import json
+
 import compas_eve as eve
 from compas_eve import JsonMessageCodec, MessageCodec
 
@@ -51,15 +53,8 @@ class UpperCaseCodec(MessageCodec):
 
     def encode(self, message):
         """Encode message by converting all string values to uppercase."""
-        import json
-        # Extract data from message
-        try:
-            data = message.data
-        except (KeyError, AttributeError):
-            try:
-                data = message.__data__
-            except (KeyError, AttributeError):
-                data = dict(message)
+        # Assume message is a Message instance
+        data = message.data
 
         # Convert string values to uppercase
         encoded_data = {}
@@ -70,10 +65,10 @@ class UpperCaseCodec(MessageCodec):
                 encoded_data[key] = value
         return json.dumps(encoded_data)
 
-    def decode(self, encoded_data):
+    def decode(self, encoded_data, message_type):
         """Decode data (strings remain uppercase)."""
-        import json
-        return json.loads(encoded_data)
+        data = json.loads(encoded_data)
+        return message_type.parse(data)
 
 
 custom_codec = UpperCaseCodec()

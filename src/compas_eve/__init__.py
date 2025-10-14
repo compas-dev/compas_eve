@@ -47,10 +47,10 @@ from .core import (
     Transport,
     Topic,
     MessageCodec,
-    JsonMessageCodec,
     get_default_transport,
     set_default_transport,
 )
+from .codecs import JsonMessageCodec
 from .memory import InMemoryTransport
 
 HERE = os.path.dirname(__file__)
