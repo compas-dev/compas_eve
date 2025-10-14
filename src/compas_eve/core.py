@@ -7,22 +7,23 @@ DEFAULT_TRANSPORT = None
 class MessageCodec(object):
     """Abstract base class for message codecs.
 
-    A codec is responsible for encoding and decoding message data
+    A codec is responsible for encoding and decoding messages
     to/from a specific representation format (e.g., JSON, Protocol Buffers).
     """
 
-    def encode(self, data):
-        """Encode data to the codec's representation format.
+    def encode(self, message):
+        """Encode a message to the codec's representation format.
 
         Parameters
         ----------
-        data : dict
-            Data dictionary to encode.
+        message : :class:`Message` or dict or object
+            Message to encode. Can be a Message instance, a dict, or
+            an object implementing the COMPAS data framework.
 
         Returns
         -------
         bytes or str
-            Encoded representation of the data.
+            Encoded representation of the message.
         """
         raise NotImplementedError("Subclasses must implement encode()")
 
@@ -37,7 +38,7 @@ class MessageCodec(object):
         Returns
         -------
         dict
-            Decoded data dictionary.
+            Decoded data dictionary that can be used to reconstruct a message.
         """
         raise NotImplementedError("Subclasses must implement decode()")
 
@@ -46,22 +47,32 @@ class JsonMessageCodec(MessageCodec):
     """JSON codec for message serialization.
 
     This codec uses the COMPAS framework's JSON serialization functions
-    to encode and decode message data.
+    to encode and decode message data. It can handle Message objects,
+    COMPAS Data objects, and regular dictionaries.
     """
 
-    def encode(self, data):
-        """Encode data to JSON string.
+    def encode(self, message):
+        """Encode a message to JSON string.
 
         Parameters
         ----------
-        data : dict
-            Data dictionary to encode.
+        message : :class:`Message` or dict or object
+            Message to encode. Can be a Message instance, a dict, or
+            an object implementing the COMPAS data framework.
 
         Returns
         -------
         str
-            JSON string representation of the data.
+            JSON string representation of the message.
         """
+        # Extract data from the message
+        try:
+            data = message.data
+        except (KeyError, AttributeError):
+            try:
+                data = message.__data__
+            except (KeyError, AttributeError):
+                data = dict(message)
         return json_dumps(data)
 
     def decode(self, encoded_data):
@@ -206,33 +217,6 @@ class Topic(object):
         self.name = name
         self.message_type = message_type or Message
         self.options = options
-
-    def _message_to_data(self, message):
-        """Convert a message to a data representation ready to be encoded.
-
-        Normally, this method expects sub-classes of Message as input.
-        However, it can deal with regular dictionaries as well as classes
-        implementing the COMPAS data framework.
-
-        Parameters
-        ----------
-        message : :class:`Message` or dict or object
-            Message to convert. Can be a Message instance, a dict, or
-            an object implementing __data__.
-
-        Returns
-        -------
-        dict
-            Data dictionary representation of the message.
-        """
-        try:
-            data = message.data
-        except (KeyError, AttributeError):
-            try:
-                data = message.__data__
-            except (KeyError, AttributeError):
-                data = dict(message)
-        return data
 
 
 class Publisher(object):

@@ -34,7 +34,8 @@ class ProtobufMessageCodec(MessageCodec):
     """Protocol Buffers codec for message serialization.
 
     This codec uses the compas_pb package to encode and decode message data
-    using Protocol Buffers binary format.
+    using Protocol Buffers binary format. It can handle Message objects,
+    COMPAS Data objects, and regular dictionaries.
 
     Note
     ----
@@ -51,24 +52,33 @@ class ProtobufMessageCodec(MessageCodec):
                 "Please install it with: pip install compas_pb"
             )
 
-    def encode(self, data):
-        """Encode data to Protocol Buffers binary format.
+    def encode(self, message):
+        """Encode a message to Protocol Buffers binary format.
 
         Parameters
         ----------
-        data : dict
-            Data dictionary to encode.
+        message : :class:`Message` or dict or object
+            Message to encode. Can be a Message instance, a dict, or
+            an object implementing the COMPAS data framework.
 
         Returns
         -------
         bytes
-            Protocol Buffers binary representation of the data.
+            Protocol Buffers binary representation of the message.
         """
         if not COMPAS_PB_AVAILABLE:
             raise ImportError(
                 "The ProtobufMessageCodec requires 'compas_pb' to be installed. "
                 "Please install it with: pip install compas_pb"
             )
+        # Extract data from the message
+        try:
+            data = message.data
+        except (KeyError, AttributeError):
+            try:
+                data = message.__data__
+            except (KeyError, AttributeError):
+                data = dict(message)
         return compas_pb.encode(data)
 
     def decode(self, encoded_data):

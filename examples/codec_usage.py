@@ -48,10 +48,19 @@ print("=" * 60)
 
 class UpperCaseCodec(MessageCodec):
     """A simple custom codec that converts all string values to uppercase."""
-    
-    def encode(self, data):
-        """Encode data by converting all string values to uppercase."""
+
+    def encode(self, message):
+        """Encode message by converting all string values to uppercase."""
         import json
+        # Extract data from message
+        try:
+            data = message.data
+        except (KeyError, AttributeError):
+            try:
+                data = message.__data__
+            except (KeyError, AttributeError):
+                data = dict(message)
+
         # Convert string values to uppercase
         encoded_data = {}
         for key, value in data.items():
@@ -60,7 +69,7 @@ class UpperCaseCodec(MessageCodec):
             else:
                 encoded_data[key] = value
         return json.dumps(encoded_data)
-    
+
     def decode(self, encoded_data):
         """Decode data (strings remain uppercase)."""
         import json

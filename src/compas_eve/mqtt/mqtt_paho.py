@@ -79,8 +79,7 @@ class MqttTransport(Transport, EventEmitterMixin):
         """
 
         def _callback(**kwargs):
-            data = topic._message_to_data(message)
-            encoded_message = self.codec.encode(data)
+            encoded_message = self.codec.encode(message)
             self.client.publish(topic.name, encoded_message)
 
         self.on_ready(_callback)
