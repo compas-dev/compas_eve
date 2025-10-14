@@ -46,11 +46,10 @@ from .core import (
     EchoSubscriber,
     Transport,
     Topic,
-    MessageCodec,
     get_default_transport,
     set_default_transport,
 )
-from .codecs import JsonMessageCodec
+from .codecs import MessageCodec, JsonMessageCodec
 from .memory import InMemoryTransport
 
 HERE = os.path.dirname(__file__)

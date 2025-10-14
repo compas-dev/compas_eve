@@ -1,45 +1,6 @@
+from compas_eve.codecs import JsonMessageCodec
+
 DEFAULT_TRANSPORT = None
-
-
-class MessageCodec(object):
-    """Abstract base class for message codecs.
-
-    A codec is responsible for encoding and decoding messages
-    to/from a specific representation format (e.g., JSON, Protocol Buffers).
-    """
-
-    def encode(self, message):
-        """Encode a message to the codec's representation format.
-
-        Parameters
-        ----------
-        message : :class:`Message` or dict or object
-            Message to encode. Can be a Message instance, a dict, or
-            an object implementing the COMPAS data framework.
-
-        Returns
-        -------
-        bytes or str
-            Encoded representation of the message.
-        """
-        raise NotImplementedError("Subclasses must implement encode()")
-
-    def decode(self, encoded_data, message_type):
-        """Decode data from the codec's representation format.
-
-        Parameters
-        ----------
-        encoded_data : bytes or str
-            Encoded data to decode.
-        message_type : type
-            The message type class to use for parsing.
-
-        Returns
-        -------
-        :class:`Message`
-            Decoded message object.
-        """
-        raise NotImplementedError("Subclasses must implement decode()")
 
 
 def get_default_transport():
@@ -80,11 +41,7 @@ class Transport(object):
     def __init__(self, codec=None, *args, **kwargs):
         super(Transport, self).__init__(*args, **kwargs)
         self._id_counter = 0
-        if codec is None:
-            from compas_eve.codecs import JsonMessageCodec
-
-            codec = JsonMessageCodec()
-        self.codec = codec
+        self.codec = codec or JsonMessageCodec()
 
     @property
     def id_counter(self):
