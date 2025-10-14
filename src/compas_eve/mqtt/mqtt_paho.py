@@ -25,7 +25,7 @@ class MqttTransport(Transport, EventEmitterMixin):
     client_id : str, optional
         Client ID for the MQTT connection. If not provided, a unique ID will be generated.
     codec : :class:`MessageCodec`, optional
-        The codec to use for encoding and decoding messages. 
+        The codec to use for encoding and decoding messages.
         If not provided, defaults to :class:`JsonMessageCodec`.
     """
 

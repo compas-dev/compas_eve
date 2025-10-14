@@ -24,6 +24,7 @@ __all__ = ["ProtobufMessageCodec"]
 
 try:
     import compas_pb
+
     COMPAS_PB_AVAILABLE = True
 except ImportError:
     COMPAS_PB_AVAILABLE = False
