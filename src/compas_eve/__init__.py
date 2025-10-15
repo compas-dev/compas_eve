@@ -21,7 +21,6 @@ Classes
     Transport
     InMemoryTransport
     MessageCodec
-    JsonMessageCodec
     get_default_transport
     set_default_transport
 
@@ -49,7 +48,7 @@ from .core import (
     get_default_transport,
     set_default_transport,
 )
-from .codecs import MessageCodec, JsonMessageCodec
+from .codecs import MessageCodec
 from .memory import InMemoryTransport
 
 HERE = os.path.dirname(__file__)
@@ -66,7 +65,6 @@ __all__ = [
     "Topic",
     "Transport",
     "MessageCodec",
-    "JsonMessageCodec",
     "get_default_transport",
     "set_default_transport",
     "InMemoryTransport",
