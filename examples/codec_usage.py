@@ -10,7 +10,8 @@ This example shows how to:
 import json
 
 import compas_eve as eve
-from compas_eve import JsonMessageCodec, MessageCodec
+from compas_eve import MessageCodec
+from compas_eve.codecs import JsonMessageCodec
 
 
 # Example 1: Using the default JSON codec (implicit)
