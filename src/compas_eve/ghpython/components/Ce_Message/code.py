@@ -1,7 +1,7 @@
 """
 Create a message.
 
-COMPAS EVE v1.0.0
+COMPAS EVE v2.0.0
 """
 
 import System

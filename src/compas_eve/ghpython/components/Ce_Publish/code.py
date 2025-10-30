@@ -1,7 +1,7 @@
 """
 Publish messages to a topic.
 
-COMPAS EVE v1.0.0
+COMPAS EVE v2.0.0
 """
 
 import time
