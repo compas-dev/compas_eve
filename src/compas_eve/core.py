@@ -1,3 +1,5 @@
+from compas_eve.codecs import JsonMessageCodec
+
 DEFAULT_TRANSPORT = None
 
 
@@ -40,8 +42,6 @@ class Transport(object):
         super(Transport, self).__init__(*args, **kwargs)
         self._id_counter = 0
         if codec is None:
-            from compas_eve.codecs import JsonMessageCodec
-
             codec = JsonMessageCodec()
         self.codec = codec
 

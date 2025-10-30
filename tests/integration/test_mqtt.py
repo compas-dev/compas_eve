@@ -1,6 +1,5 @@
 from threading import Event
 
-from compas.data import Data
 from compas.geometry import Frame
 from compas.datastructures import Graph
 
