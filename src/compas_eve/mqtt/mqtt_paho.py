@@ -24,10 +24,13 @@ class MqttTransport(Transport, EventEmitterMixin):
         MQTT broker port, defaults to ``1883``.
     client_id : str, optional
         Client ID for the MQTT connection. If not provided, a unique ID will be generated.
+    codec : :class:`MessageCodec`, optional
+        The codec to use for encoding and decoding messages.
+        If not provided, defaults to :class:`JsonMessageCodec`.
     """
 
-    def __init__(self, host, port=1883, client_id=None, *args, **kwargs):
-        super(MqttTransport, self).__init__(*args, **kwargs)
+    def __init__(self, host, port=1883, client_id=None, codec=None, *args, **kwargs):
+        super(MqttTransport, self).__init__(codec=codec, *args, **kwargs)
         self.host = host
         self.port = port
         self._is_connected = False
@@ -76,8 +79,8 @@ class MqttTransport(Transport, EventEmitterMixin):
         """
 
         def _callback(**kwargs):
-            json_message = topic._message_to_json(message)
-            self.client.publish(topic.name, json_message)
+            encoded_message = self.codec.encode(message)
+            self.client.publish(topic.name, encoded_message)
 
         self.on_ready(_callback)
 
@@ -103,8 +106,8 @@ class MqttTransport(Transport, EventEmitterMixin):
         subscribe_id = "{}:{}".format(event_key, id(callback))
 
         def _local_callback(msg):
-            msg = topic._message_from_json(msg.payload.decode())
-            callback(msg)
+            message_obj = self.codec.decode(msg.payload, topic.message_type)
+            callback(message_obj)
 
         def _subscribe_callback(**kwargs):
             self.client.subscribe(topic.name)

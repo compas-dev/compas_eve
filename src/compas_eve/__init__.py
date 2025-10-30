@@ -20,6 +20,7 @@ Classes
     EchoSubscriber
     Transport
     InMemoryTransport
+    MessageCodec
     get_default_transport
     set_default_transport
 
@@ -47,6 +48,7 @@ from .core import (
     get_default_transport,
     set_default_transport,
 )
+from .codecs import MessageCodec
 from .memory import InMemoryTransport
 
 HERE = os.path.dirname(__file__)
@@ -62,6 +64,7 @@ __all__ = [
     "EchoSubscriber",
     "Topic",
     "Transport",
+    "MessageCodec",
     "get_default_transport",
     "set_default_transport",
     "InMemoryTransport",

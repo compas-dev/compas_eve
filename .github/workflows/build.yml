@@ -27,29 +27,6 @@ jobs:
         run: |
           pytest tests/unit
 
-  build-ironpython:
-    name: windows-ironpython
-    runs-on: windows-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Install dependencies
-        shell: cmd
-        run: |
-          curl -o compas.tar.gz -LJO https://pypi.debian.net/compas/latest
-          curl -o ironpython-pytest.tar.gz -LJO https://pypi.debian.net/ironpython-pytest/latest
-          choco install ironpython --version=2.7.8.1
-          ipy -X:Frames -m ensurepip
-          ipy -X:Frames -m pip install --no-deps ironpython-pytest.tar.gz
-
-          rem untar and rename, these cannot be installed using ironpip because they not longer have a setup.py
-          tar -xf compas.tar.gz && for /d %%i in (compas-*) do ren "%%i" compas
-
-      - name: Run tests
-        env:
-          IRONPYTHONPATH: ./src;./compas/src
-        run: |
-          ipy -m pytest tests/unit
-
   integration_tests:
     if: "!contains(github.event.pull_request.labels.*.name, 'docs-only')"
     runs-on: 'ubuntu-latest'
@@ -63,6 +40,9 @@ jobs:
           python: '3.11'
           invoke_lint: false
           invoke_test: false
+      - name: Install test dependencies
+        run: |
+          pip install -r tests/integration/requirements.txt
       - name: Run integration tests
         run: |
           pytest tests/integration

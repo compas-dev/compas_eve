@@ -1,5 +1,4 @@
-from compas.data import json_dumps
-from compas.data import json_loads
+from compas_eve.codecs import JsonMessageCodec
 
 DEFAULT_TRANSPORT = None
 
@@ -30,11 +29,21 @@ def set_default_transport(transport):
 
 
 class Transport(object):
-    """Defines the base interface for different transport implementations."""
+    """Defines the base interface for different transport implementations.
 
-    def __init__(self, *args, **kwargs):
+    Parameters
+    ----------
+    codec : :class:`MessageCodec`, optional
+        The codec to use for encoding and decoding messages.
+        If not provided, defaults to :class:`JsonMessageCodec`.
+    """
+
+    def __init__(self, codec=None, *args, **kwargs):
         super(Transport, self).__init__(*args, **kwargs)
         self._id_counter = 0
+        if codec is None:
+            codec = JsonMessageCodec()
+        self.codec = codec
 
     @property
     def id_counter(self):
@@ -122,26 +131,6 @@ class Topic(object):
         self.name = name
         self.message_type = message_type or Message
         self.options = options
-
-    def _message_to_json(self, message):
-        """Convert a message to a JSON string.
-
-        Normally, this method expects sub-classes of ``Message`` as input.
-        However, it can deal with regular dictionaries as well as classes
-        implementing the COMPAS data framework.
-        """
-        try:
-            data = message.data
-        except (KeyError, AttributeError):
-            try:
-                data = message.__data__
-            except (KeyError, AttributeError):
-                data = dict(message)
-        return json_dumps(data)
-
-    def _message_from_json(self, json_message):
-        """Converts a JSON string back into a message instance."""
-        return self.message_type.parse(json_loads(json_message))
 
 
 class Publisher(object):

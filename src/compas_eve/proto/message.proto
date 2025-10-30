@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+package compas_eve;
+
+import "compas_pb/generated/message.proto";
+
+message Message {
+  map<string, compas_pb.data.AnyData> data = 1;
+}

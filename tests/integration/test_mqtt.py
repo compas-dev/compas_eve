@@ -1,6 +1,7 @@
 from threading import Event
 
-from compas.data import Data
+from compas.geometry import Frame
+from compas.datastructures import Graph
 
 from compas_eve import Message
 from compas_eve import Publisher
@@ -116,39 +117,6 @@ def test_message_type_parsing():
 
 
 def test_compas_data_as_message():
-
-    class Header(Data):
-        def __init__(self, sequence_id=None):
-            super(Header, self).__init__()
-            self.sequence_id = sequence_id
-
-        @property
-        def __data__(self):
-            return {"sequence_id": self.sequence_id}
-
-    class DataTestMessage(Data):
-        def __init__(self, name=None, location=None, header=None):
-            super(DataTestMessage, self).__init__()
-            self.name = name
-            self.location = location
-            self.header = header or Header(1)
-
-        @property
-        def __data__(self):
-            return {"name": self.name, "location": self.location, "header": self.header.__data__}
-
-        @classmethod
-        def __from_data__(cls, data):
-            return cls(
-                name=data["name"],
-                location=data["location"],
-                header=Header.__from_data__(data["header"]),
-            )
-
-        @classmethod
-        def parse(cls, value):
-            return cls.__from_data__(value)
-
     result = dict(value=None, event=Event())
 
     def callback(msg):
@@ -156,16 +124,17 @@ def test_compas_data_as_message():
         result["event"].set()
 
     tx = MqttTransport(HOST)
-    topic = Topic("/messages_compas_eve_test/test_compas_data_as_message/", DataTestMessage)
+    topic = Topic("/messages_compas_eve_test/test_compas_data_as_message/")
 
     Subscriber(topic, callback, transport=tx).subscribe()
-    Publisher(topic, transport=tx).publish(DataTestMessage(name="Jazz", location=1.334))
+    Publisher(topic, transport=tx).publish(dict(frame=Frame.worldXY(), graph=Graph()))
 
+    assert result is not None, "No result?"
     received = result["event"].wait(timeout=3)
     assert received, "Message not received"
-    assert result["value"].name == "Jazz"
-    assert result["value"].location == 1.334
-    assert result["value"].header.sequence_id == 1
+    assert result["value"]["frame"] == Frame.worldXY()
+    assert isinstance(result["value"]["graph"], Graph)
+
 
 
 def test_nested_message_types():

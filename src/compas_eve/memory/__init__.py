@@ -26,10 +26,17 @@ __all__ = ["InMemoryTransport"]
 class InMemoryTransport(Transport, EventEmitterMixin):
     """In-Memory transport is ideal for simple single-process apps and testing.
 
-    It will only distribute messages within the same process, not across different processes."""
+    It will only distribute messages within the same process, not across different processes.
 
-    def __init__(self, *args, **kwargs):
-        super(InMemoryTransport, self).__init__(*args, **kwargs)
+    Parameters
+    ----------
+    codec : :class:`MessageCodec`, optional
+        The codec to use for encoding and decoding messages.
+        If not provided, defaults to :class:`JsonMessageCodec`.
+    """
+
+    def __init__(self, codec=None, *args, **kwargs):
+        super(InMemoryTransport, self).__init__(codec=codec, *args, **kwargs)
         self._local_callbacks = {}
 
     def on_ready(self, callback):
@@ -49,7 +56,9 @@ class InMemoryTransport(Transport, EventEmitterMixin):
         event_key = "event:{}".format(topic.name)
 
         def _callback(**kwargs):
-            self.emit(event_key, message)
+            encoded_message = self.codec.encode(message)
+            encoded_message_bytes = encoded_message if isinstance(encoded_message, bytes) else encoded_message.encode('utf-8')
+            self.emit(event_key, encoded_message_bytes)
 
         self.on_ready(_callback)
 
@@ -74,10 +83,14 @@ class InMemoryTransport(Transport, EventEmitterMixin):
         event_key = "event:{}".format(topic.name)
         subscribe_id = "{}:{}".format(event_key, id(callback))
 
-        def _callback(**kwargs):
-            self.on(event_key, callback)
+        def _local_callback(msg):
+            message_obj = self.codec.decode(msg, topic.message_type)
+            callback(message_obj)
 
-        self._local_callbacks[subscribe_id] = callback
+        def _callback(**kwargs):
+            self.on(event_key, _local_callback)
+
+        self._local_callbacks[subscribe_id] = _local_callback
 
         self.on_ready(_callback)
 
