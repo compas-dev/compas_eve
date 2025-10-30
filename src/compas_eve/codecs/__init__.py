@@ -53,13 +53,13 @@ class MessageCodec(object):
 
         Parameters
         ----------
-        encoded_data : bytes or str
+        encoded_data : bytes
             Encoded data to decode.
 
         Returns
         -------
-        dict
-            Decoded data dictionary that can be used to reconstruct a message.
+        :class:`Message` or dict or object
+            Decoded message after reconstruction from the encoded data.
         """
         raise NotImplementedError("Subclasses must implement decode()")
 
