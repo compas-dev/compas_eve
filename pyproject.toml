@@ -49,8 +49,19 @@ Forum = "https://forum.compas-framework.org/"
 # setuptools config
 # ============================================================================
 
-[tool.black]
-line-length = 120
+[tool.ruff]
+line-length = 179
+indent-width = 4
+target-version = "py39"
+exclude = ["src/compas_eve/proto"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I"]
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["I001"]
+"tests/*" = ["I001"]
+"tasks.py" = ["I001"]
 
 [tool.pytest.ini_options]
 minversion = "6.0"
@@ -64,7 +75,7 @@ doctest_optionflags= "NORMALIZE_WHITESPACE IGNORE_EXCEPTION_DETAIL ALLOW_UNICODE
 filterwarnings = "ignore::DeprecationWarning"
 
 [tool.isort]
-line_length = 120
+line_length = 179
 multi_line_output = 3
 include_trailing_comma = true
 force_grid_wrap = 0
@@ -76,3 +87,16 @@ default_section = "THIRDPARTY"
 forced_separate = "test_compas_eve"
 skip = ["__init__.py"]
 
+[tool.ruff.lint.isort]
+force-single-line = true
+known-first-party = ["compas_eve"]
+
+[tool.ruff.lint.pydocstyle]
+convention = "numpy"
+
+[tool.ruff.lint.pycodestyle]
+max-doc-length = 179
+
+[tool.ruff.format]
+docstring-code-format = true
+docstring-code-line-length = "dynamic"

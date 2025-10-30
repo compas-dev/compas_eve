@@ -14,6 +14,7 @@ def message_to_pb(message: Message) -> message_pb2.Message:
         pb.data[k].CopyFrom(_serializer_any(v))
     return pb
 
+
 @pb_deserializer(message_pb2.Message)
 def message_from_pb(pb: message_pb2.Message) -> Message:
     message = Message()

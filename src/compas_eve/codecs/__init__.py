@@ -141,10 +141,7 @@ class ProtobufMessageCodec(MessageCodec):
     def __init__(self):
         super(ProtobufMessageCodec, self).__init__()
         if not COMPAS_PB_AVAILABLE:
-            raise ImportError(
-                "The ProtobufMessageCodec requires 'compas_pb' to be installed. "
-                "Please install it with: pip install compas_pb"
-            )
+            raise ImportError("The ProtobufMessageCodec requires 'compas_pb' to be installed. Please install it with: pip install compas_pb")
 
     def encode(self, message):
         """Encode a message to Protocol Buffers binary format.
@@ -161,10 +158,7 @@ class ProtobufMessageCodec(MessageCodec):
             Protocol Buffers binary representation of the message.
         """
         if not COMPAS_PB_AVAILABLE:
-            raise ImportError(
-                "The ProtobufMessageCodec requires 'compas_pb' to be installed. "
-                "Please install it with: pip install compas_pb"
-            )
+            raise ImportError("The ProtobufMessageCodec requires 'compas_pb' to be installed. Please install it with: pip install compas_pb")
         return compas_pb.pb_dump_bts(message)
 
     def decode(self, encoded_data, message_type=None):
@@ -183,8 +177,5 @@ class ProtobufMessageCodec(MessageCodec):
             Decoded message object.
         """
         if not COMPAS_PB_AVAILABLE:
-            raise ImportError(
-                "The ProtobufMessageCodec requires 'compas_pb' to be installed. "
-                "Please install it with: pip install compas_pb"
-            )
+            raise ImportError("The ProtobufMessageCodec requires 'compas_pb' to be installed. Please install it with: pip install compas_pb")
         return compas_pb.pb_load_bts(encoded_data)

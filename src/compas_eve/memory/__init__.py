@@ -57,7 +57,7 @@ class InMemoryTransport(Transport, EventEmitterMixin):
 
         def _callback(**kwargs):
             encoded_message = self.codec.encode(message)
-            encoded_message_bytes = encoded_message if isinstance(encoded_message, bytes) else encoded_message.encode('utf-8')
+            encoded_message_bytes = encoded_message if isinstance(encoded_message, bytes) else encoded_message.encode("utf-8")
             self.emit(event_key, encoded_message_bytes)
 
         self.on_ready(_callback)

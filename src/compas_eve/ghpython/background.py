@@ -33,6 +33,7 @@ class BackgroundWorker(object):
 
         import time
 
+
         def do_something_long_and_complicated(worker):
             # Result can be of any data type
             result = 0
@@ -40,7 +41,7 @@ class BackgroundWorker(object):
             for i in range(50):
                 worker.current_value = i
                 result += i
-                worker.display_progress(i / (50-1))
+                worker.display_progress(i / (50 - 1))
                 time.sleep(0.01)
 
             worker.display_message("Done!")
@@ -190,9 +191,7 @@ class BackgroundWorker(object):
         Rhino.RhinoApp.InvokeOnUiThread(System.Action(ui_callback))
 
     @classmethod
-    def instance_by_component(
-        cls, ghenv, long_running_function=None, dispose_function=None, auto_set_done=True, force_new=False, args=()
-    ):
+    def instance_by_component(cls, ghenv, long_running_function=None, dispose_function=None, auto_set_done=True, force_new=False, args=()):
         """Get the worker instance assigned to the component.
 
         This will get a persistant instance of a background worker

@@ -136,9 +136,7 @@ def test_compas_data_as_message():
     assert isinstance(result["value"]["graph"], Graph)
 
 
-
 def test_nested_message_types():
-
     class Header(Message):
         def __init__(self, sequence_id=None):
             super(Header, self).__init__()

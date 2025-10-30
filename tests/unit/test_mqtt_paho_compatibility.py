@@ -4,10 +4,7 @@ from compas_eve.mqtt.mqtt_paho import MqttTransport, PAHO_MQTT_V2_AVAILABLE
 
 
 def test_paho_mqtt_v1_compatibility():
-    with patch("compas_eve.mqtt.mqtt_paho.PAHO_MQTT_V2_AVAILABLE", False), patch(
-        "paho.mqtt.client.Client"
-    ) as mock_client_class:
-
+    with patch("compas_eve.mqtt.mqtt_paho.PAHO_MQTT_V2_AVAILABLE", False), patch("paho.mqtt.client.Client") as mock_client_class:
         mock_client = Mock()
         mock_client_class.return_value = mock_client
 

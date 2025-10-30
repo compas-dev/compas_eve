@@ -73,11 +73,12 @@ class EventEmitterMixin(object):
 
       For example::
 
-          @ee.on('error')
+          @ee.on("error")
           def onError(message):
               logging.err(message)
 
-          ee.emit('error', Exception('something blew up'))
+
+          ee.emit("error", Exception("something blew up"))
 
       For synchronous callbacks, exceptions are **not** handled for you---
       you must catch your own exceptions inside synchronous ``on`` handlers.
@@ -102,7 +103,7 @@ class EventEmitterMixin(object):
         takes ``f`` as a callback; in other words, you can use this method
         as a decorator, like so::
 
-            @ee.on('data')
+            @ee.on("data")
             def data_handler(data):
                 print(data)
 
@@ -150,7 +151,7 @@ class EventEmitterMixin(object):
 
         Example::
 
-            ee.emit('data', '00101001')
+            ee.emit("data", "00101001")
 
         Assuming ``data`` is an attached function, this will call
         ``data('00101001')'``.
