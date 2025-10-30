@@ -481,11 +481,7 @@ document.write(`
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="grasshopper.html">Examples in Rhino/Grasshopper</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="api.html">API Reference</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="api/compas_eve.html">compas_eve</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api/compas_eve.mqtt.html">compas_eve.mqtt</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api/compas_eve.memory.html">compas_eve.memory</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api/compas_eve.ghpython.html">compas_eve.ghpython</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="api.html">API Reference</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul class="simple">
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="license.html">License</a></li>
@@ -560,9 +556,9 @@ If you haven’t, please follow the instructions in the <span class="xref std st
 parts of a program using messages. These messages are sent around using a
 publisher/subscriber model, or pub/sub for short. In pub/sub communication,
 messages are not sent directly from a sender to a receiver, instead, they are
-sent to a <a class="reference internal" href="api/generated/compas_eve.Topic.html" title="compas_eve.Topic"><code class="xref py py-class docutils literal notranslate"><span class="pre">Topic</span></code></a>. A topic is like a mailbox, the <a class="reference internal" href="api/generated/compas_eve.Publisher.html" title="compas_eve.Publisher"><code class="xref py py-class docutils literal notranslate"><span class="pre">Publisher</span></code></a>
+sent to a <code class="xref py py-class docutils literal notranslate"><span class="pre">Topic</span></code>. A topic is like a mailbox, the <code class="xref py py-class docutils literal notranslate"><span class="pre">Publisher</span></code>
 sends messages to the topic without the need for a subcriber to be
-actively listening for messages, and also the <a class="reference internal" href="api/generated/compas_eve.Subscriber.html" title="compas_eve.Subscriber"><code class="xref py py-class docutils literal notranslate"><span class="pre">Subscriber</span></code></a> can start
+actively listening for messages, and also the <code class="xref py py-class docutils literal notranslate"><span class="pre">Subscriber</span></code> can start
 listening for messages on a topic without the need for any publisher to be
 currently sending anything.</p>
 <p>This creates a highly decoupled communication model that facilitates the creation
@@ -651,7 +647,7 @@ or even on a completely separate machine, we need to take an extra step.</p>
 <h2>Hello Distributed World</h2>
 <p>Fortunately, it is very easy to extend our example and enable communication across processes, machines,
 networks, continents, and anything that is connected to the Internet!</p>
-<p>The only difference is that we are going to configure a different <a class="reference internal" href="api/generated/compas_eve.Transport.html" title="compas_eve.Transport"><code class="xref py py-class docutils literal notranslate"><span class="pre">Transport</span></code></a> implementation for
+<p>The only difference is that we are going to configure a different <code class="xref py py-class docutils literal notranslate"><span class="pre">Transport</span></code> implementation for
 our messages. In this case, we will use the MQTT transport method. <a class="reference external" href="https://en.wikipedia.org/wiki/MQTT">MQTT</a>
 is a network protocol very popular for IoT applications because of its lightweight.</p>
 <p>We are going to split the code and create one script for sending messages with a publisher and a different

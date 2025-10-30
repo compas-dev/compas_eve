@@ -481,11 +481,7 @@ document.write(`
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Examples in Rhino/Grasshopper</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="api.html">API Reference</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="api/compas_eve.html">compas_eve</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api/compas_eve.mqtt.html">compas_eve.mqtt</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api/compas_eve.memory.html">compas_eve.memory</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api/compas_eve.ghpython.html">compas_eve.ghpython</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="api.html">API Reference</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul class="simple">
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="license.html">License</a></li>
@@ -566,7 +562,7 @@ background, so that the user can continue working with Grasshopper while the tas
 <p>In order to use it, add a <code class="docutils literal notranslate"><span class="pre">Background</span> <span class="pre">task</span></code> component to your Grasshopper definition, and connect
 an input with a python function containing the code that needs to run in the background. The only
 requirement is that this function must accept a <code class="docutils literal notranslate"><span class="pre">worker</span></code> argument, which is an instance of
-<a class="reference internal" href="api/generated/compas_eve.ghpython.BackgroundWorker.html" title="compas_eve.ghpython.BackgroundWorker"><code class="xref py py-class docutils literal notranslate"><span class="pre">BackgroundWorker</span></code></a>.</p>
+<code class="xref py py-class docutils literal notranslate"><span class="pre">BackgroundWorker</span></code>.</p>
 <figure class="figure align-default">
 <img alt="_images/background-task.png" class="figure-img img-fluid" src="_images/background-task.png" />
 </figure>

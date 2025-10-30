@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" href="../_static/compas.ico" type="image/x-icon">
-    <title>compas_eve &#8212; COMPAS EVE</title>
+    <title>&lt;no title&gt; &#8212; COMPAS EVE</title>
   
   
   
@@ -59,7 +59,7 @@
         </script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Message" href="generated/compas_eve.Message.html" />
+    <link rel="next" title="&lt;no title&gt;" href="compas_eve.codecs.html" />
     <link rel="prev" title="API Reference" href="../api.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -476,16 +476,12 @@ document.write(`
     <div class="sidebar-primary-items__start sidebar-primary__section">
         <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
-        <ul class="current nav bd-sidenav">
+        <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../index.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../examples.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../grasshopper.html">Examples in Rhino/Grasshopper</a></li>
-<li class="toctree-l1 current active has-children"><a class="reference internal" href="../api.html">API Reference</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
-<li class="toctree-l2 current active"><a class="current reference internal" href="#">compas_eve</a></li>
-<li class="toctree-l2"><a class="reference internal" href="compas_eve.mqtt.html">compas_eve.mqtt</a></li>
-<li class="toctree-l2"><a class="reference internal" href="compas_eve.memory.html">compas_eve.memory</a></li>
-<li class="toctree-l2"><a class="reference internal" href="compas_eve.ghpython.html">compas_eve.ghpython</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../api.html">API Reference</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul class="simple">
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../license.html">License</a></li>
@@ -535,7 +531,7 @@ document.write(`
     
     <li class="breadcrumb-item"><a href="../api.html" class="nav-link">API Reference</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page">compas_eve</li>
+    <li class="breadcrumb-item active" aria-current="page">&lt;no title&gt;</li>
   </ul>
 </nav>
 </div>
@@ -552,47 +548,7 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article" role="main">
                   
-  <section id="module-compas_eve">
-<span id="compas-eve"></span><h1>compas_eve</h1>
-<section id="id1">
-<h2>compas_eve</h2>
-<section id="classes">
-<h3>Classes</h3>
-<table class="autosummary longtable table autosummary">
-<tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/compas_eve.Message.html" title="compas_eve.Message"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Message</span></code></a></p></td>
-<td><p>Message objects used for publishing and subscribing to/from topics.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/compas_eve.Topic.html" title="compas_eve.Topic"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Topic</span></code></a></p></td>
-<td><p>A topic is like a mailbox where messages can be sent and received.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/compas_eve.Publisher.html" title="compas_eve.Publisher"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Publisher</span></code></a></p></td>
-<td><p>Publisher for a specific topic.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/compas_eve.Subscriber.html" title="compas_eve.Subscriber"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Subscriber</span></code></a></p></td>
-<td><p>Subscriber for a specific topic.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/compas_eve.EchoSubscriber.html" title="compas_eve.EchoSubscriber"><code class="xref py py-obj docutils literal notranslate"><span class="pre">EchoSubscriber</span></code></a></p></td>
-<td><p>Simple subscriber that prints received messages on the console (ie.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/compas_eve.Transport.html" title="compas_eve.Transport"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Transport</span></code></a></p></td>
-<td><p>Defines the base interface for different transport implementations.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/compas_eve.InMemoryTransport.html" title="compas_eve.InMemoryTransport"><code class="xref py py-obj docutils literal notranslate"><span class="pre">InMemoryTransport</span></code></a></p></td>
-<td><p>In-Memory transport is ideal for simple single-process apps and testing.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/compas_eve.get_default_transport.html" title="compas_eve.get_default_transport"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_default_transport</span></code></a></p></td>
-<td><p>Retrieve the default transport implementation to be used system-wide.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/compas_eve.set_default_transport.html" title="compas_eve.set_default_transport"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_default_transport</span></code></a></p></td>
-<td><p>Assign a default transport implementation to be used system-wide.</p></td>
-</tr>
-</tbody>
-</table>
-</section>
-</section>
-</section>
-
+  
 
                 </article>
               
@@ -613,12 +569,9 @@ document.write(`
     <i class="fa-solid fa-list"></i> On this page
   </div>
   <nav class="bd-toc-nav page-toc">
-    <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">compas_eve</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#classes">Classes</a></li>
+    <ul class="simple visible nav section-nav flex-column">
 </ul>
-</li>
-</ul>
+
   </nav></div>
 
 </div></div>
