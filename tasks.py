@@ -1,12 +1,16 @@
 from __future__ import print_function
 
 import os
+from pathlib import Path
 
-from compas_invocations import build
-from compas_invocations import docs
-from compas_invocations import style
-from compas_invocations import tests
+from compas_invocations2 import build
+from compas_invocations2 import docs
+from compas_invocations2 import style
+from compas_invocations2 import tests
 from invoke import Collection
+
+import compas_pb
+from compas_pb.invocations import generate_proto_classes
 
 ns = Collection(
     docs.help,
@@ -21,6 +25,7 @@ ns = Collection(
     build.prepare_changelog,
     build.clean,
     build.release,
+    generate_proto_classes,
 )
 ns.configure(
     {
@@ -30,5 +35,8 @@ ns.configure(
             "source_dir": "src/compas_eve/ghpython/components",
             "target_dir": "src/compas_eve/ghpython/components/ghuser",
         },
+        "proto_folder": Path("./src") / "compas_eve" / "proto",
+        "proto_include_paths": [Path("./src") / "compas_eve" / "proto", compas_pb.PROTOBUF_DEFS],
+        "proto_out_folder": Path("./src") / "compas_eve" / "proto",
     }
 )

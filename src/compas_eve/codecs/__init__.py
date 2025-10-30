@@ -88,21 +88,20 @@ class JsonMessageCodec(MessageCodec):
         """
         # Extract data from the message
         try:
-            data = message.data
+            return json_dumps(message.data)
         except (KeyError, AttributeError):
             try:
-                data = message.__data__
+                return json_dumps(message)
             except (KeyError, AttributeError):
-                data = dict(message)
-        return json_dumps(data)
+                return json_dumps(dict(message))
 
     def decode(self, encoded_data, message_type):
-        """Decode JSON string to message object.
+        """Decode JSON message payloads to message object.
 
         Parameters
         ----------
-        encoded_data : str
-            JSON string to decode.
+        encoded_data : bytes
+            Message bytes to decode into a JSON string.
         message_type : type
             The message type class to use for parsing.
 
@@ -111,8 +110,11 @@ class JsonMessageCodec(MessageCodec):
         :class:`Message`
             Decoded message object.
         """
-        data = json_loads(encoded_data)
-        return message_type.parse(data)
+        data = json_loads(encoded_data.decode())
+        if hasattr(data, "__data__"):
+            return data
+        else:
+            return message_type.parse(data)
 
 
 try:

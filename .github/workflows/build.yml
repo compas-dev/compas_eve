@@ -40,6 +40,9 @@ jobs:
           python: '3.11'
           invoke_lint: false
           invoke_test: false
+      - name: Install test dependencies
+        run: |
+          pip install -r tests/integration/requirements.txt
       - name: Run integration tests
         run: |
           pytest tests/integration

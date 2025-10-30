@@ -56,7 +56,9 @@ class InMemoryTransport(Transport, EventEmitterMixin):
         event_key = "event:{}".format(topic.name)
 
         def _callback(**kwargs):
-            self.emit(event_key, message)
+            encoded_message = self.codec.encode(message)
+            encoded_message_bytes = encoded_message if isinstance(encoded_message, bytes) else encoded_message.encode('utf-8')
+            self.emit(event_key, encoded_message_bytes)
 
         self.on_ready(_callback)
 
@@ -81,10 +83,14 @@ class InMemoryTransport(Transport, EventEmitterMixin):
         event_key = "event:{}".format(topic.name)
         subscribe_id = "{}:{}".format(event_key, id(callback))
 
-        def _callback(**kwargs):
-            self.on(event_key, callback)
+        def _local_callback(msg):
+            message_obj = self.codec.decode(msg, topic.message_type)
+            callback(message_obj)
 
-        self._local_callbacks[subscribe_id] = callback
+        def _callback(**kwargs):
+            self.on(event_key, _local_callback)
+
+        self._local_callbacks[subscribe_id] = _local_callback
 
         self.on_ready(_callback)
 
