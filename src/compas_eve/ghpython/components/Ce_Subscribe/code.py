@@ -1,8 +1,6 @@
 # r: compas_eve>=2.0.0
 """
 Subscribe to a topic to receive messages.
-
-COMPAS EVE v2.0.0
 """
 
 import System

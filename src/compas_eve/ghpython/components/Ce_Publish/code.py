@@ -1,8 +1,6 @@
 # r: compas_eve>=2.0.0
 """
 Publish messages to a topic.
-
-COMPAS EVE v2.0.0
 """
 
 import time

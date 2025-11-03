@@ -1,8 +1,6 @@
 # r: compas_eve>=2.0.0
 """
 Create a message.
-
-COMPAS EVE v2.0.0
 """
 
 import System
