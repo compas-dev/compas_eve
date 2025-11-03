@@ -14,7 +14,7 @@ from compas_eve.ghpython import warning
 class SubscribeComponent(Grasshopper.Kernel.GH_ScriptInstance):
     def RunScript(self, transport, topic_name: str, start: bool, on: bool):
         if not topic_name:
-            warning(ghenv.Component, "Please specify the name of the topic")
+            warning(ghenv.Component, "Please specify the name of the topic")  # noqa: F821
             return None
 
         if on is None:

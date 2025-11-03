@@ -17,14 +17,14 @@ from compas_eve.ghpython import warning
 class PublishComponent(Grasshopper.Kernel.GH_ScriptInstance):
     def RunScript(self, transport, topic_name: str, message, on: bool):
         if not topic_name:
-            warning(ghenv.Component, "Please specify the name of the topic")
+            warning(ghenv.Component, "Please specify the name of the topic")  # noqa: F821
             return
 
         if on is None:
             on = True
 
-        key = create_id(ghenv.Component, "publisher_{}".format(id(transport)))
-        key_count = create_id(ghenv.Component, "publisher_count_{}".format(id(transport)))
+        key = create_id(ghenv.Component, "publisher_{}".format(id(transport)))  # noqa: F821
+        key_count = create_id(ghenv.Component, "publisher_count_{}".format(id(transport)))  # noqa: F821
         publisher = st.get(key, None)
 
         if not publisher:

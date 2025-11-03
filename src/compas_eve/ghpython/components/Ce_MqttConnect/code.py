@@ -19,7 +19,7 @@ class MqttConnectComponent(Grasshopper.Kernel.GH_ScriptInstance):
         host = host or "127.0.0.1"
         port = port or 1883
 
-        key = create_id(ghenv.Component, "mqtt_transport")
+        key = create_id(ghenv.Component, "mqtt_transport")  # noqa: F821
         mqtt_transport = st.get(key, None)
 
         if mqtt_transport:
