@@ -1,20 +1,23 @@
+# env: C:\Users\ckasirer\Documents\repos\compas_eve\src
 """
 Subscribe to a topic to receive messages.
 
 COMPAS EVE v2.0.0
 """
 
-from ghpythonlib.componentbase import executingcomponent as component
+import System
+import Grasshopper
 
 from compas_eve import Topic
 from compas_eve import Subscriber
 from compas_eve.ghpython import BackgroundWorker
+from compas_eve.ghpython import warning
 
-
-class SubscribeComponent(component):
-    def RunScript(self, transport, topic_name, start, on):
+class SubscribeComponent(Grasshopper.Kernel.GH_ScriptInstance):
+    def RunScript(self, transport, topic_name: str, start: bool, on: bool):
         if not topic_name:
-            raise ValueError("Please specify the name of the topic")
+            warning(ghenv.Component, "Please specify the name of the topic")
+            return None
 
         if on is None:
             on = True
