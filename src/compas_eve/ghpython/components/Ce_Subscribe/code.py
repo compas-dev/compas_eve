@@ -1,4 +1,4 @@
-# env: C:\Users\ckasirer\Documents\repos\compas_eve\src
+# r: compas_eve>=2.0.0
 """
 Subscribe to a topic to receive messages.
 
