@@ -19,6 +19,7 @@ Classes
     message
 
 """
+
 try:
     import Grasshopper  # type: ignore
 except (ImportError, SyntaxError):
