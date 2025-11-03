@@ -6,7 +6,6 @@ Publish messages to a topic.
 import time
 
 import Grasshopper
-import System
 from compas_ghpython import create_id
 from scriptcontext import sticky as st
 

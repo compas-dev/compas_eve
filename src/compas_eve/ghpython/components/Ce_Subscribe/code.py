@@ -3,13 +3,13 @@
 Subscribe to a topic to receive messages.
 """
 
-import System
 import Grasshopper
 
-from compas_eve import Topic
 from compas_eve import Subscriber
+from compas_eve import Topic
 from compas_eve.ghpython import BackgroundWorker
 from compas_eve.ghpython import warning
+
 
 class SubscribeComponent(Grasshopper.Kernel.GH_ScriptInstance):
     def RunScript(self, transport, topic_name: str, start: bool, on: bool):

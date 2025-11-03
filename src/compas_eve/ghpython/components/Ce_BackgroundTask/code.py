@@ -11,7 +11,6 @@ import threading
 
 import Grasshopper
 import scriptcontext as sc
-import System
 
 from compas_eve.ghpython import BackgroundWorker
 

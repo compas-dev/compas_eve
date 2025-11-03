@@ -3,14 +3,13 @@
 Create a message.
 """
 
-import System
-
 import Rhino.Geometry as rg
 import rhinoscriptsyntax as rs
-
+import System
 from compas.geometry import Brep
-from compas_eve import Message
 from compas_rhino import conversions
+
+from compas_eve import Message
 
 component = ghenv.Component  # noqa: F821
 

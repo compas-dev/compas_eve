@@ -6,7 +6,6 @@ Connect or disconnect to an MQTT broker.
 from threading import Event
 
 import Grasshopper
-import System
 from compas_ghpython import create_id
 from scriptcontext import sticky as st
 
