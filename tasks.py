@@ -7,6 +7,7 @@ from compas_invocations2 import build
 from compas_invocations2 import docs
 from compas_invocations2 import style
 from compas_invocations2 import tests
+from compas_invocations2 import grasshopper
 from invoke import Collection
 
 import compas_pb
@@ -21,16 +22,18 @@ ns = Collection(
     docs.linkcheck,
     tests.test,
     tests.testdocs,
-    build.build_ghuser_components,
+    build.build_cpython_ghuser_components,
     build.prepare_changelog,
     build.clean,
     build.release,
+    grasshopper.yakerize,
+    grasshopper.update_gh_header,
     generate_proto_classes,
 )
 ns.configure(
     {
         "base_folder": os.path.dirname(__file__),
-        "ghuser": {
+        "ghuser_cpython": {
             "prefix": "COMPAS EVE: ",
             "source_dir": "src/compas_eve/ghpython/components",
             "target_dir": "src/compas_eve/ghpython/components/ghuser",
