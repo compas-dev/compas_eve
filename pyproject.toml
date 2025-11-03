@@ -3,7 +3,7 @@ requires = ["setuptools>=66.0"]
 build-backend = "setuptools.build_meta"
 
 # ============================================================================
-# project info
+# Project info
 # ============================================================================
 
 [project]
@@ -51,7 +51,7 @@ Forum = "https://forum.compas-framework.org/"
 
 
 # ============================================================================
-# setuptools config
+# Linting and formatting
 # ============================================================================
 
 [tool.ruff]
@@ -105,6 +105,10 @@ max-doc-length = 179
 [tool.ruff.format]
 docstring-code-format = true
 docstring-code-line-length = "dynamic"
+
+# ============================================================================
+# Release automation
+# ============================================================================
 
 [tool.bumpversion]
 current_version = "2.0.0"
