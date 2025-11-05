@@ -18,7 +18,7 @@ class PublishComponent(Grasshopper.Kernel.GH_ScriptInstance):
     def RunScript(self, transport, topic_name: str, message, on: bool):
         if not topic_name:
             warning(ghenv.Component, "Please specify the name of the topic")  # noqa: F821
-            return
+            return None
 
         if on is None:
             on = True
