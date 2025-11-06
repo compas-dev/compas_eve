@@ -13,10 +13,6 @@ Classes
     :nosignatures:
 
     BackgroundWorker
-    warning
-    error
-    remark
-    message
 
 """
 
