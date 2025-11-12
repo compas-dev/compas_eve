@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html>
 
 
@@ -6,7 +7,7 @@
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
     <link rel="icon" href="_static/compas.ico" type="image/x-icon">
     <title>Examples &#8212; COMPAS EVE</title>
   
@@ -28,29 +29,28 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
-    <link rel="stylesheet" type="text/css" href="_static/css/compas.css?v=617b33e2" />
-    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="_static/tabs.css?v=4c969af8" />
-    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
-    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/css/compas.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/tabs.css" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.4cbf315f70debaebd550c87a6162cf0f.min.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
 
-    <script src="_static/documentation_options.js?v=bb99e320"></script>
-    <script src="_static/doctools.js?v=9bcbadda"></script>
-    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
-    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
-    <script src="_static/copybutton.js?v=f281be69"></script>
-    <script src="_static/tabs.js?v=3ee01567"></script>
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/tabs.js"></script>
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
     <script>let toggleOpenOnPrint = 'true';</script>
-    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
-    <script src="_static/design-tabs.js?v=f930bc37"></script>
-    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/togglebutton.js"></script>
+    <script src="_static/design-tabs.js"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'examples';</script>
     <script>
@@ -481,7 +481,12 @@ document.write(`
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="grasshopper.html">Examples in Rhino/Grasshopper</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="api.html">API Reference</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul class="simple">
+<li class="toctree-l1 has-children"><a class="reference internal" href="api.html">API Reference</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/compas_eve.html">compas_eve</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/compas_eve.codecs.html">compas_eve.codecs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/compas_eve.memory.html">compas_eve.memory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/compas_eve.mqtt.html">compas_eve.mqtt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/compas_eve.ghpython.html">compas_eve.ghpython</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="license.html">License</a></li>
@@ -556,9 +561,9 @@ If you haven’t, please follow the instructions in the <span class="xref std st
 parts of a program using messages. These messages are sent around using a
 publisher/subscriber model, or pub/sub for short. In pub/sub communication,
 messages are not sent directly from a sender to a receiver, instead, they are
-sent to a <code class="xref py py-class docutils literal notranslate"><span class="pre">Topic</span></code>. A topic is like a mailbox, the <code class="xref py py-class docutils literal notranslate"><span class="pre">Publisher</span></code>
+sent to a <a class="reference internal" href="api/generated/compas_eve.Topic.html" title="compas_eve.Topic"><code class="xref py py-class docutils literal notranslate"><span class="pre">Topic</span></code></a>. A topic is like a mailbox, the <a class="reference internal" href="api/generated/compas_eve.Publisher.html" title="compas_eve.Publisher"><code class="xref py py-class docutils literal notranslate"><span class="pre">Publisher</span></code></a>
 sends messages to the topic without the need for a subcriber to be
-actively listening for messages, and also the <code class="xref py py-class docutils literal notranslate"><span class="pre">Subscriber</span></code> can start
+actively listening for messages, and also the <a class="reference internal" href="api/generated/compas_eve.Subscriber.html" title="compas_eve.Subscriber"><code class="xref py py-class docutils literal notranslate"><span class="pre">Subscriber</span></code></a> can start
 listening for messages on a topic without the need for any publisher to be
 currently sending anything.</p>
 <p>This creates a highly decoupled communication model that facilitates the creation
@@ -647,7 +652,7 @@ or even on a completely separate machine, we need to take an extra step.</p>
 <h2>Hello Distributed World</h2>
 <p>Fortunately, it is very easy to extend our example and enable communication across processes, machines,
 networks, continents, and anything that is connected to the Internet!</p>
-<p>The only difference is that we are going to configure a different <code class="xref py py-class docutils literal notranslate"><span class="pre">Transport</span></code> implementation for
+<p>The only difference is that we are going to configure a different <a class="reference internal" href="api/generated/compas_eve.Transport.html" title="compas_eve.Transport"><code class="xref py py-class docutils literal notranslate"><span class="pre">Transport</span></code></a> implementation for
 our messages. In this case, we will use the MQTT transport method. <a class="reference external" href="https://en.wikipedia.org/wiki/MQTT">MQTT</a>
 is a network protocol very popular for IoT applications because of its lightweight.</p>
 <p>We are going to split the code and create one script for sending messages with a publisher and a different
@@ -796,7 +801,7 @@ not need to be specified on every publisher and subscriber instance.</p>
       
         <div class="footer-item">
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 6.2.1.
     <br/>
   </p>
 </div>
