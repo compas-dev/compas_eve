@@ -1,19 +1,20 @@
-import pytest
-import compas
-import compas_eve
+from pathlib import Path
 import math
 import numpy
+import pytest
+
+import compas
+import compas_eve
 
 
-def pytest_ignore_collect(path):
-    if "rhino" in str(path):
+def pytest_ignore_collect(collection_path: Path, config):
+    # Skip anything under rhino/blender/ghpython
+    parts_lower = {p.lower() for p in collection_path.parts}
+    if {"rhino", "blender", "ghpython"} & parts_lower:
         return True
 
-    if "blender" in str(path):
-        return True
-
-    if "ghpython" in str(path):
-        return True
+    # return None -> don't ignore
+    return None
 
 
 @pytest.fixture(autouse=True)
