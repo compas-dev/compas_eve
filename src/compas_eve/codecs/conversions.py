@@ -3,8 +3,8 @@ from compas_pb.core import _serializer_any
 from compas_pb.registry import pb_deserializer
 from compas_pb.registry import pb_serializer
 
-from compas_eve.proto import message_pb2
 from compas_eve import Message
+from compas_eve.proto import message_pb2
 
 
 @pb_serializer(Message)

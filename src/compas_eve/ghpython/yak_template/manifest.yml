@@ -1,0 +1,27 @@
+name: compas_eve
+version: {{ version }}
+authors:
+  - Gramazio Kohler Research, ETH Zurich
+description: "compas_eve adds event-based communication infrastructure to the COMPAS framework."
+url: "https://github.com/gramaziokohler/compas_eve"
+keywords: [
+    "COMPAS",
+    "compas_eve",
+    "compas",
+    "framework",
+    "architecture",
+    "engineering",
+    "digital",
+    "fabrication",
+    "construction",
+    "mqtt",
+    "events",
+    "ipc",
+    "IPC",
+    "publish",
+    "subscribe",
+    "topic",
+    "event-driven",
+    "distributed systems"
+]
+icon: "icon.png"

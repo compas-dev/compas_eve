@@ -1,29 +1,30 @@
+# r: compas_eve>=2.0.0
 """
 Publish messages to a topic.
-
-COMPAS EVE v2.0.0
 """
 
 import time
 
-from ghpythonlib.componentbase import executingcomponent as component
+import Grasshopper
+from compas_ghpython import create_id
 from scriptcontext import sticky as st
 
-from compas_eve import Topic
 from compas_eve import Publisher
-from compas_ghpython import create_id
+from compas_eve import Topic
+from compas_eve.ghpython import warning
 
 
-class PublishComponent(component):
-    def RunScript(self, transport, topic_name, message, on):
+class PublishComponent(Grasshopper.Kernel.GH_ScriptInstance):
+    def RunScript(self, transport, topic_name: str, message, on: bool):
         if not topic_name:
-            raise ValueError("Please specify the name of the topic")
+            warning(ghenv.Component, "Please specify the name of the topic")  # noqa: F821
+            return None
 
         if on is None:
             on = True
 
-        key = create_id(self, "publisher_{}".format(id(transport)))
-        key_count = create_id(self, "publisher_count_{}".format(id(transport)))
+        key = create_id(ghenv.Component, "publisher_{}".format(id(transport)))  # noqa: F821
+        key_count = create_id(ghenv.Component, "publisher_count_{}".format(id(transport)))  # noqa: F821
         publisher = st.get(key, None)
 
         if not publisher:

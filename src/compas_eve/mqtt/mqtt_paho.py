@@ -1,8 +1,9 @@
-from ..core import Transport
-from ..event_emitter import EventEmitterMixin
+import uuid
 
 import paho.mqtt.client as mqtt
-import uuid
+
+from ..core import Transport
+from ..event_emitter import EventEmitterMixin
 
 try:
     from paho.mqtt.enums import CallbackAPIVersion

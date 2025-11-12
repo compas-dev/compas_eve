@@ -3,7 +3,7 @@ requires = ["setuptools>=66.0"]
 build-backend = "setuptools.build_meta"
 
 # ============================================================================
-# project info
+# Project info
 # ============================================================================
 
 [project]
@@ -33,6 +33,11 @@ classifiers = [
     "Programming Language :: Python :: 3.14",
 ]
 
+[tool.setuptools.dynamic]
+version = { attr = "compas_eve.__version__" }
+dependencies = { file = "requirements.txt" }
+optional-dependencies = { dev = { file = "requirements-dev.txt" } }
+
 [project.entry-points.'compas_pb.plugins']
 serializers = 'compas_eve.codecs.conversions'
 
@@ -46,7 +51,7 @@ Forum = "https://forum.compas-framework.org/"
 
 
 # ============================================================================
-# setuptools config
+# Linting and formatting
 # ============================================================================
 
 [tool.ruff]
@@ -100,3 +105,33 @@ max-doc-length = 179
 [tool.ruff.format]
 docstring-code-format = true
 docstring-code-line-length = "dynamic"
+
+# ============================================================================
+# Release automation
+# ============================================================================
+
+[tool.bumpversion]
+current_version = "2.0.0"
+message = "Bump version to {new_version}"
+commit = true
+tag = true
+
+[[tool.bumpversion.files]]
+filename = "src/compas_eve/__init__.py"
+search = "{current_version}"
+replace = "{new_version}"
+
+[[tool.bumpversion.files]]
+filename = "docs/installation.rst"
+search = "{current_version}"
+replace = "{new_version}"
+
+[[tool.bumpversion.files]]
+glob = "src/compas_eve/ghpython/components/**/code.py"
+search = "# r: compas_eve>={current_version}"
+replace = "# r: compas_eve>={new_version}"
+
+[[tool.bumpversion.files]]
+filename = "CHANGELOG.md"
+search = "Unreleased"
+replace = "[{new_version}] {now:%Y-%m-%d}"

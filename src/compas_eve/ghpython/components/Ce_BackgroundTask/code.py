@@ -1,3 +1,4 @@
+# r: compas_eve>=2.0.0
 """
 Background Task component.
 
@@ -7,16 +8,16 @@ COMPAS EVE v2.0.0
 """
 
 import threading
+
+import Grasshopper
 import scriptcontext as sc
 
 from compas_eve.ghpython import BackgroundWorker
-from ghpythonlib.componentbase import executingcomponent as component
-
 
 DEBUG = False
 
 
-class BackgroundTaskComponent(component):
+class BackgroundTaskComponent(Grasshopper.Kernel.GH_ScriptInstance):
     def RunScript(self, task, reset, on):
         if not on:
             BackgroundWorker.stop_instance_by_component(ghenv)  # noqa: F821
