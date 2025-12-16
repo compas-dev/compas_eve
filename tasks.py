@@ -27,6 +27,7 @@ ns = Collection(
     build.clean,
     build.release,
     grasshopper.yakerize,
+    grasshopper.publish_yak,
     grasshopper.update_gh_header,
     generate_proto_classes,
 )
