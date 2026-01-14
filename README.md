@@ -1,5 +1,14 @@
 # COMPAS EVE
 
+[![Made with COMPAS](https://compas.dev/badge.svg)](https://compas.dev)
+[![Github Actions Build Status](https://github.com/gramaziokohler/compas_eve/workflows/build/badge.svg)](https://github.com/gramaziokohler/compas_eve/actions)
+[![License](https://img.shields.io/github/license/gramaziokohler/compas_eve.svg)](https://pypi.python.org/pypi/compas_eve)
+[![pip downloads](https://img.shields.io/pypi/dm/compas_eve)](https://pypi.python.org/project/compas_eve)
+[![PyPI Package latest release](https://img.shields.io/pypi/v/compas_eve.svg)](https://pypi.python.org/pypi/compas_eve)
+[![Supported implementations](https://img.shields.io/pypi/implementation/compas_eve.svg)](https://pypi.python.org/pypi/compas_eve)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.17955773.svg)](https://doi.org/10.5281/zenodo.17955773)
+[![Twitter Follow](https://img.shields.io/twitter/follow/compas_dev?style=social)](https://twitter.com/compas_dev)
+
 Event-based communication for the COMPAS framework.
 
 ```python
