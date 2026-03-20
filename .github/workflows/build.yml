@@ -31,9 +31,10 @@ jobs:
     if: "!contains(github.event.pull_request.labels.*.name, 'docs-only')"
     runs-on: 'ubuntu-latest'
     steps:
-      - name: Set up docker container
+      - name: Set up docker containers
         run: |
           docker run -d --name nanomq -p 1883:1883 -p 8083:8083 -p 8883:8883 emqx/nanomq:latest
+          docker run -d --name zenoh --init -p 7447:7447/tcp -p 8000:8000/tcp eclipse/zenoh
           docker ps -a
       - uses: compas-dev/compas-actions.build@v4
         with:
@@ -49,6 +50,7 @@ jobs:
       - name: Tear down docker container
         run: |
           docker rm -f nanomq
+          docker rm -f zenoh
 
   build-cpython-components:
     runs-on: windows-latest

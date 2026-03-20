@@ -21,16 +21,14 @@ HOST = "localhost"
 
 
 @pytest.fixture(params=["mqtt", "zenoh"])
-def tx_setup(request):
+def tx(request):
     if request.param == "mqtt":
         tx = MqttTransport(HOST)
-        delay = 0.0
     elif request.param == "zenoh":
         if ZenohTransport is None:
             pytest.skip("zenoh not installed")
         tx = ZenohTransport()
-        delay = 0.1
-    yield tx, delay
+    yield tx
     if hasattr(tx, "close"):
         tx.close()
 
@@ -46,42 +44,39 @@ def test_client_id():
     transport.close()
 
 
-def test_default_transport_publishing(tx_setup):
-    tx, delay = tx_setup
+def test_default_transport_publishing(tx):
     set_default_transport(tx)
     event = Event()
     topic = Topic("/messages_compas_eve_test/test_default_transport_publishing/", Message)
 
     Subscriber(topic, lambda m: event.set()).subscribe()
-    time.sleep(delay)
+    time.sleep(0.1)
     Publisher(topic).publish(Message(done=True))
 
     received = event.wait(timeout=3)
     assert received, "Message not received"
 
 
-def test_pubsub(tx_setup):
-    tx, delay = tx_setup
+def test_pubsub(tx):
     event = Event()
     topic = Topic("/messages_compas_eve_test/test_pubsub/", Message)
 
     Subscriber(topic, lambda m: event.set(), transport=tx).subscribe()
-    time.sleep(delay)
+    time.sleep(0.1)
     Publisher(topic, transport=tx).publish(Message(done=True))
 
     received = event.wait(timeout=3)
     assert received, "Message not received"
 
 
-def test_two_subs(tx_setup):
-    tx, delay = tx_setup
+def test_two_subs(tx):
     event1 = Event()
     event2 = Event()
     topic = Topic("/messages_compas_eve_test/test_two_subs/", Message)
 
     Subscriber(topic, lambda m: event1.set(), transport=tx).subscribe()
     Subscriber(topic, lambda m: event2.set(), transport=tx).subscribe()
-    time.sleep(delay)
+    time.sleep(0.1)
     Publisher(topic, transport=tx).publish(Message(done=True))
 
     received1 = event1.wait(timeout=3)
@@ -90,8 +85,7 @@ def test_two_subs(tx_setup):
     assert received2, "Message 2 not received"
 
 
-def test_unsub(tx_setup):
-    tx, delay = tx_setup
+def test_unsub(tx):
     topic = Topic("/messages_compas_eve_test/test_unsub/", Message)
 
     result = dict(count=0, event=Event())
@@ -104,7 +98,7 @@ def test_unsub(tx_setup):
     sub = Subscriber(topic, callback, transport=tx)
 
     sub.subscribe()
-    time.sleep(delay)
+    time.sleep(0.1)
     pub.publish(Message(done=True))
     received = result["event"].wait(timeout=3)
     assert received, "First message not received"
@@ -112,7 +106,7 @@ def test_unsub(tx_setup):
 
     result["event"].clear()
     sub.unsubscribe()
-    time.sleep(delay)
+    time.sleep(0.1)
     pub.publish(Message(done=True))
 
     received = result["event"].wait(timeout=1)
@@ -121,7 +115,7 @@ def test_unsub(tx_setup):
     assert len(list(tx._local_callbacks.keys())) == 0, "Internal callback reference should have been released"
 
 
-def test_message_type_parsing(tx_setup):
+def test_message_type_parsing(tx):
     class TestMessage(Message):
         @property
         def hello_name(self):
@@ -133,11 +127,10 @@ def test_message_type_parsing(tx_setup):
         result["value"] = msg
         result["event"].set()
 
-    tx, delay = tx_setup
     topic = Topic("/messages_compas_eve_test/test_message_type_parsing/", TestMessage)
 
     Subscriber(topic, callback, transport=tx).subscribe()
-    time.sleep(delay)
+    time.sleep(0.1)
     Publisher(topic, transport=tx).publish(TestMessage(name="Jazz"))
 
     received = result["event"].wait(timeout=3)
@@ -147,18 +140,17 @@ def test_message_type_parsing(tx_setup):
     assert result["value"].hello_name == "Hello Jazz"
 
 
-def test_compas_data_as_message(tx_setup):
+def test_compas_data_as_message(tx):
     result = dict(value=None, event=Event())
 
     def callback(msg):
         result["value"] = msg
         result["event"].set()
 
-    tx, delay = tx_setup
     topic = Topic("/messages_compas_eve_test/test_compas_data_as_message/")
 
     Subscriber(topic, callback, transport=tx).subscribe()
-    time.sleep(delay)
+    time.sleep(0.1)
     Publisher(topic, transport=tx).publish(dict(frame=Frame.worldXY(), graph=Graph()))
 
     assert result is not None, "No result?"
@@ -168,7 +160,7 @@ def test_compas_data_as_message(tx_setup):
     assert isinstance(result["value"]["graph"], Graph)
 
 
-def test_nested_message_types(tx_setup):
+def test_nested_message_types(tx):
     class Header(Message):
         def __init__(self, sequence_id=None):
             super(Header, self).__init__()
@@ -195,11 +187,10 @@ def test_nested_message_types(tx_setup):
         result["value"] = msg
         result["event"].set()
 
-    tx, delay = tx_setup
     topic = Topic("/messages_compas_eve_test/test_nested_message_types/", DataTestMessage)
 
     Subscriber(topic, callback, transport=tx).subscribe()
-    time.sleep(delay)
+    time.sleep(0.1)
     Publisher(topic, transport=tx).publish(DataTestMessage(name="Jazz", location=1.334))
 
     received = result["event"].wait(timeout=3)
@@ -209,18 +200,17 @@ def test_nested_message_types(tx_setup):
     assert result["value"].header.sequence_id == 1
 
 
-def test_dict_as_message(tx_setup):
+def test_dict_as_message(tx):
     result = dict(value=None, event=Event())
 
     def callback(msg):
         result["value"] = msg
         result["event"].set()
 
-    tx, delay = tx_setup
     topic = Topic("/messages_compas_eve_test/test_dict_as_message/", Message)
 
     Subscriber(topic, callback, transport=tx).subscribe()
-    time.sleep(delay)
+    time.sleep(0.1)
     Publisher(topic, transport=tx).publish(dict(name="Jazz"))
 
     received = result["event"].wait(timeout=3)

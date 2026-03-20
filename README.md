@@ -44,6 +44,7 @@ Or using `conda`:
 * Publisher/subscriber communication model (N-to-N communication)
 * In-process events
 * MQTT support
+* Zenoh support
 * Extensible codec system for message serialization (JSON, Protocol Buffers)
 
 ## Examples
@@ -86,6 +87,25 @@ for i in range(10):
 
 This example shows how to send and receive from a single script, but
 running publishers and subscribers on different scripts, different processes, or even different computers will work the exact same way.
+
+### Zenoh
+
+Apache Zenoh is a pub/sub/query protocol. In many ways, it is similar to MQTT but with some additional features and optimizations. COMPAS EVE also supports Zenoh as a transport protocol with an identical API to MQTT:
+
+```python
+import compas_eve as eve
+from compas_eve.zenoh import ZenohTransport
+
+tx = ZenohTransport()
+eve.set_default_transport(tx)
+
+pub = eve.Publisher("/hello_world")
+sub = eve.EchoSubscriber("/hello_world")
+sub.subscribe()
+
+for i in range(10):
+    pub.publish(dict(text=f"Hello World {i}"))
+```
 
 ### Using different codecs
 

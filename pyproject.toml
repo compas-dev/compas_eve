@@ -36,7 +36,7 @@ classifiers = [
 [tool.setuptools.dynamic]
 version = { attr = "compas_eve.__version__" }
 dependencies = { file = "requirements.txt" }
-optional-dependencies = { dev = { file = "requirements-dev.txt" } }
+optional-dependencies = { dev = { file = "requirements-dev.txt" }, zenoh = { file = "requirements-zenoh.txt" } }
 
 [project.entry-points.'compas_pb.plugins']
 serializers = 'compas_eve.codecs.conversions'
