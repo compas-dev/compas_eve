@@ -76,5 +76,5 @@ The following components are available in Grasshopper:
 | `ZenohConnect` | Connects to a Zenoh router. |
 | `Message` | Creates a new `compas_eve` message. |
 | `Publish` | Publishes a message to a specific topic. |
-| `Subscribe` | Subscribes to a certain topic. |
-| `BackgroundTask` | Runs a function continuously in the background, <br>useful for running any kind of long running tasks. |
+| `Subscribe` | Subscribes to a specific topic. |
+| `BackgroundTask` | Runs a function continuously in the background. |
