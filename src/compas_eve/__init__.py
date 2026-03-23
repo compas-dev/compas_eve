@@ -28,8 +28,6 @@ Classes
 
 from __future__ import print_function
 
-import os
-
 
 __author__ = ["Gonzalo Casas"]
 __copyright__ = "COMPAS Association"
@@ -51,13 +49,9 @@ from .core import (
 from .codecs import MessageCodec
 from .memory import InMemoryTransport
 
-HERE = os.path.dirname(__file__)
-HOME = os.path.abspath(os.path.join(HERE, "../../"))
-
 set_default_transport(InMemoryTransport())
 
 __all__ = [
-    "HOME",
     "Message",
     "Publisher",
     "Subscriber",
