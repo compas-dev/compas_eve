@@ -70,11 +70,11 @@ in the Rhino Viewport even before the task has completed.
 
 The following components are available in Grasshopper:
 
-| Component | Description |
-| --------- | ----------- |
-| `MqttConnect` | Connects to an MQTT broker. |
-| `ZenohConnect` | Connects to a Zenoh router. |
-| `Message` | Creates a new `compas_eve` message. |
-| `Publish` | Publishes a message to a specific topic. |
-| `Subscribe` | Subscribes to a specific topic. |
-| `BackgroundTask` | Runs a function continuously in the background. |
+| Icon | Component | Description |
+| :---: | --------- | ----------- |
+| ![](_images/mqtt_connect.png) | `MqttConnect` | Connects to an MQTT broker. |
+| ![](_images/zenoh_connect.png) | `ZenohConnect` | Connects to a Zenoh router. |
+| ![](_images/message.png) | `Message` | Creates a new `compas_eve` message. |
+| ![](_images/publish.png) | `Publish` | Publishes a message to a specific topic. |
+| ![](_images/subscribe.png) | `Subscribe` | Subscribes to a specific topic. |
+| ![](_images/background_task.png) | `BackgroundTask` | Runs a function continuously in the background. |
