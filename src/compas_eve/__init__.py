@@ -32,7 +32,7 @@ import os
 
 
 __author__ = ["Gonzalo Casas"]
-__copyright__ = "Gramazio Kohler Research"
+__copyright__ = "COMPAS Association"
 __license__ = "MIT License"
 __email__ = "casas@arch.ethz.ch"
 __version__ = "2.1.1"

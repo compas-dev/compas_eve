@@ -1,21 +1,16 @@
-********************************************************************************
-Examples
-********************************************************************************
+# Examples
 
-.. currentmodule:: compas_eve
+!!! note
+    This tutorial assumes that you have already installed `compas_eve`.
+    If you haven't, please follow the instructions in the [installation](installation.md) section.
 
-.. note::
-
-    This tutorial assumes that you have already installed ``compas_eve``.
-    If you haven't, please follow the instructions in the :ref:`installation` section.
-
-The main feature of ``compas_eve`` is to allow communication between different
+The main feature of `compas_eve` is to allow communication between different
 parts of a program using messages. These messages are sent around using a
 publisher/subscriber model, or pub/sub for short. In pub/sub communication,
 messages are not sent directly from a sender to a receiver, instead, they are
-sent to a :class:`Topic`. A topic is like a mailbox, the :class:`Publisher`
+sent to a [Topic][compas_eve.Topic]. A topic is like a mailbox, the [Publisher][compas_eve.Publisher]
 sends messages to the topic without the need for a subcriber to be
-actively listening for messages, and also the :class:`Subscriber` can start
+actively listening for messages, and also the [Subscriber][compas_eve.Subscriber] can start
 listening for messages on a topic without the need for any publisher to be
 currently sending anything.
 
@@ -26,43 +21,42 @@ An additional benefit of pub/sub is that it is not limited to 1-to-1 communicati
 on a single topic, there can be multiple publishers and multiple subscribers all
 communicating at the same time without additional coordination.
 
-Hello World
------------
+## Hello World
 
-Let's see a **Hello World** example of this type of communication using ``compas_eve``.
+Let's see a **Hello World** example of this type of communication using `compas_eve`.
 This example is very contrived because both the publisher and the subscriber are defined
 in the same script and the same thread.
 
-.. literalinclude :: examples/01_hello_world.py
-   :language: python
+```python
+--8<-- "docs/examples/01_hello_world.py"
+```
 
 This example is the simplest possible, and it only shows the main concepts needed
 to communicate. In particular, ``compas_eve`` uses by default an **in-memory transport**
 for the messages, this means that messages are can only be received within the same program.
 
-Hello Threaded World
---------------------
+## Hello Threaded World
 
 Let's try to extend this first example and add multiple threads to illustrate
 multi-threaded communication:
 
-.. literalinclude :: examples/02_hello_threaded_world.py
-   :language: python
+```python
+--8<-- "docs/examples/02_hello_threaded_world.py"
+```
 
-This get more interesting! Now the publisher and subscriber are in separate threads. However,
-the in-memory transport is limited to *same-process*. This means that if we launch this
-script twice, the messages will not jump from one process to the other.
-In other words, if we want to communicate with a subscriber on a different process on the machine,
-or even on a completely separate machine, we need to take an extra step.
+This get more interesting! Now the publisher and subscriber are in separate threads.
+However, the in-memory transport is limited to *same-process*. This means that if we launch this script twice, the messages will not jump from one process to the other.
 
-Hello Distributed World
------------------------
+In other words, if we want to communicate with a subscriber on a different process on 
+the machine, or even on a completely separate machine, we need to take an extra step.
+
+## Hello Distributed World
 
 Fortunately, it is very easy to extend our example and enable communication across processes, machines,
 networks, continents, and anything that is connected to the Internet!
 
-The only difference is that we are going to configure a different :class:`Transport` implementation for
-our messages. In this case, we will use the MQTT transport method. `MQTT <https://en.wikipedia.org/wiki/MQTT>`_
+The only difference is that we are going to configure a different [Transport][compas_eve.Transport] implementation for
+our messages. In this case, we will use the MQTT transport method. [MQTT](https://en.wikipedia.org/wiki/MQTT)
 is a network protocol very popular for IoT applications because of its lightweight.
 
 We are going to split the code and create one script for sending messages with a publisher and a different
@@ -71,13 +65,17 @@ potentially from different machines!
 
 First the publisher example:
 
-.. literalinclude :: examples/03_hello_distributed_world_pub.py
-   :language: python
+```python
+--8<-- "docs/examples/03_hello_distributed_world_pub.py"
+```
+
+### Subscriber
 
 And now the subscriber example:
 
-.. literalinclude :: examples/03_hello_distributed_world_sub.py
-   :language: python
+```python
+--8<-- "docs/examples/03_hello_distributed_world_sub.py"
+```
 
 You can start both programs in two completely different terminal windows,
 or even completely different computers and they will be able to communicate!
@@ -86,15 +84,38 @@ And since pub/sub allows any number of publishers and any number of
 subscriber per topic, you can start the same scripts more than once and the
 messages will be received and send multiple times!
 
-Add typing information to messages
-----------------------------------
+## Add typing information to messages
 
 So far, we have defined our messages as simple dictionaries.
 It is also possible to define a class that messages need to comform to,
 in order to get typing information on the messages.
 
-.. literalinclude :: examples/04_message_type.py
-   :language: python
+```python
+--8<-- "docs/examples/04_message_type.py"
+```
 
 This example also shows how to set a default transport so that it does
 not need to be specified on every publisher and subscriber instance.
+
+## Distributed communication with Zenoh
+
+Just like the MQTT example above, we can achieve distributed communication
+using [Apache Zenoh](https://zenoh.io/) as transport. Zenoh is an open source
+implementation of a very fast and efficient protocol built around the idea of
+Zero Overhead Network Protocol.
+
+The syntax remains almost identical, demonstrating how `compas_eve` abstracts
+away the underlying transport layers. You only need to change the transport
+initialization.
+
+First, let's look at the publisher using Zenoh:
+
+```python
+--8<-- "docs/examples/05_zenoh_distributed_world_pub.py"
+```
+
+Next, we create the matching subscriber:
+
+```python
+--8<-- "docs/examples/05_zenoh_distributed_world_sub.py"
+```
