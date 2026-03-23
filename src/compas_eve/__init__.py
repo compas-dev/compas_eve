@@ -69,4 +69,3 @@ __all__ = [
     "set_default_transport",
     "InMemoryTransport",
 ]
-__all_plugins__ = ["compas_eve.rhino.install"]
