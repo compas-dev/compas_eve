@@ -32,7 +32,7 @@ in the same script and the same thread.
 ```
 
 This example is the simplest possible, and it only shows the main concepts needed
-to communicate. In particular, ``compas_eve`` uses by default an **in-memory transport**
+to communicate. In particular, `compas_eve` uses by default an **in-memory transport**
 for the messages, this means that messages are can only be received within the same program.
 
 ## Hello Threaded World

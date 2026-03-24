@@ -1,28 +1,34 @@
-from compas_eve.codecs import JsonMessageCodec
+from typing import Any
+from typing import Callable
+from typing import Dict
+from typing import Optional
+from typing import Type
+from typing import Union
+
 
 DEFAULT_TRANSPORT = None
 
 
-def get_default_transport():
+def get_default_transport() -> Optional["Transport"]:
     """Retrieve the default transport implementation to be used system-wide.
 
     Returns
     -------
-    :class:`~compas_eve.Transport`
-        Instance of a transport class. By default, ``compas_eve`` uses
-        :class:`~compas_eve.memory.InMemoryTransport`.
+    Transport
+        Instance of a transport class. By default, `compas_eve` uses
+        [InMemoryTransport][compas_eve.memory.InMemoryTransport].
     """
     return DEFAULT_TRANSPORT
 
 
-def set_default_transport(transport):
+def set_default_transport(transport: Optional["Transport"]) -> None:
     """Assign a default transport implementation to be used system-wide.
 
     Parameters
     ----------
-    transport : :class:`~compas_eve.Transport`
-        Instance of a transport class. By default, ``compas_eve`` uses
-        :class:`~compas_eve.memory.InMemoryTransport`.
+    transport
+        Instance of a transport class. By default, `compas_eve` uses
+        [InMemoryTransport][compas_eve.memory.InMemoryTransport].
     """
     global DEFAULT_TRANSPORT
     DEFAULT_TRANSPORT = transport
@@ -33,37 +39,39 @@ class Transport(object):
 
     Parameters
     ----------
-    codec : :class:`MessageCodec`, optional
+    codec
         The codec to use for encoding and decoding messages.
-        If not provided, defaults to :class:`JsonMessageCodec`.
+        If not provided, defaults to [JsonMessageCodec][compas_eve.codecs.JsonMessageCodec].
     """
 
-    def __init__(self, codec=None, *args, **kwargs):
+    def __init__(self, codec: Optional[Any] = None, *args: Any, **kwargs: Any) -> None:
         super(Transport, self).__init__(*args, **kwargs)
+        from compas_eve.codecs import JsonMessageCodec
+
         self._id_counter = 0
         if codec is None:
             codec = JsonMessageCodec()
         self.codec = codec
 
     @property
-    def id_counter(self):
+    def id_counter(self) -> int:
         """Generate an auto-incremental ID starting from 1."""
         self._id_counter += 1
         return self._id_counter
 
-    def publish(self, topic, message):
+    def publish(self, topic: "Topic", message: Union["Message", dict]) -> None:
         pass
 
-    def subscribe(self, topic, callback):
+    def subscribe(self, topic: "Topic", callback: Callable) -> Optional[str]:
         pass
 
-    def unsubscribe(self, topic):
+    def unsubscribe(self, topic: "Topic") -> None:
         pass
 
-    def advertise(self, topic):
+    def advertise(self, topic: "Topic") -> Optional[str]:
         pass
 
-    def unadvertise(self, topic):
+    def unadvertise(self, topic: "Topic") -> None:
         pass
 
 
@@ -72,37 +80,37 @@ class Message(object):
 
     A message is fundamentally a dictionary and behaves as one."""
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         super(Message, self).__init__()
         self.data = {}
         self.data.update(*args, **kwargs)
 
-    def ToString(self):
+    def ToString(self) -> str:
         return str(self)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return str(self.data)
 
-    def __getattr__(self, name):
+    def __getattr__(self, name: str) -> Any:
         return self.data[name]
 
-    def __setattr__(self, key, value):
+    def __setattr__(self, key: str, value: Any) -> None:
         if key == "data" or key in self.__dict__:
             super(Message, self).__setattr__(key, value)
         else:
             self.data[key] = value
 
-    def __getitem__(self, key):
+    def __getitem__(self, key: str) -> Any:
         return self.data[key]
 
-    def __setitem__(self, key, value):
+    def __setitem__(self, key: str, value: Any) -> None:
         self.data[key] = value
 
-    def __jsondump__(self, minimal=False):
+    def __jsondump__(self, minimal: bool = False) -> Dict[str, Any]:
         return self.data
 
     @classmethod
-    def parse(cls, value):
+    def parse(cls, value: Dict[str, Any]) -> "Message":
         instance = cls(**value)
         return instance
 
@@ -115,19 +123,19 @@ class Topic(object):
 
     Attributes
     ----------
-    name : str
+    name
         Name of the topic.
-    message_type : type
-        Class defining the message structure. Use :class:`Message` for
+    message_type
+        Class defining the message structure. Use [Message][] for
         a generic, non-typed checked message implementation.
-        Defaults to :class:`Message`.
-    options : dict
+        Defaults to [Message][].
+    options
         A dictionary of options.
     """
 
     # TODO: Add documentation/examples of possible options
 
-    def __init__(self, name, message_type=None, **options):
+    def __init__(self, name: str, message_type: Optional[Type[Message]] = None, **options: Any) -> None:
         self.name = name
         self.message_type = message_type or Message
         self.options = options
@@ -138,20 +146,20 @@ class Publisher(object):
 
     Parameters
     ----------
-    topic : :class:`Topic` or str
+    topic
         The topic to publish messages to. If a string is provided, a new topic instance
         will be created using the string as topic name.
-    transport : :class:`Transport`, optional
+    transport
         The transport to use for publishing. If not provided, the default transport will be used.
     """
 
-    def __init__(self, topic, transport=None):
+    def __init__(self, topic: Union[Topic, str], transport: Optional[Transport] = None) -> None:
         self.topic = topic if isinstance(topic, Topic) else Topic(topic)
         self.transport = transport or get_default_transport()
         self._advertise_id = None
 
     @property
-    def is_advertised(self):
+    def is_advertised(self) -> bool:
         """Indicate if the publisher has announced its topic as advertised or not.
 
         Returns
@@ -161,16 +169,16 @@ class Publisher(object):
         """
         return self._advertise_id is not None
 
-    def message_published(self, message):
+    def message_published(self, message: Union[Message, dict]) -> None:
         """Handler called when a message has been published."""
         pass
 
-    def publish(self, message):
+    def publish(self, message: Union[Message, dict]) -> None:
         """Publish a message to the topic.
 
         Parameters
         ----------
-        message : :class:`Message` or dict
+        message
             The message to publish.
         """
         # TODO: check if message type matches self.topic.message_type declared
@@ -180,14 +188,14 @@ class Publisher(object):
         self.transport.publish(self.topic, message)
         self.message_published(message)
 
-    def advertise(self):
+    def advertise(self) -> None:
         """Advertise the publisher for the topic."""
         if self.is_advertised:
             return
 
         self._advertise_id = self.transport.advertise(self.topic)
 
-    def unadvertise(self):
+    def unadvertise(self) -> None:
         """Unadvertise the publisher for the topic."""
         if not self.is_advertised:
             return
@@ -201,20 +209,20 @@ class Subscriber(object):
 
     Parameters
     ----------
-    topic : :class:`Topic` or str
+    topic
         The topic to subscribe to. If a string is provided, a new topic instance
         will be created using the string as topic name.
-    transport : :class:`Transport`, optional
+    transport
         The transport to use for subscribing. If not provided, the default transport will be used.
     """
 
-    def __init__(self, topic, callback=None, transport=None):
+    def __init__(self, topic: Union[Topic, str], callback: Optional[Callable] = None, transport: Optional[Transport] = None) -> None:
         self.transport = transport or get_default_transport()
         self.topic = topic if isinstance(topic, Topic) else Topic(topic)
         self._subscribe_id = None
         self._callback = callback
 
-    def message_received(self, message):
+    def message_received(self, message: Union[Message, dict]) -> None:
         """Handler called whenever a new message is received.
 
         By default, this implementation will simply invoke the callback
@@ -223,17 +231,17 @@ class Subscriber(object):
             self._callback(message)
 
     @property
-    def is_subscribed(self):
+    def is_subscribed(self) -> bool:
         """Indicate if the instace is currently subscribed to its topic or not."""
         return self._subscribe_id is not None
 
-    def subscribe(self):
+    def subscribe(self) -> None:
         if self._subscribe_id:
             return
 
         self._subscribe_id = self.transport.subscribe(self.topic, self.message_received)
 
-    def unsubscribe(self):
+    def unsubscribe(self) -> None:
         """Unregister the subscriber from its topic."""
         if not self._subscribe_id:
             return
@@ -247,14 +255,14 @@ class EchoSubscriber(Subscriber):
 
     Parameters
     ----------
-    topic : :class:`Topic` or str
+    topic
         The topic to subscribe to. If a string is provided, a new topic instance
         will be created using the string as topic name.
     """
 
-    def __init__(self, topic, transport=None):
+    def __init__(self, topic: Union[Topic, str], transport: Optional[Transport] = None) -> None:
         super(EchoSubscriber, self).__init__(topic, callback=self.echo, transport=transport)
 
-    def echo(self, message):
+    def echo(self, message: Union[Message, dict]) -> None:
         """Print received messages to the console."""
         print(str(message))

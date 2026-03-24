@@ -16,7 +16,7 @@ background, so that the user can continue working with Grasshopper while the tas
 In order to use it, add a `Background task` component to your Grasshopper definition, and connect
 an input with a python function containing the code that needs to run in the background. The only
 requirement is that this function must accept a `worker` argument, which is an instance of
-[BackgroundWorker](compas_eve.ghpython.BackgroundWorker).
+[BackgroundWorker][compas_eve.ghpython.BackgroundWorker].
 
 ![PubSub](_images/background-task.png)
 

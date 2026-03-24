@@ -1,7 +1,13 @@
 import threading
+from typing import Any
+from typing import Callable
+from typing import Optional
 
 import zenoh
 
+from ..codecs import MessageCodec
+from ..core import Message
+from ..core import Topic
 from ..core import Transport
 from ..event_emitter import EventEmitterMixin
 
@@ -11,14 +17,14 @@ class ZenohTransport(Transport, EventEmitterMixin):
 
     Parameters
     ----------
-    config : :class:`zenoh.Config`, optional
+    config
         The Zenoh configuration to use. If not provided, a default `zenoh.Config()` will be used.
-    codec : :class:`MessageCodec`, optional
+    codec
         The codec to use for encoding and decoding messages.
-        If not provided, defaults to :class:`JsonMessageCodec`.
+        If not provided, defaults to [JsonMessageCodec][compas_eve.codecs.JsonMessageCodec].
     """
 
-    def __init__(self, config=None, codec=None, *args, **kwargs):
+    def __init__(self, config: Optional[zenoh.Config] = None, codec: Optional[MessageCodec] = None, *args: Any, **kwargs: Any) -> None:
         super(ZenohTransport, self).__init__(codec=codec, *args, **kwargs)
         if config is None:
             self.config = zenoh.Config()
@@ -33,24 +39,24 @@ class ZenohTransport(Transport, EventEmitterMixin):
         self.session = zenoh.open(self.config)
         self._is_connected = True
 
-        def emit_ready():
+        def emit_ready() -> None:
             self.emit("ready")
 
         threading.Thread(target=emit_ready).start()
 
-    def close(self):
+    def close(self) -> None:
         """Close the Zenoh session."""
         self.session.close()
 
-    def _get_topic_name(self, topic):
+    def _get_topic_name(self, topic: Topic) -> str:
         return topic.name.strip("/")
 
-    def on_ready(self, callback):
+    def on_ready(self, callback: Callable) -> None:
         """Allows to hook-up to the event triggered when the connection is established.
 
         Parameters
         ----------
-        callback : function
+        callback
             Function to invoke when the connection is established.
         """
         if self._is_connected:
@@ -58,18 +64,18 @@ class ZenohTransport(Transport, EventEmitterMixin):
         else:
             self.once("ready", callback)
 
-    def publish(self, topic, message):
+    def publish(self, topic: Topic, message: Message) -> None:
         """Publish a message to a topic.
 
         Parameters
         ----------
-        topic : :class:`Topic`
+        topic
             Instance of the topic to publish to.
-        message : :class:`Message`
+        message
             Instance of the message to publish.
         """
 
-        def _callback(**kwargs):
+        def _callback(**kwargs: Any) -> None:
             if self._get_topic_name(topic) not in self._publishers:
                 self._publishers[self._get_topic_name(topic)] = self.session.declare_publisher(self._get_topic_name(topic))
 
@@ -78,33 +84,33 @@ class ZenohTransport(Transport, EventEmitterMixin):
 
         self.on_ready(_callback)
 
-    def subscribe(self, topic, callback):
+    def subscribe(self, topic: Topic, callback: Callable) -> str:
         """Subscribe to a topic.
 
         Parameters
         ----------
-        topic : :class:`Topic`
+        topic
             Instance of the topic to subscribe to.
-        callback : function
+        callback
             Callback to invoke whenever a new message arrives.
 
         Returns
         -------
         str
-            Returns an identifier of the subscription.
+            Identifier of the subscription.
         """
         event_key = "event:{}".format(self._get_topic_name(topic))
         subscribe_id = "{}:{}".format(event_key, id(callback))
 
-        def _local_callback(msg):
+        def _local_callback(msg: Any) -> None:
             callback(msg)
 
-        def _zenoh_handler(sample):
+        def _zenoh_handler(sample: Any) -> None:
             payload = sample.payload.to_bytes() if hasattr(sample.payload, "to_bytes") else bytes(sample.payload)
             message_obj = self.codec.decode(payload, topic.message_type)
             self.emit(event_key, message_obj)
 
-        def _subscribe_callback(**kwargs):
+        def _subscribe_callback(**kwargs: Any) -> None:
             if self._get_topic_name(topic) not in self._subscribers:
                 self._subscribers[self._get_topic_name(topic)] = self.session.declare_subscriber(self._get_topic_name(topic), _zenoh_handler)
 
@@ -116,12 +122,12 @@ class ZenohTransport(Transport, EventEmitterMixin):
 
         return subscribe_id
 
-    def unsubscribe(self, topic):
+    def unsubscribe(self, topic: Topic) -> None:
         """Unsubscribe from a topic.
 
         Parameters
         ----------
-        topic : :class:`Topic`
+        topic
             Instance of the topic to unsubscribe from.
         """
         event_key = "event:{}".format(self._get_topic_name(topic))
@@ -135,12 +141,12 @@ class ZenohTransport(Transport, EventEmitterMixin):
             self.remove_listener(event_key, self._local_callbacks[k])
             del self._local_callbacks[k]
 
-    def advertise(self, topic):
+    def advertise(self, topic: Topic) -> str:
         """Announce this code will publish messages to the specified topic.
 
         Parameters
         ----------
-        topic : :class:`Topic`
+        topic
             Instance of the topic to advertise.
 
         Returns
@@ -151,12 +157,12 @@ class ZenohTransport(Transport, EventEmitterMixin):
         advertise_id = "advertise:{}:{}".format(self._get_topic_name(topic), self.id_counter)
         return advertise_id
 
-    def unsubscribe_by_id(self, subscribe_id):
+    def unsubscribe_by_id(self, subscribe_id: str) -> None:
         """Unsubscribe from the specified topic based on the subscription id.
 
         Parameters
         ----------
-        subscribe_id : str
+        subscribe_id
             The subscription identifier.
         """
         # subscribe_id format: "event:topic_name:id(callback)"

@@ -1,34 +1,3 @@
-"""
-********************************************************************************
-compas_eve
-********************************************************************************
-
-.. currentmodule:: compas_eve
-
-
-Classes
-=======
-
-.. autosummary::
-    :toctree: generated/
-    :nosignatures:
-
-    Message
-    Topic
-    Publisher
-    Subscriber
-    EchoSubscriber
-    Transport
-    InMemoryTransport
-    MessageCodec
-    get_default_transport
-    set_default_transport
-
-"""
-
-from __future__ import print_function
-
-
 __author__ = ["Gonzalo Casas"]
 __copyright__ = "COMPAS Association"
 __license__ = "MIT License"
