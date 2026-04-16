@@ -2,7 +2,7 @@ attrs >=17.4
 black >=22.12.0
 build
 bump-my-version
-compas_invocations2
+compas_invocations2[mkdocs]
 compas_pb >= 0.4.4
 invoke >=0.14
 pytest-mock
@@ -11,19 +11,3 @@ sphinx_compas2_theme
 twine
 wheel
 pythonnet
-markdown-callouts >=0.4
-markdown-exec >=1.8
-mike
-mkdocs >=1.6
-mkdocs-autorefs >=1.4
-mkdocs-coverage >=1.0
-mkdocs-git-revision-date-localized-plugin >=1.2
-mkdocs-llmstxt >=0.2
-mkdocs-material >=9.5
-mkdocs-minify-plugin >=0.8
-mkdocs-redirects >=1.2
-mkdocs-section-index >=0.3
-mkdocs-mermaid2-plugin
-mkdocstrings[python]
-pydantic >=2.10
-tomli >=2.0; python_version < '3.11'
