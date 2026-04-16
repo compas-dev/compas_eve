@@ -1,42 +1,42 @@
 [
   {
-    "name": "Latest",
     "version": "latest",
-    "url": "/latest/"
+    "title": "Latest (legacy)",
+    "aliases": []
   },
   {
-    "name": "2.1.1 (stable)",
     "version": "2.1.1",
-    "url": "/2.1.1/"
+    "title": "2.1.1 (stable) (legacy)",
+    "aliases": []
   },
   {
-    "name": "2.0.0",
     "version": "2.0.0",
-    "url": "/2.0.0/"
+    "title": "2.0.0 (legacy)",
+    "aliases": []
   },
   {
-    "name": "1.0.0",
     "version": "1.0.0",
-    "url": "/1.0.0/"
+    "title": "1.0.0 (legacy)",
+    "aliases": []
   },
   {
-    "name": "0.5.0",
     "version": "0.5.0",
-    "url": "/0.5.0/"
+    "title": "0.5.0 (legacy)",
+    "aliases": []
   },
   {
-    "name": "0.4.0",
     "version": "0.4.0",
-    "url": "/0.4.0/"
+    "title": "0.4.0 (legacy)",
+    "aliases": []
   },
   {
-    "name": "0.3.7",
     "version": "0.3.7",
-    "url": "/0.3.7/"
+    "title": "0.3.7 (legacy)",
+    "aliases": []
   },
   {
-    "name": "0.1.2",
     "version": "0.1.2",
-    "url": "/0.1.2/"
+    "title": "0.1.2 (legacy)",
+    "aliases": []
   }
 ]
