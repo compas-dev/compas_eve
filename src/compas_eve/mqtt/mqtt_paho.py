@@ -1,7 +1,12 @@
 import uuid
+from typing import Callable
+from typing import Optional
 
 import paho.mqtt.client as mqtt
 
+from ..codecs import MessageCodec
+from ..core import Message
+from ..core import Topic
 from ..core import Transport
 from ..event_emitter import EventEmitterMixin
 
@@ -18,19 +23,19 @@ class MqttTransport(Transport, EventEmitterMixin):
 
     Parameters
     ----------
-    host : str
-        Host name for the MQTT broker, e.g. ``broker.hivemq.com`` or ``localhost`` if
+    host
+        Host name for the MQTT broker, e.g. `broker.hivemq.com` or `localhost` if
         you are running a local broker on your machine.
-    port : int
-        MQTT broker port, defaults to ``1883``.
-    client_id : str, optional
+    port
+        MQTT broker port, defaults to `1883`.
+    client_id
         Client ID for the MQTT connection. If not provided, a unique ID will be generated.
-    codec : :class:`MessageCodec`, optional
+    codec
         The codec to use for encoding and decoding messages.
-        If not provided, defaults to :class:`JsonMessageCodec`.
+        If not provided, defaults to [JsonMessageCodec][compas_eve.codecs.JsonMessageCodec].
     """
 
-    def __init__(self, host, port=1883, client_id=None, codec=None, *args, **kwargs):
+    def __init__(self, host: str, port: int = 1883, client_id: Optional[str] = None, codec: Optional[MessageCodec] = None, *args, **kwargs):
         super(MqttTransport, self).__init__(codec=codec, *args, **kwargs)
         self.host = host
         self.port = port
@@ -47,20 +52,20 @@ class MqttTransport(Transport, EventEmitterMixin):
         self.client.connect(self.host, self.port)
         self.client.loop_start()
 
-    def close(self):
+    def close(self) -> None:
         """Close the connection to the MQTT broker."""
         self.client.loop_stop()
 
-    def _on_connect(self, client, userdata, flags, rc):
+    def _on_connect(self, client, userdata, flags, rc) -> None:
         self._is_connected = True
         self.emit("ready")
 
-    def on_ready(self, callback):
+    def on_ready(self, callback: Callable):
         """Allows to hook-up to the event triggered when the connection to MQTT broker is ready.
 
         Parameters
         ----------
-        callback : function
+        callback
             Function to invoke when the connection is established.
         """
         if self._is_connected:
@@ -68,14 +73,14 @@ class MqttTransport(Transport, EventEmitterMixin):
         else:
             self.once("ready", callback)
 
-    def publish(self, topic, message):
+    def publish(self, topic: Topic, message: Message):
         """Publish a message to a topic.
 
         Parameters
         ----------
-        topic : :class:`Topic`
+        topic
             Instance of the topic to publish to.
-        message : :class:`Message`
+        message
             Instance of the message to publish.
         """
 
@@ -85,18 +90,18 @@ class MqttTransport(Transport, EventEmitterMixin):
 
         self.on_ready(_callback)
 
-    def subscribe(self, topic, callback):
+    def subscribe(self, topic: Topic, callback: Callable) -> str:
         """Subscribe to a topic.
 
         Every time a new message is received on the topic, the callback will be invoked.
 
         Parameters
         ----------
-        topic : :class:`Topic`
+        topic
             Instance of the topic to subscribe to.
-        callback : function
+        callback
             Callback to invoke whenever a new message arrives. The callback should
-            receive only one `msg` argument, e.g. ``lambda msg: print(msg)``.
+            receive only one `msg` argument, e.g. `lambda msg: print(msg)`.
 
         Returns
         -------
@@ -129,14 +134,14 @@ class MqttTransport(Transport, EventEmitterMixin):
         event_key = "event:{}".format(msg.topic)
         self.emit(event_key, msg)
 
-    def advertise(self, topic):
+    def advertise(self, topic: Topic) -> str:
         """Announce this code will publish messages to the specified topic.
 
         This call has no effect on this transport implementation.
 
         Parameters
         ----------
-        topic : :class:`Topic`
+        topic
             Instance of the topic to advertise.
 
         Returns
@@ -149,24 +154,24 @@ class MqttTransport(Transport, EventEmitterMixin):
         # mqtt does not need anything here
         return advertise_id
 
-    def unadvertise(self, topic):
+    def unadvertise(self, topic: Topic):
         """Announce that this code will stop publishing messages to the specified topic.
 
         This call has no effect on this transport implementation.
 
         Parameters
         ----------
-        topic : :class:`Topic`
+        topic
             Instance of the topic to stop publishing messages to.
         """
         pass
 
-    def unsubscribe_by_id(self, subscribe_id):
+    def unsubscribe_by_id(self, subscribe_id: str):
         """Unsubscribe from the specified topic based on the subscription id.
 
         Parameters
         ----------
-        subscribe_id : str
+        subscribe_id
             Identifier of the subscription.
         """
         ev_type, topic_name, _callback_id = subscribe_id.split(":")
@@ -178,12 +183,12 @@ class MqttTransport(Transport, EventEmitterMixin):
 
         del self._local_callbacks[subscribe_id]
 
-    def unsubscribe(self, topic):
+    def unsubscribe(self, topic: Topic):
         """Unsubscribe from the specified topic.
 
         Parameters
         ----------
-        topic : :class:`Topic`
+        topic
             Instance of the topic to unsubscribe from.
         """
         self.client.unsubscribe(topic.name)

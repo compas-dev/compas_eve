@@ -1,19 +1,17 @@
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-
 import threading
+from typing import Any
+from typing import Callable
+from typing import Optional
 
-import Rhino
-import scriptcontext
-import System
-from compas_ghpython import create_id
-
-# COMPAS 1.x compatibility
 try:
+    import GhPython
+    import Rhino
+    import scriptcontext
+    import System
+    from compas_ghpython import create_id
     from compas_ghpython.timer import update_component
 except ImportError:
-    from compas_ghpython import update_component
+    pass
 
 
 class BackgroundWorker(object):
@@ -29,43 +27,49 @@ class BackgroundWorker(object):
     The following is an example of a long-running function that updates the
     progress while it runs.
 
-    .. code-block:: python
+    ```python
+    import time
 
-        import time
 
+    def do_something_long_and_complicated(worker):
+        # Result can be of any data type
+        result = 0
 
-        def do_something_long_and_complicated(worker):
-            # Result can be of any data type
-            result = 0
+        for i in range(50):
+            worker.current_value = i
+            result += i
+            worker.display_progress(i / (50 - 1))
+            time.sleep(0.01)
 
-            for i in range(50):
-                worker.current_value = i
-                result += i
-                worker.display_progress(i / (50 - 1))
-                time.sleep(0.01)
+        worker.display_message("Done!")
 
-            worker.display_message("Done!")
-
-            return result
-
+        return result
+    ```
 
     Parameters
     ----------
-    ghenv : ``GhPython.Component.PythonEnvironment``
+    ghenv
         Grasshopper environment object
-    long_running_function : function, optional
+    long_running_function
         This function will be the main entry point for the long-running task.
-    dispose_function : function, optional
+    dispose_function
         If defined, this function will be called when the worker is disposed. It can be used for clean-up tasks
         and resource deallocation.
-    auto_set_done : bool, optional
-        If true, the worker state will be automatically set to ``Done`` after the function returns.
-        Defaults to ``True``.
-    args : tuple, optional
-        List or tuple of arguments for the invocation of the ``long_running_function``. Defaults to ``()``.
+    auto_set_done
+        If true, the worker state will be automatically set to `Done` after the function returns.
+        Defaults to `True`.
+    args
+        List or tuple of arguments for the invocation of the `long_running_function`. Defaults to `()`.
     """
 
-    def __init__(self, ghenv, long_running_function=None, dispose_function=None, auto_set_done=True, args=()):
+    def __init__(
+        self,
+        ghenv: "GhPython.Component.PythonEnvironment",
+        long_running_function: Optional[Callable] = None,
+        dispose_function: Optional[Callable] = None,
+        auto_set_done: bool = True,
+        args=(),
+    ):
         super(BackgroundWorker, self).__init__()
         self.ghenv = ghenv
         self._is_working = False
@@ -130,19 +134,19 @@ class BackgroundWorker(object):
             self.dispose_function(self)
 
     def set_internal_state_to_working(self):
-        """Set the internal state to ``working``."""
+        """Set the internal state to `working`."""
         self._is_working = True
         self._is_done = False
         self._is_cancelled = False
 
-    def set_internal_state_to_done(self, result):
-        """Set the internal state to ``done``, which indicates the worker has completed."""
+    def set_internal_state_to_done(self, result: Any):
+        """Set the internal state to `done`, which indicates the worker has completed."""
         self._is_working = False
         self._is_done = True
         self._is_cancelled = False
         self.update_result(result, delay=1)
 
-    def update_result(self, result, delay=1):
+    def update_result(self, result: Any, delay: int = 1):
         """Update the result of the worker.
 
         This will update the result of the worker, and trigger a solution expiration
@@ -150,36 +154,36 @@ class BackgroundWorker(object):
 
         Parameters
         ----------
-        result : object
+        result
             Result of the worker.
-        delay : int, optional
+        delay
             Delay (in milliseconds) before updating the component, by default 1.
         """
         self.result = result
         update_component(self.ghenv, delay)
 
     def set_internal_state_to_cancelled(self):
-        """Set the internal state to ``cancelled``."""
+        """Set the internal state to `cancelled`."""
         self._is_working = False
         self._is_done = False
         self._is_cancelled = True
 
-    def display_progress(self, progress):
+    def display_progress(self, progress: float):
         """Display a progress indicator in the component.
 
         Parameters
         ----------
-        progress : float
-            Float between ``0..1`` indicating progress of completion.
+        progress
+            Float between `0..1` indicating progress of completion.
         """
         self.display_message("Progress {:.1f}%".format(progress * 100))
 
-    def display_message(self, message):
+    def display_message(self, message: str):
         """Display a message in the component without triggering a solution expiration.
 
         Parameters
         ----------
-        message : str
+        message
             Message to display.
 
         """
@@ -191,7 +195,15 @@ class BackgroundWorker(object):
         Rhino.RhinoApp.InvokeOnUiThread(System.Action(ui_callback))
 
     @classmethod
-    def instance_by_component(cls, ghenv, long_running_function=None, dispose_function=None, auto_set_done=True, force_new=False, args=()):
+    def instance_by_component(
+        cls,
+        ghenv: "GhPython.Component.PythonEnvironment",
+        long_running_function: Optional[Callable] = None,
+        dispose_function: Optional[Callable] = None,
+        auto_set_done: bool = True,
+        force_new: bool = False,
+        args=(),
+    ):
         """Get the worker instance assigned to the component.
 
         This will get a persistant instance of a background worker
@@ -200,24 +212,24 @@ class BackgroundWorker(object):
 
         Parameters
         ----------
-        ghenv : ``GhPython.Component.PythonEnvironment``
+        ghenv
             Grasshopper environment object
-        long_running_function : function, optional
+        long_running_function
             This function will be the main entry point for the long-running task.
-        dispose_function : function, optional
+        dispose_function
             If defined, this function will be called when the worker is disposed.
             It can be used for clean-up tasks and resource deallocation.
-        auto_set_done : bool, optional
-            If true, the worker state will be automatically set to ``Done`` after the function returns.
-            Defaults to ``True``.
-        force_new : bool, optional
-            Force the creation of a new background worker, by default False.
+        auto_set_done
+            If true, the worker state will be automatically set to `Done` after the function returns.
+            Defaults to `True`.
+        force_new
+            Force the creation of a new background worker, by default `False`.
         args : tuple, optional
-            List or tuple of arguments for the invocation of the ``long_running_function``. Defaults to ``()``.
+            List or tuple of arguments for the invocation of the `long_running_function`. Defaults to `()`.
 
         Returns
         -------
-        :class:`BackgroundWorker`
+        BackgroundWorker
             Instance of the background worker of the current component.
         """
 
@@ -243,14 +255,14 @@ class BackgroundWorker(object):
         return worker
 
     @classmethod
-    def stop_instance_by_component(cls, ghenv):
+    def stop_instance_by_component(cls, ghenv: "GhPython.Component.PythonEnvironment"):
         """Stops the worker instance assigned to the component.
 
         If there is no worker running, it will do nothing.
 
         Parameters
         ----------
-        ghenv : ``GhPython.Component.PythonEnvironment``
+        ghenv
             Grasshopper environment object
         """
 

@@ -1,77 +1,58 @@
-"""
-********************************************************************************
-compas_eve.ghpython
-********************************************************************************
-
-.. currentmodule:: compas_eve.ghpython
-
-Classes
-=======
-
-.. autosummary::
-    :toctree: generated/
-    :nosignatures:
-
-    BackgroundWorker
-
-"""
-
 try:
     import Grasshopper  # type: ignore
 except (ImportError, SyntaxError):
     pass
 
-
 from .background import BackgroundWorker
 
 
-def warning(component, message):
+def warning(component: "Grasshopper.Kernel.IGH_Component", message: str):
     """Add a warning message to the component.
 
     Parameters
     ----------
-    component : Grasshopper.Kernel.IGH_Component
-        The component instance. Pre-Rhino8 use `self`. Post-Rhino8 use `ghenv.Component`.
-    message : str
+    component
+        The component instance. Use `ghenv.Component`.
+    message
         The message to display.
     """
     component.AddRuntimeMessage(Grasshopper.Kernel.GH_RuntimeMessageLevel.Warning, message)
 
 
-def error(component, message):
+def error(component: "Grasshopper.Kernel.IGH_Component", message: str):
     """Add an error message to the component.
 
     Parameters
     ----------
-    component : Grasshopper.Kernel.IGH_Component
+    component
         The component instance. Pre-Rhino8 use `self`. Post-Rhino8 use `ghenv.Component`.
-    message : str
+    message
         The message to display.
     """
     component.AddRuntimeMessage(Grasshopper.Kernel.GH_RuntimeMessageLevel.Error, message)
 
 
-def remark(component, message):
+def remark(component: "Grasshopper.Kernel.IGH_Component", message: str):
     """Add a remark message to the component.
 
     Parameters
     ----------
-    component : Grasshopper.Kernel.IGH_Component
+    component
         The component instance. Pre-Rhino8 use `self`. Post-Rhino8 use `ghenv.Component`.
-    message : str
+    message
         The message to display.
     """
     component.AddRuntimeMessage(Grasshopper.Kernel.GH_RuntimeMessageLevel.Remark, message)
 
 
-def message(component, message):
+def message(component: "Grasshopper.Kernel.IGH_Component", message: str):
     """Add a text that will appear under the component.
 
     Parameters
     ----------
-    component : Grasshopper.Kernel.IGH_Component
+    component
         The component instance. Pre-Rhino8 use `self`. Post-Rhino8 use `ghenv.Component`.
-    message : str
+    message
         The message to display.
     """
     component.Message = message
