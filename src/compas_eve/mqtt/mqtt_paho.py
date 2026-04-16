@@ -4,6 +4,7 @@ from typing import Optional
 
 import paho.mqtt.client as mqtt
 
+from ..codecs import MessageCodec
 from ..core import Message
 from ..core import Topic
 from ..core import Transport
