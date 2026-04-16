@@ -1,1 +1,2 @@
 compas_pb >= 0.4.4
+eclipse-zenoh

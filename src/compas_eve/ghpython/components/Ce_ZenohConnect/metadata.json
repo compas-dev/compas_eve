@@ -1,0 +1,30 @@
+{
+    "name": "Zenoh Transport",
+    "nickname": "Zenoh",
+    "category": "COMPAS EVE",
+    "subcategory": "Events",
+    "description": "Initialize a Zenoh transport.",
+    "exposure": 2,
+
+    "ghpython": {
+        "isAdvancedMode": true,
+        "iconDisplay": 2,
+        "inputParameters": [
+            {
+                "name": "connect",
+                "description": "If True, initializes a Zenoh transport. If False, removes it. Defaults to False.",
+                "typeHintID": "bool"
+            }
+        ],
+        "outputParameters": [
+            {
+                "name": "zenoh_transport",
+                "description": "The Zenoh transport instance."
+            },
+            {
+                "name": "is_connected",
+                "description": "True if initialization has been processed."
+            }
+        ]
+    }
+}

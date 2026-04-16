@@ -9,5 +9,6 @@ API Reference
     api/compas_eve.codecs
     api/compas_eve.memory
     api/compas_eve.mqtt
+    api/compas_eve.zenoh
     api/compas_eve.ghpython
 
