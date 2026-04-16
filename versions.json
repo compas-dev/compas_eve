@@ -1,10 +1,5 @@
 [
   {
-    "version": "latest",
-    "title": "Latest (legacy)",
-    "aliases": []
-  },
-  {
     "version": "2.1.1",
     "title": "2.1.1 (stable) (legacy)",
     "aliases": []
