@@ -122,11 +122,6 @@ search = "{current_version}"
 replace = "{new_version}"
 
 [[tool.bumpversion.files]]
-filename = "docs/installation.rst"
-search = "{current_version}"
-replace = "{new_version}"
-
-[[tool.bumpversion.files]]
 glob = "src/compas_eve/ghpython/components/**/code.py"
 search = "# r: compas_eve>={current_version}"
 replace = "# r: compas_eve>={new_version}"
