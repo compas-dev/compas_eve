@@ -4,6 +4,7 @@ from typing import Callable
 from typing import Optional
 
 try:
+    import GhPython
     import Rhino
     import scriptcontext
     import System
