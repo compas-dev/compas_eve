@@ -5,7 +5,6 @@ from typing import Optional
 from typing import Type
 from typing import Union
 
-
 DEFAULT_TRANSPORT = None
 
 
