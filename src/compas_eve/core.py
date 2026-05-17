@@ -59,7 +59,7 @@ class Transport(object):
         self._id_counter += 1
         return self._id_counter
 
-    def publish(self, topic: "Topic", message: Union["Message", dict]) -> None:
+    def publish(self, topic: "Topic", message: Union["Message", dict], **options: Any) -> None:
         pass
 
     def subscribe(self, topic: "Topic", callback: Callable) -> Optional[str]:
@@ -173,19 +173,22 @@ class Publisher(object):
         """Handler called when a message has been published."""
         pass
 
-    def publish(self, message: Union[Message, dict]) -> None:
+    def publish(self, message: Union[Message, dict], **options: Any) -> None:
         """Publish a message to the topic.
 
         Parameters
         ----------
         message
             The message to publish.
+        **options
+            Transport-specific options passed through to the underlying transport.
+            For example, ``retain=True`` on MQTT and InMemory transports.
         """
         # TODO: check if message type matches self.topic.message_type declared
         if not self.is_advertised:
             self.advertise()
 
-        self.transport.publish(self.topic, message)
+        self.transport.publish(self.topic, message, **options)
         self.message_published(message)
 
     def advertise(self) -> None:

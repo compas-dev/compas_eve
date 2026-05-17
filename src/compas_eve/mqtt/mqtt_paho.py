@@ -73,7 +73,7 @@ class MqttTransport(Transport, EventEmitterMixin):
         else:
             self.once("ready", callback)
 
-    def publish(self, topic: Topic, message: Message):
+    def publish(self, topic: Topic, message: Message, **options):
         """Publish a message to a topic.
 
         Parameters
@@ -82,11 +82,17 @@ class MqttTransport(Transport, EventEmitterMixin):
             Instance of the topic to publish to.
         message
             Instance of the message to publish.
+        retain : bool, optional
+            If True, the broker retains the last message on this topic and
+            delivers it immediately to any new subscriber. Defaults to False.
         """
+        retain = options.pop("retain", False)
+        if options:
+            raise TypeError("publish() got unexpected options for MqttTransport: {}".format(", ".join(options)))
 
         def _callback(**kwargs):
             encoded_message = self.codec.encode(message)
-            self.client.publish(topic.name, encoded_message)
+            self.client.publish(topic.name, encoded_message, retain=retain)
 
         self.on_ready(_callback)
 
