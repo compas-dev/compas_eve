@@ -20,6 +20,13 @@ except ImportError:
 HOST = "localhost"
 
 
+@pytest.fixture
+def mqtt_tx():
+    tx = MqttTransport(HOST)
+    yield tx
+    tx.close()
+
+
 @pytest.fixture(params=["mqtt", "zenoh"])
 def tx(request):
     if request.param == "mqtt":
@@ -217,3 +224,32 @@ def test_dict_as_message(tx):
     assert received, "Message not received"
     assert result["value"].name == "Jazz"
     assert result["value"]["name"] == "Jazz", "Messages should be accessible as dict"
+
+
+def test_mqtt_retain_delivers_to_late_subscriber(mqtt_tx):
+    topic = Topic("/messages_compas_eve_test/test_retain/", Message)
+
+    pub = Publisher(topic, transport=mqtt_tx)
+    pub.publish(Message(value=42), retain=True)
+    time.sleep(0.2)
+
+    result = dict(value=None, event=Event())
+
+    def callback(msg):
+        result["value"] = msg.value
+        result["event"].set()
+
+    Subscriber(topic, callback, transport=mqtt_tx).subscribe()
+
+    received = result["event"].wait(timeout=3)
+    assert received, "Retained message not delivered to late subscriber"
+    assert result["value"] == 42
+
+    # Clean up: publish empty retained message to clear broker state
+    pub.publish(Message(), retain=True)
+
+
+def test_mqtt_unknown_option_raises(mqtt_tx):
+    topic = Topic("/messages_compas_eve_test/test_bad_option/", Message)
+    with pytest.raises(TypeError):
+        Publisher(topic, transport=mqtt_tx).publish(Message(value=1), unknown_flag=True)

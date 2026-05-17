@@ -1,6 +1,10 @@
+from unittest.mock import Mock
+from unittest.mock import patch
+
 import pytest
-from unittest.mock import Mock, patch
-from compas_eve.mqtt.mqtt_paho import MqttTransport, PAHO_MQTT_V2_AVAILABLE
+
+from compas_eve.mqtt import MqttTransport
+from compas_eve.mqtt.mqtt_paho import PAHO_MQTT_V2_AVAILABLE
 
 
 def test_paho_mqtt_v1_compatibility():
