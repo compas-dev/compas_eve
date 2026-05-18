@@ -1,4 +1,4 @@
-# r: compas_eve>=2.2.0
+# r: compas_eve>=2.3.0
 """
 Connect or disconnect to an MQTT broker.
 """

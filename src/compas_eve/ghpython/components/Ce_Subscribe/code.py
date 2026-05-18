@@ -1,4 +1,4 @@
-# r: compas_eve>=2.2.0
+# r: compas_eve>=2.3.0
 """
 Subscribe to a topic to receive messages.
 """
