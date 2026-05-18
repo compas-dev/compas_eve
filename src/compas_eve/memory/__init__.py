@@ -24,12 +24,13 @@ class InMemoryTransport(Transport, EventEmitterMixin):
     def __init__(self, codec: Optional[MessageCodec] = None, *args, **kwargs):
         super(InMemoryTransport, self).__init__(codec=codec, *args, **kwargs)
         self._local_callbacks = {}
+        self._retained = {}
 
     def on_ready(self, callback: Callable):
         """In-memory transport is always ready, it will immediately trigger the callback."""
         callback()
 
-    def publish(self, topic: Topic, message: Message):
+    def publish(self, topic: Topic, message: Message, **options):
         """Publish a message to a topic.
 
         Parameters
@@ -38,12 +39,20 @@ class InMemoryTransport(Transport, EventEmitterMixin):
             Instance of the topic to publish to.
         message
             Instance of the message to publish.
+        retain : bool, optional
+            If True, the last message on this topic is stored and delivered
+            immediately to any new subscriber. Defaults to False.
         """
+        retain = options.pop("retain", False)
+        if options:
+            raise TypeError("publish() got unexpected options for InMemoryTransport: {}".format(", ".join(options)))
         event_key = "event:{}".format(topic.name)
 
         def _callback(**kwargs):
             encoded_message = self.codec.encode(message)
             encoded_message_bytes = encoded_message if isinstance(encoded_message, bytes) else encoded_message.encode("utf-8")
+            if retain:
+                self._retained[topic.name] = encoded_message_bytes
             self.emit(event_key, encoded_message_bytes)
 
         self.on_ready(_callback)
@@ -75,6 +84,8 @@ class InMemoryTransport(Transport, EventEmitterMixin):
 
         def _callback(**kwargs):
             self.on(event_key, _local_callback)
+            if topic.name in self._retained:
+                _local_callback(self._retained[topic.name])
 
         self._local_callbacks[subscribe_id] = _local_callback
 

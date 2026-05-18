@@ -1,4 +1,5 @@
 from compas.geometry import Frame
+
 from compas_eve import Message
 from compas_eve.codecs import JsonMessageCodec
 from compas_eve.codecs import ProtobufMessageCodec

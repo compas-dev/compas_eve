@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+* Added `retain` option to `publish()` method for transports that allow retaining messages for new subscribers.
+* Added support for MQTT over secure WebSockets using `transport="websockets"` and `tls_set()`.
+
 ### Changed
 
 ### Removed
@@ -236,4 +239,3 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 ### Removed
-

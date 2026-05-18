@@ -1,5 +1,7 @@
 from threading import Event
 
+import pytest
+
 from compas_eve import InMemoryTransport
 from compas_eve import Message
 from compas_eve import Publisher
@@ -104,3 +106,64 @@ def test_message_type_parsing():
 def test_message_str():
     msg = Message(a=3)
     assert str(msg) == "{'a': 3}"
+
+
+def test_retain_delivers_to_late_subscriber():
+    tx = InMemoryTransport()
+    topic = Topic("/messages_compas_eve_test/retain/", Message)
+
+    Publisher(topic, transport=tx).publish(Message(value=42), retain=True)
+
+    result = dict(value=None, event=Event())
+
+    def callback(msg):
+        result["value"] = msg.value
+        result["event"].set()
+
+    Subscriber(topic, callback, transport=tx).subscribe()
+
+    received = result["event"].wait(timeout=1)
+    assert received, "Retained message not delivered to late subscriber"
+    assert result["value"] == 42
+
+
+def test_retain_last_message_wins():
+    tx = InMemoryTransport()
+    topic = Topic("/messages_compas_eve_test/retain_last/", Message)
+    pub = Publisher(topic, transport=tx)
+
+    pub.publish(Message(value=1), retain=True)
+    pub.publish(Message(value=2), retain=True)
+
+    result = dict(value=None, event=Event())
+
+    def callback(msg):
+        result["value"] = msg.value
+        result["event"].set()
+
+    Subscriber(topic, callback, transport=tx).subscribe()
+
+    received = result["event"].wait(timeout=1)
+    assert received, "Retained message not delivered"
+    assert result["value"] == 2
+
+
+def test_no_retain_does_not_deliver_to_late_subscriber():
+    tx = InMemoryTransport()
+    topic = Topic("/messages_compas_eve_test/no_retain/", Message)
+
+    Publisher(topic, transport=tx).publish(Message(value=42))
+
+    event = Event()
+    Subscriber(topic, lambda m: event.set(), transport=tx).subscribe()
+
+    received = event.wait(timeout=0.2)
+    assert not received, "Non-retained message should not be delivered to late subscriber"
+
+
+def test_unknown_option_raises():
+    tx = InMemoryTransport()
+    topic = Topic("/messages_compas_eve_test/bad_option/", Message)
+
+    with pytest.raises(TypeError):
+        Publisher(topic, transport=tx).publish(Message(value=1), unknown_flag=True)

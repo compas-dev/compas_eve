@@ -64,7 +64,7 @@ class ZenohTransport(Transport, EventEmitterMixin):
         else:
             self.once("ready", callback)
 
-    def publish(self, topic: Topic, message: Message) -> None:
+    def publish(self, topic: Topic, message: Message, **options: Any) -> None:
         """Publish a message to a topic.
 
         Parameters
@@ -74,13 +74,16 @@ class ZenohTransport(Transport, EventEmitterMixin):
         message
             Instance of the message to publish.
         """
+        if options:
+            raise TypeError("publish() got unexpected options for ZenohTransport: {}".format(", ".join(options)))
 
         def _callback(**kwargs: Any) -> None:
-            if self._get_topic_name(topic) not in self._publishers:
-                self._publishers[self._get_topic_name(topic)] = self.session.declare_publisher(self._get_topic_name(topic))
+            topic_name = self._get_topic_name(topic)
+            if topic_name not in self._publishers:
+                self._publishers[topic_name] = self.session.declare_publisher(topic_name)
 
             encoded_message = self.codec.encode(message)
-            self._publishers[self._get_topic_name(topic)].put(encoded_message)
+            self._publishers[topic_name].put(encoded_message)
 
         self.on_ready(_callback)
 
@@ -111,8 +114,9 @@ class ZenohTransport(Transport, EventEmitterMixin):
             self.emit(event_key, message_obj)
 
         def _subscribe_callback(**kwargs: Any) -> None:
-            if self._get_topic_name(topic) not in self._subscribers:
-                self._subscribers[self._get_topic_name(topic)] = self.session.declare_subscriber(self._get_topic_name(topic), _zenoh_handler)
+            topic_name = self._get_topic_name(topic)
+            if topic_name not in self._subscribers:
+                self._subscribers[topic_name] = self.session.declare_subscriber(topic_name, _zenoh_handler)
 
             self.on(event_key, _local_callback)
 

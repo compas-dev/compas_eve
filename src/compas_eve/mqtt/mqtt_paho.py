@@ -1,5 +1,7 @@
 import uuid
+from typing import Any
 from typing import Callable
+from typing import Dict
 from typing import Optional
 
 import paho.mqtt.client as mqtt
@@ -30,12 +32,30 @@ class MqttTransport(Transport, EventEmitterMixin):
         MQTT broker port, defaults to `1883`.
     client_id
         Client ID for the MQTT connection. If not provided, a unique ID will be generated.
+    transport
+        Paho MQTT transport to use. Defaults to `"tcp"`. Use `"websockets"` for MQTT over WebSockets.
+    tls
+        If True, enables TLS by calling `client.tls_set()` before connecting.
+    tls_options
+        Optional keyword arguments for `client.tls_set()`, e.g. `ca_certs`, `certfile`,
+        `keyfile`, `cert_reqs`, `tls_version`, or `ciphers`. Providing this also enables TLS.
     codec
         The codec to use for encoding and decoding messages.
         If not provided, defaults to [JsonMessageCodec][compas_eve.codecs.JsonMessageCodec].
     """
 
-    def __init__(self, host: str, port: int = 1883, client_id: Optional[str] = None, codec: Optional[MessageCodec] = None, *args, **kwargs):
+    def __init__(
+        self,
+        host: str,
+        port: int = 1883,
+        client_id: Optional[str] = None,
+        codec: Optional[MessageCodec] = None,
+        transport: str = "tcp",
+        tls: bool = False,
+        tls_options: Optional[Dict[str, Any]] = None,
+        *args,
+        **kwargs,
+    ):
         super(MqttTransport, self).__init__(codec=codec, *args, **kwargs)
         self.host = host
         self.port = port
@@ -45,10 +65,12 @@ class MqttTransport(Transport, EventEmitterMixin):
         if client_id is None:
             client_id = "compas_eve_{}".format(uuid.uuid4().hex[:8])
         if PAHO_MQTT_V2_AVAILABLE:
-            self.client = mqtt.Client(client_id=client_id, callback_api_version=CallbackAPIVersion.VERSION1)
+            self.client = mqtt.Client(client_id=client_id, callback_api_version=CallbackAPIVersion.VERSION1, transport=transport)
         else:
-            self.client = mqtt.Client(client_id=client_id)
+            self.client = mqtt.Client(client_id=client_id, transport=transport)
         self.client.on_connect = self._on_connect
+        if tls or tls_options is not None:
+            self.client.tls_set(**(tls_options or {}))
         self.client.connect(self.host, self.port)
         self.client.loop_start()
 
@@ -73,7 +95,7 @@ class MqttTransport(Transport, EventEmitterMixin):
         else:
             self.once("ready", callback)
 
-    def publish(self, topic: Topic, message: Message):
+    def publish(self, topic: Topic, message: Message, **options):
         """Publish a message to a topic.
 
         Parameters
@@ -82,11 +104,17 @@ class MqttTransport(Transport, EventEmitterMixin):
             Instance of the topic to publish to.
         message
             Instance of the message to publish.
+        retain : bool, optional
+            If True, the broker retains the last message on this topic and
+            delivers it immediately to any new subscriber. Defaults to False.
         """
+        retain = options.pop("retain", False)
+        if options:
+            raise TypeError("publish() got unexpected options for MqttTransport: {}".format(", ".join(options)))
 
         def _callback(**kwargs):
             encoded_message = self.codec.encode(message)
-            self.client.publish(topic.name, encoded_message)
+            self.client.publish(topic.name, encoded_message, retain=retain)
 
         self.on_ready(_callback)
 
