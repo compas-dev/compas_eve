@@ -119,3 +119,12 @@ Next, we create the matching subscriber:
 ```python
 --8<-- "docs/examples/05_zenoh_distributed_world_sub.py"
 ```
+
+## Communication with ROS
+
+The ROS transport connects to a rosbridge server and works with native ROS
+message types. ROS messages are represented as JSON-compatible dictionaries.
+
+```python
+--8<-- "docs/examples/06_ros_pubsub.py"
+```

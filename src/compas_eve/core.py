@@ -125,16 +125,16 @@ class Topic(object):
     name
         Name of the topic.
     message_type
-        Class defining the message structure. Use [Message][] for
-        a generic, non-typed checked message implementation.
-        Defaults to [Message][].
+        Class defining the message structure, or a backend-native message type
+        identifier. Use [Message][] for a generic, non-type-checked message
+        implementation. Defaults to [Message][].
     options
         A dictionary of options.
     """
 
     # TODO: Add documentation/examples of possible options
 
-    def __init__(self, name: str, message_type: Optional[Type[Message]] = None, **options: Any) -> None:
+    def __init__(self, name: str, message_type: Optional[Union[Type[Message], str]] = None, **options: Any) -> None:
         self.name = name
         self.message_type = message_type or Message
         self.options = options

@@ -95,3 +95,14 @@ uv pip install compas_eve[zenoh]
 ```
 
 For more details about Zenoh, refer to the [Eclipse Zenoh](https://zenoh.io/) website.
+
+### ROS Transport
+
+The ROS transport requires `roslibpy` 2.x and a running rosbridge server. Install
+the optional dependency with:
+
+```bash
+uv pip install compas_eve[ros]
+```
+
+The transport connects to rosbridge over WebSockets on port `9090` by default.

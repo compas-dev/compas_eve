@@ -35,6 +35,7 @@ jobs:
         run: |
           docker run -d --name nanomq -p 1883:1883 -p 8083:8083 -p 8883:8883 emqx/nanomq:latest
           docker run -d --name zenoh --init -p 7447:7447/tcp -p 8000:8000/tcp eclipse/zenoh
+          docker run -d --name rosbridge -p 9090:9090 husarion/rosbridge-server:humble ros2 launch rosbridge_server rosbridge_websocket_launch.xml
           docker ps -a
       - uses: compas-dev/compas-actions.build@v4
         with:
@@ -49,8 +50,7 @@ jobs:
           pytest tests/integration
       - name: Tear down docker container
         run: |
-          docker rm -f nanomq
-          docker rm -f zenoh
+          docker rm -f nanomq zenoh rosbridge
 
   build-cpython-components:
     runs-on: windows-latest
