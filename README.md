@@ -1,6 +1,6 @@
 # COMPAS EVE
 
-[![Made with COMPAS](https://compas.dev/badge.svg)](https://compas.dev)
+[![Made with COMPAS](https://compas.dev/badge.svg)](https://compas.dev/mission-control/#compas_eve)
 [![Github Actions Build Status](https://github.com/gramaziokohler/compas_eve/workflows/build/badge.svg)](https://github.com/gramaziokohler/compas_eve/actions)
 [![License](https://img.shields.io/github/license/gramaziokohler/compas_eve.svg)](https://pypi.python.org/pypi/compas_eve)
 [![pip downloads](https://img.shields.io/pypi/dm/compas_eve)](https://pypi.python.org/project/compas_eve)

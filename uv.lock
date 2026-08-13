@@ -571,7 +571,7 @@ requires-dist = [
     { name = "black", marker = "extra == 'dev'", specifier = ">=22.12.0" },
     { name = "build", marker = "extra == 'dev'" },
     { name = "bump-my-version", marker = "extra == 'dev'" },
-    { name = "compas", specifier = ">=1.17.6" },
+    { name = "compas", specifier = ">=2.0" },
     { name = "compas-invocations2", marker = "extra == 'dev'" },
     { name = "compas-pb", marker = "extra == 'dev'", specifier = ">=0.4.4" },
     { name = "eclipse-zenoh", marker = "extra == 'zenoh'" },
