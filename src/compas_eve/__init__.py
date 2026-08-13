@@ -4,7 +4,7 @@ __license__ = "MIT License"
 __email__ = "casas@arch.ethz.ch"
 __version__ = "2.3.0"
 
-from .event_emitter import EventEmitterMixin  # noqa: F401 needed here to avoid circular import on py2.7
+from .event_emitter import EventEmitterMixin  # noqa: F401 needed here to avoid a circular import
 from .core import (
     Message,
     Publisher,
