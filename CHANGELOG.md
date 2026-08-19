@@ -9,10 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+* Every release now publishes `message.proto` and the generated bindings for each supported language (TypeScript, C#, C++, Java, Objective-C, PHP, Ruby) as release assets, so consumers pin a schema version instead of reading the `.proto` out of this repository. Built by `invoke create-class-assets`, reusing the tasks `compas_pb` provides.
 * Added an optional ROS transport backed by `roslibpy` and rosbridge.
 
 ### Changed
 
+* **Breaking:** Requires `compas_pb >=1,<2`. The constraint was previously `>=0.4.4` with no upper bound, so an install could resolve to either the v0 or the v1 wire format; the two are incompatible, and two `compas_eve` peers installed at different times could silently fail to talk to each other. `ProtobufMessageCodec` behaves the same otherwise.
 * Migrated CI, documentation, Grasshopper component generation, and releases to `compas-actions@v1` with trusted publishing and release pull requests.
 * Modernized the package and wheel metadata for Python 3-only releases.
 

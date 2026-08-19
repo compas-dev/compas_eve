@@ -3,7 +3,7 @@ black >=22.12.0
 build
 bump-my-version
 compas_invocations2[mkdocs]
-compas_pb >= 0.4.4
+compas_pb >=1,<2
 invoke >=0.14
 pytest-mock
 ruff

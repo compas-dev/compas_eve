@@ -94,3 +94,16 @@ jobs:
           name: compas-eve-components
           path: src/compas_eve/ghpython/components/ghuser/*.ghuser
           if-no-files-found: error
+
+  schema-assets:
+    name: Verify asset generation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: compas-dev/compas-actions/release-assets@v1
+        with:
+          python-version: "3.12"
+          management-tool: uv
+          extras: dev
+          invoke-tasks: create-class-assets
+          paths: dist/proto/*.zip
+          artifact-name: protobuf-test-assets

@@ -91,9 +91,26 @@ jobs:
 
       - uses: actions/upload-artifact@v7.0.1
         with:
-          name: github-release-assets
+          name: github-release-assets-ghuser
           path: src/compas_eve/ghpython/components/ghuser/*.ghuser
           if-no-files-found: error
+
+  schema-assets:
+    name: Build schema and binding assets
+    needs: release
+    if: needs.release.outputs.is-release == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      # compas_eve owns message.proto, so it publishes the schema and the bindings for
+      # every supported language, as compas_pb does for the COMPAS types.
+      - uses: compas-dev/compas-actions/release-assets@v1
+        with:
+          python-version: "3.12"
+          management-tool: uv
+          extras: dev
+          invoke-tasks: create-class-assets
+          paths: dist/proto/*.zip
+          artifact-name: github-release-assets-proto
 
   prepare:
     needs: [release, unit-tests, integration-tests, components]
@@ -123,7 +140,7 @@ jobs:
         uses: pypa/gh-action-pypi-publish@v1.14.2
 
   create-release:
-    needs: [release, publish]
+    needs: [release, publish, schema-assets]
     if: needs.release.outputs.is-release == 'true'
     runs-on: ubuntu-latest
     permissions:
@@ -134,7 +151,7 @@ jobs:
           github-token: ${{ github.token }}
           tag-name: ${{ needs.release.outputs.tag }}
           target: ${{ github.sha }}
-          release-assets-artifact-name: github-release-assets
+          release-assets-artifact-pattern: github-release-assets-*
 
   docs:
     needs: [release, create-release]

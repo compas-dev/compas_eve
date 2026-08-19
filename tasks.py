@@ -12,6 +12,8 @@ from compas_invocations2 import grasshopper
 from invoke import Collection
 
 import compas_pb
+from compas_pb.invocations import create_class_assets
+from compas_pb.invocations import create_proto_bundle
 from compas_pb.invocations import generate_proto_classes
 
 ns = Collection(
@@ -31,10 +33,15 @@ ns = Collection(
     grasshopper.publish_yak,
     grasshopper.update_gh_header,
     generate_proto_classes,
+    create_class_assets,
+    create_proto_bundle,
 )
 ns.configure(
     {
         "base_folder": os.path.dirname(__file__),
+        # compas_eve owns message.proto, so it publishes its schemas and bindings.
+        "package_name": "compas_eve",
+        "generated_folder": Path("./dist") / "generated",
         "ghuser_cpython": {
             "prefix": "COMPAS EVE: ",
             "source_dir": "src/compas_eve/ghpython/components",
