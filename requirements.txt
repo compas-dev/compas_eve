@@ -1,2 +1,2 @@
-compas>=1.17.6
+compas>=2.0
 paho-mqtt >=1, <3

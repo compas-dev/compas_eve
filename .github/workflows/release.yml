@@ -2,59 +2,151 @@ name: release
 
 on:
   push:
-    tags:
-      - 'v*'
+    branches:
+      - main
+
+permissions:
+  contents: read
 
 jobs:
-  Build:
+  release:
+    name: Detect release merge
+    runs-on: ubuntu-latest
+    outputs:
+      is-release: ${{ steps.release.outputs.is-release }}
+      version: ${{ steps.release.outputs.version }}
+      tag: ${{ steps.release.outputs.tag }}
+    steps:
+      - uses: compas-dev/compas-actions/release-check@v1
+        id: release
+
+  unit-tests:
+    needs: release
+    if: needs.release.outputs.is-release == 'true'
     runs-on: ${{ matrix.os }}
     strategy:
+      fail-fast: false
       matrix:
-        os: [ubuntu-latest]
-        python: ['3.10']
-
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        python: ["3.10", "3.11", "3.12"]
     steps:
-      - uses: compas-dev/compas-actions.build@v4
+      - uses: compas-dev/compas-actions/ci@v1
         with:
-          invoke_lint: true
-          check_import: false
-          use_conda: false
-          invoke_test: false
-          python: ${{ matrix.python }}
-      - name: Run unit tests
-        run: |
-          pytest tests/unit
+          python-version: ${{ matrix.python }}
+          management-tool: uv
+          invoke-tasks: lint
 
-  integration_tests:
-    if: "!contains(github.event.pull_request.labels.*.name, 'docs-only')"
-    runs-on: 'ubuntu-latest'
+      - name: Run unit tests
+        run: pytest tests/unit
+
+  integration-tests:
+    needs: release
+    if: needs.release.outputs.is-release == 'true'
+    runs-on: ubuntu-latest
     steps:
-      - name: Set up docker container
+      - name: Start test services
         run: |
           docker run -d --name nanomq -p 1883:1883 -p 8083:8083 -p 8883:8883 emqx/nanomq:latest
           docker run -d --name zenoh --init -p 7447:7447/tcp -p 8000:8000/tcp eclipse/zenoh
           docker run -d --name rosbridge -p 9090:9090 husarion/rosbridge-server:humble ros2 launch rosbridge_server rosbridge_websocket_launch.xml
           docker ps -a
-      - uses: compas-dev/compas-actions.build@v4
-        with:
-          python: '3.11'
-          invoke_lint: false
-          invoke_test: false
-      - name: Run integration tests
-        run: |
-          pip install -r tests/integration/requirements.txt
-          pytest tests/integration
-      - name: Tear down docker container
-        run: |
-          docker rm -f nanomq zenoh rosbridge
 
-  Publish:
-    needs: Build
+      - uses: compas-dev/compas-actions/ci@v1
+        with:
+          python-version: "3.11"
+          management-tool: uv
+          invoke-tasks: ""
+
+      - name: Install integration-test dependencies
+        run: uv pip install --system -r tests/integration/requirements.txt
+
+      - name: Run integration tests
+        run: pytest tests/integration
+
+      - name: Stop test services
+        if: always()
+        run: docker rm -f nanomq zenoh rosbridge || true
+
+  components:
+    needs: release
+    if: needs.release.outputs.is-release == 'true'
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: compas-dev/compas-actions/setup-python@v1
+        with:
+          python-version: "3.12"
+          management-tool: uv
+          extras: dev
+
+      - uses: compas-dev/compas-actions/ghpython-components@v1
+        with:
+          source: src/compas_eve/ghpython/components
+          target: src/compas_eve/ghpython/components/ghuser
+          prefix: "COMPAS EVE: "
+          version: ${{ needs.release.outputs.version }}
+
+      - uses: actions/upload-artifact@v7.0.1
+        with:
+          name: github-release-assets
+          path: src/compas_eve/ghpython/components/ghuser/*.ghuser
+          if-no-files-found: error
+
+  prepare:
+    needs: [release, unit-tests, integration-tests, components]
+    if: needs.release.outputs.is-release == 'true'
     runs-on: ubuntu-latest
     steps:
-      - uses: compas-dev/compas-actions.publish@v3
+      - uses: compas-dev/compas-actions/prepare-release@v1
         with:
-          publish_to_pypi: true
-          pypi_token: ${{ secrets.PYPI }}
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          python: '3.10'
+          python-version: "3.12"
+          management-tool: uv
+
+  publish:
+    needs: [release, prepare]
+    if: needs.release.outputs.is-release == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - name: Download package distributions
+        uses: actions/download-artifact@v8.0.1
+        with:
+          name: python-package-distributions
+          path: dist
+
+      - name: Publish package distributions to PyPI
+        uses: pypa/gh-action-pypi-publish@v1.14.2
+
+  create-release:
+    needs: [release, publish]
+    if: needs.release.outputs.is-release == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: compas-dev/compas-actions/github-release@v1
+        with:
+          github-token: ${{ github.token }}
+          tag-name: ${{ needs.release.outputs.tag }}
+          target: ${{ github.sha }}
+          release-assets-artifact-name: github-release-assets
+
+  docs:
+    needs: [release, create-release]
+    if: needs.release.outputs.is-release == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: compas-dev/compas-actions/docs@v1
+        with:
+          deploy: true
+          version: ${{ needs.release.outputs.version }}
+          python-version: "3.12"
+          extras: dev
+          strict: false

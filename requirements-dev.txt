@@ -7,7 +7,6 @@ compas_pb >= 0.4.4
 invoke >=0.14
 pytest-mock
 ruff
-sphinx_compas2_theme
 twine
 wheel
 pythonnet

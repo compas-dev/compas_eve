@@ -13,7 +13,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+* Migrated CI, documentation, Grasshopper component generation, and releases to `compas-actions@v1` with trusted publishing and release pull requests.
+* Modernized the package and wheel metadata for Python 3-only releases.
+
 ### Removed
+
+* Dropped support for COMPAS 1.x. COMPAS 2.0 or later is now required.
 
 
 ## [2.3.0] 2026-05-18
