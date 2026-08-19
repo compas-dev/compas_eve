@@ -119,3 +119,26 @@ Next, we create the matching subscriber:
 ```python
 --8<-- "docs/examples/05_zenoh_distributed_world_sub.py"
 ```
+
+## Communication with ROS
+
+The ROS transport connects to a rosbridge server and works with native ROS
+message types. ROS messages are represented as JSON-compatible dictionaries.
+
+```python
+--8<-- "docs/examples/06_ros_pubsub.py"
+```
+
+The message dictionary is mapped directly to the fields of the declared ROS
+message type. It is not serialized into a string field. For example, the next
+example publishes a native `sensor_msgs/JointState` containing a nested ROS
+header and arrays for three joints. The subscriber receives the same structured
+fields as a dictionary:
+
+```python
+--8<-- "docs/examples/07_ros_joint_state.py"
+```
+
+Because rosbridge handles this as `sensor_msgs/JointState`, regular ROS nodes can
+subscribe to `/compas_eve/joint_states` and access `name`, `position`,
+`velocity`, and `effort` as normal ROS message fields.

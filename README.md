@@ -44,6 +44,7 @@ Or using `conda`:
 * Publisher/subscriber communication model (N-to-N communication)
 * In-process events
 * MQTT support
+* ROS support through rosbridge
 * Zenoh support
 * Extensible codec system for message serialization (JSON, Protocol Buffers)
 
@@ -87,6 +88,34 @@ for i in range(10):
 
 This example shows how to send and receive from a single script, but
 running publishers and subscribers on different scripts, different processes, or even different computers will work the exact same way.
+
+### ROS
+
+The optional ROS backend uses native ROS message types through a rosbridge server:
+
+```bash
+pip install compas_eve[ros]
+```
+
+```python
+import time
+
+import compas_eve as eve
+from compas_eve.ros import RosTransport
+
+tx = RosTransport("localhost", 9090)
+topic = eve.Topic("/chatter", "std_msgs/String", queue_size=10)
+
+sub = eve.EchoSubscriber(topic, transport=tx)
+sub.subscribe()
+eve.Publisher(topic, transport=tx).publish({"data": "Hello ROS"})
+time.sleep(1)
+tx.close()
+```
+
+ROS messages are passed as JSON-compatible dictionaries. Topic options supported
+by `roslibpy`—including `compression`, `latch`, `throttle_rate`, `queue_size`,
+`queue_length`, and `reconnect_on_close`—can be set on `eve.Topic`.
 
 ### Zenoh
 

@@ -1,3 +1,4 @@
+import os
 import time
 from threading import Event
 
@@ -17,7 +18,14 @@ try:
 except ImportError:
     ZenohTransport = None
 
+try:
+    from compas_eve.ros import RosTransport
+except ImportError:
+    RosTransport = None
+
 HOST = "localhost"
+ROS_HOST = os.getenv("ROS_HOST", HOST)
+ROS_PORT = int(os.getenv("ROS_PORT", "9090"))
 
 
 @pytest.fixture
@@ -253,3 +261,36 @@ def test_mqtt_unknown_option_raises(mqtt_tx):
     topic = Topic("/messages_compas_eve_test/test_bad_option/", Message)
     with pytest.raises(TypeError):
         Publisher(topic, transport=mqtt_tx).publish(Message(value=1), unknown_flag=True)
+
+
+def test_ros_pubsub():
+    if RosTransport is None:
+        pytest.skip("roslibpy not installed")
+
+    transport = RosTransport(ROS_HOST, ROS_PORT, connect_timeout=30)
+    event = Event()
+    result = {}
+    topic = Topic(
+        "/messages_compas_eve_test/test_ros_pubsub",
+        "std_msgs/String",
+        compression="none",
+        latch=False,
+        throttle_rate=0,
+        queue_size=10,
+        queue_length=1,
+        reconnect_on_close=True,
+    )
+
+    def callback(message):
+        result.update(message)
+        event.set()
+
+    try:
+        Subscriber(topic, callback, transport=transport).subscribe()
+        time.sleep(0.5)
+        Publisher(topic, transport=transport).publish({"data": "Hello from COMPAS EVE"})
+
+        assert event.wait(timeout=5), "ROS message not received"
+        assert result == {"data": "Hello from COMPAS EVE"}
+    finally:
+        transport.close()
