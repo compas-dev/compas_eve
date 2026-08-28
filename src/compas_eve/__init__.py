@@ -2,7 +2,7 @@ __author__ = ["Gonzalo Casas"]
 __copyright__ = "COMPAS Association"
 __license__ = "MIT License"
 __email__ = "casas@arch.ethz.ch"
-__version__ = "2.3.0"
+__version__ = "2.4.0"
 
 from .event_emitter import EventEmitterMixin  # noqa: F401 needed here to avoid a circular import
 from .core import (
