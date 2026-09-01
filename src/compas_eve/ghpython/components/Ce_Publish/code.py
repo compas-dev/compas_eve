@@ -1,4 +1,4 @@
-# r: compas_eve>=2.3.0
+# r: compas_eve>=2.4.0
 """
 Publish messages to a topic.
 """
